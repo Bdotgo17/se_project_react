@@ -1,9 +1,9 @@
-@font-face {
+/* @font-face {
   font-family: "Cabinet Grotesk";
   src: url("/assets/fonts/CabinetGrotesk.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
-}
+} */
 
 .header {
   display: flex;

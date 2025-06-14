@@ -7,3 +7,14 @@
   margin: 0 auto;
   padding: 0 20px;
 }
+
+body {
+  font-family: "Cabinet Grotesk", sans-serif; /* Apply font family */
+  font-weight: 700; /* Apply font weight */
+  font-size: 20px; /* Apply font size */
+  line-height: 24px; /* Apply line height */
+  letter-spacing: 0%; /* Apply letter spacing */
+  margin: 0; /* Reset default margin */
+  padding: 0; /* Reset default padding */
+  box-sizing: border-box; /* Ensure consistent box sizing */
+}
