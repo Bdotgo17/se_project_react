@@ -12,12 +12,33 @@
 
 .modal__title {
   margin: 0;
+  margin-bottom: 24px;
+  font-family: Cabinet Grotesk;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  color: rgba(0, 0, 0, 1);
+}
+
+.modal__label {
+  font-family: Cabinet Grotesk;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  color: rgba(0, 0, 0, 1);
+  margin-bottom: 24px;
 }
 
 .modal__close {
   position: absolute;
   top: 20px;
   right: 28px;
+  background: none; /* Remove default button background */
+  border: none; /* Remove default button border */
+  cursor: pointer; /* Change cursor to pointer */
+  padding: 0; 
 }
 
 .modal__content {
@@ -27,7 +48,7 @@
   max-width: 496px;
   box-sizing: border-box;
   width: 100%;
-  border-radius: 8px;
+  border-radius: 20px;
 }
 
 .modal_opened {
@@ -38,6 +59,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
+  background-color: transparent; /* Remove background color */
 }
 
 .modal__form {
@@ -48,6 +70,16 @@
 
 .modal__input {
   display: block;
+  border: none; /* Remove the default border */
+  outline: none; /* Remove the focus outline */
+  background-color: transparent;
+  margin-top: 7px;
+  width: 440px; /* Set the width of the input */
+  border-bottom: 1px solid rgba(0, 0, 0, 1); /* Add a line along the bottom */
+}
+
+.modal__input_type_radio {
+  margin-bottom: 8px;
 }
 
 .modal__radio-buttons {
@@ -55,6 +87,43 @@
   padding: 0;
   display: flex;
   flex-direction: column;
+  font-family: Cabinet Grotesk;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0%;
 }
 
-/* margins in between border-radius card image */
+.modal__legend {
+  font-family: "Cabinet Grotesk", sans-serif; /* Apply the desired font */
+  font-weight: 700; /* Adjust font weight */
+  font-size: 18px; /* Change font size */
+  line-height: 22px; /* Adjust line height */
+  letter-spacing: 0%; /* Adjust letter spacing */
+  color: #333; /* Ensure text color contrasts with the background */
+  margin-bottom: 12px;
+}
+
+.modal__submit {
+  width: 124px; /* Set the width of the button */
+  height: 36px; /* Set the height of the button */
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.3
+  ); /* Set the background color (optional) */
+  color: #fff; /* Set the text color to white */
+  border: none; /* Remove the default border */
+  border-radius: 4px; /* Optional: Add rounded corners */
+  text-align: left; /* Align the button to the left */
+  font-family: "Cabinet Grotesk", sans-serif; /* Apply the desired font */
+  font-weight: 700; /* Make the text bold */
+  font-size: 16px; /* Adjust the font size */
+  line-height: 20px; /* Adjust the line height */
+  cursor: pointer; /* Change the cursor to a pointer on hover */
+  margin-top: 32px; /* Add spacing above the button */
+  display: flex; /* Use flexbox for centering */
+  justify-content: center; /* Center text horizontally */
+  align-items: center;
+}

@@ -11,10 +11,31 @@
   position: absolute;
   top: 15px;
   margin: 0;
+  font-family: Cabinet Grotesk;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  padding: 8px; /* Add padding inside the box */
+  border-radius: 4px; /* Optional: Add rounded corners */
+  background-color: #f8f9fa; /* Optional: Add a background color */
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .card__image {
   width: 100%;
+  max-width: 323px;
+  height: 323px; /* Maintain aspect ratio */
+  border-radius: 19px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
-/* font size, white box around title, border radius*/
+.cards__text {
+  font-family: "Cabinet Grotesk", sans-serif; /* Apply the desired font */
+  font-weight: 700; /* Adjust font weight */
+  font-size: 18px; /* Adjust font size */
+  line-height: 22px; /* Adjust line height */
+  letter-spacing: 0%; /* Adjust letter spacing */
+  color: #333; /* Ensure text color contrasts with the background */
+  margin-bottom: 16px; /* Add spacing below the text */
+}

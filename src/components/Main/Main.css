@@ -6,3 +6,12 @@
   list-style-type: none;
   gap: 21px;
 }
+
+.weather-card__temp {
+  font-family: "Cabinet Grotesk", sans-serif; /* Apply the desired font */
+  font-weight: 700; /* Adjust font weight */
+  font-size: 36px; /* Adjust font size */
+  line-height: 24px; /* Adjust line height */
+  letter-spacing: 0%; /* Adjust letter spacing */
+  color: rgba(255, 255, 255, 1);
+}

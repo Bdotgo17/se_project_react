@@ -12,8 +12,12 @@ function ModalWithForm({
     <div className={`modal ${isOpen ? "modal_opened" : ""}`}>
       <div className="modal__content">
         <h2 className="modal__title">{title}</h2>
-        <button onClick={onClose} type="button" className="modal__close">
-          CLOSE
+        <button type="button" className="modal__close" onClick={onClose}>
+          <img
+            src="/src/assets/Union.svg"
+            alt="Close"
+            className="modal__close-icon"
+          />
         </button>
         <form className="modal__form" onSubmit={onSubmit}>
           {children}
