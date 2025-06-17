@@ -16,7 +16,7 @@ function App() {
     temp: { F: 0, C: 0 },
     city: "",
   });
-  const [activeModal, setActiveModal] = useState("preview");
+  const [activeModal, setActiveModal] = useState("");
   const [selectedCard, setSelectedCard] = useState({});
   const [clothingItems, setClothingItems] = useState([]);
 
@@ -24,10 +24,24 @@ function App() {
     console.log("Active modal state updated:", activeModal);
   }, [activeModal]);
 
+  useEffect(() => {
+    console.log("Selected Card:", selectedCard);
+    console.log("Active Modal:", activeModal);
+  }, [selectedCard, activeModal]);
+
+  useEffect(() => {
+    getWeather(coordinates, APIkey)
+      .then((data) => {
+        const filteredData = filterWeatherData(data);
+        setWeatherData(filteredData);
+      })
+      .catch(console.error);
+  }, []);
+
   const handleCardClick = (card) => {
     console.log("Card clicked:", card);
-    setActiveModal("preview");
     setSelectedCard(card);
+    setActiveModal("preview");
   };
 
   const handleAddClick = () => {
@@ -36,7 +50,7 @@ function App() {
   };
 
   const closeActiveModal = () => {
-    setActiveModal(" ");
+    setActiveModal("");
   };
 
   const handleCloseModal = () => setActiveModal(null);
@@ -59,27 +73,22 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    getWeather(coordinates, APIkey)
-      .then((data) => {
-        const filteredData = filterWeatherData(data);
-        setWeatherData(filteredData);
-      })
-      .catch(console.error);
-  }, []);
-
   return (
     <div className="page">
       <div className="page__content">
         <Header handleAddClick={handleAddClick} weatherData={weatherData} />
-        <Main weatherData={weatherData} handleCardClick={handleCardClick} />
+        <Main
+          weatherData={weatherData}
+          handleCardClick={handleCardClick}
+          clothingItems={clothingItems}
+        />
         {selectedCard.name && selectedCard.imageUrl && (
           <div className="selected-card">
             <h2 className="card__name">{selectedCard.name}</h2>
             <img
               className="card__image"
               src={selectedCard.imageUrl}
-              alt={selectedCard.name}
+              alt={`Image of ${selectedCard.name}`}
             />
           </div>
         )}
@@ -90,7 +99,7 @@ function App() {
               <img
                 className="card__image"
                 src={item.imageUrl}
-                alt={item.name}
+                alt={`Image of ${item.name}`}
               />
             </li>
           ))}
