@@ -39,13 +39,11 @@ function App() {
   }, []);
 
   const handleCardClick = (card) => {
-    console.log("Card clicked:", card);
     setSelectedCard(card);
     setActiveModal("preview");
   };
 
   const handleAddClick = () => {
-    console.log("Add clothes button clicked!");
     setActiveModal("add-garment");
   };
 
@@ -59,13 +57,13 @@ function App() {
     event.preventDefault();
     const newGarment = {
       name: document.getElementById("name").value,
-      imageUrl: document.getElementById("imageUrl").value,
+      link: document.getElementById("imageUrl").value,
       weather: document.querySelector('input[name="weather"]:checked')?.id, // Get selected weather type
     };
 
     console.log("New Garment:", newGarment); // Debug log to verify the new garment data
 
-    if (newGarment.name && newGarment.imageUrl && newGarment.weather) {
+    if (newGarment.name && newGarment.link && newGarment.weather) {
       setClothingItems((prevItems) => [...prevItems, newGarment]); // Add new garment to the list
       setActiveModal(null); // Close the modal
     } else {
@@ -87,7 +85,7 @@ function App() {
             <h2 className="card__name">{selectedCard.name}</h2>
             <img
               className="card__image"
-              src={selectedCard.imageUrl}
+              src={selectedCard.link}
               alt={`Image of ${selectedCard.name}`}
             />
           </div>
@@ -98,7 +96,7 @@ function App() {
               <h2 className="card__name">{item.name}</h2>
               <img
                 className="card__image"
-                src={item.imageUrl}
+                src={item.link}
                 alt={`Image of ${item.name}`}
               />
             </li>
