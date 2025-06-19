@@ -13,7 +13,7 @@
 .form-modal__title {
   margin: 0;
   margin-bottom: 24px;
-  font-family: Cabinet Grotesk;
+  font-family: "Cabinet Grotesk", sans-serif;
   font-weight: 700;
   font-size: 16px;
   line-height: 20px;
@@ -22,13 +22,17 @@
 }
 
 .modal__label {
-  font-family: Cabinet Grotesk;
+  font-family: "Cabinet Grotesk", sans-serif;
   font-weight: 700;
   font-size: 16px;
   line-height: 20px;
   letter-spacing: 0%;
   color: rgba(0, 0, 0, 1);
   margin-bottom: 24px;
+}
+
+.modal__radio-input {
+  margin-right: 8px; /* Add spacing between the radio button and text */
 }
 
 .modal__close {
@@ -59,13 +63,19 @@
   z-index: 1001; /* Ensure it appears above the overlay */
   background-color: white;
   border-radius: 20px;
-  padding: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-  max-width: 496px; /* Limit the modal's width */
-  /* //width: 100%; Make it responsive */
-  height: 436px;
+  max-width: 496px !important; /* Limit the modal's width */
+  width: 100%;
+  padding: 20px;
+  height: 436px !important;
   font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0%;
+  box-sizing: border-box; /* Include padding and border in width/height */
 }
+
 .form-modal__close {
   position: absolute; /* Position the button relative to the modal content */
   top: 20px; /* Adjust the vertical position */
