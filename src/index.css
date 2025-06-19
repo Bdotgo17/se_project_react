@@ -3,16 +3,37 @@
 
 @font-face {
   font-family: "Cabinet Grotesk";
-  src: url("./assets/fonts/CabinetGrotesk-Regular.woff2") format("woff2"),
-    url("./assets/fonts/CabinetGrotesk-Regular.woff") format("woff");
+  src: url("/src/assets/fonts/CabinetGrotesk-Regular.woff2") format("woff2"),
+       url("/src/assets/fonts/CabinetGrotesk-Regular.woff") format("woff"),
+       url("/src/assets/fonts/CabinetGrotesk-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Cabinet Grotesk";
-  src: url("./assets/fonts/CabinetGrotesk-Bold.woff2") format("woff2"),
-    url("./assets/fonts/CabinetGrotesk-Bold.woff") format("woff");
+  src: url("/src/assets/fonts/CabinetGrotesk-Bold.woff2") format("woff2"),
+       url("/src/assets/fonts/CabinetGrotesk-Bold.woff") format("woff"),
+       url("/src/assets/fonts/CabinetGrotesk-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
+}
+
+/* Global styles for html and body */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Prevent scrolling when the modal is open */
+  position: relative; /* Ensure proper positioning context */
+  font-family: "Cabinet Grotesk", sans-serif;
+}
+
+.page {
+  position: relative; /* Makes this element the positioning context for the overlay */
+  width: 100%; /* Ensure it spans the full width */
+  height: 100%; /* Ensure it spans the full height */
+  overflow: visible; /* Ensure no clipping occurs */
 }

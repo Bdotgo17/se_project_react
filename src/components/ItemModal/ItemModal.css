@@ -1,3 +1,52 @@
+.modal {
+  position: fixed; /* Fix the modal to the viewport */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust for perfect centering */
+  z-index: 1000; /* Ensure it appears above the overlay */
+  background-color: white; /* Modal background */
+  border-radius: 10px; /* Optional: Add rounded corners */
+  padding: 20px; /* Add padding inside the modal */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  max-width: 500px; /* Limit the modal's width */
+  width: 100%; /* Make it responsive */
+}
+
+.item-modal__overlay {
+  position: fixed; /* Ensures the overlay covers the entire viewport */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Full width of the screen */
+  height: 100vh; /* Full height of the screen */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  z-index: 999; /* Ensure it appears behind the modal content */
+}
+
+.item-modal__content {
+  position: absolute; /* Position relative to div.page__content */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust for perfect centering */
+  z-index: 1001; /* Ensure it appears above the overlay */
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  max-width: 450px; /* Limit the modal's width */
+  width: 100%; /* Make it responsive */
+}
+
+.item-modal__close {
+  position: absolute; /* Position the button relative to the modal content */
+  top: 20px; /* Adjust the vertical position */
+  right: 10px; /* Move the button to the right */
+  background-color: white; /* Set the background color to white */
+  border: 1px solid black;
+  width: 80px;
+  cursor: pointer; /* Change cursor to pointer on hover */
+  z-index: 1002; /* Ensure it appears above the modal content */
+}
+
 .modal__image {
   width: 500px;
   height: 500px;

@@ -10,7 +10,7 @@
   align-items: center;
 }
 
-.modal__title {
+.form-modal__title {
   margin: 0;
   margin-bottom: 24px;
   font-family: Cabinet Grotesk;
@@ -41,7 +41,7 @@
   padding: 0;
 }
 
-.modal__overlay {
+.form-modal__overlay {
   position: fixed; /* Ensures the overlay is fixed to the viewport */
   top: 0;
   left: 0;
@@ -51,16 +51,33 @@
   z-index: 999; /* Ensure it appears behind the modal content */
 }
 
-.modal__content {
-  position: relative;
+.form-modal__content {
+  position: absolute; /* Position relative to div.page__content */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust for perfect centering */
+  z-index: 1001; /* Ensure it appears above the overlay */
   background-color: white;
+  border-radius: 20px;
   padding: 20px;
-  border-radius: 8px;
-  z-index: 1000; /* Ensure it appears above the overlay */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-  max-width: 496px; /* Keep the max-width from your existing styles */
-  width: 100%; /* Ensure the modal is responsive */
-  box-sizing: border-box;
+  max-width: 496px; /* Limit the modal's width */
+  /* //width: 100%; Make it responsive */
+  height: 436px;
+  font-family: "Cabinet Grotesk", sans-serif;
+}
+.form-modal__close {
+  position: absolute; /* Position the button relative to the modal content */
+  top: 20px; /* Adjust the vertical position */
+  right: 20px; /* Move the button to the right */
+  width: 20px; /* Set the width of the button */
+  height: 20px; /* Set the height of the button */
+  background: url("/src/assets/union.svg") no-repeat center center;
+  /* background: url("../") no-repeat center center; Use the X image */
+  background-size: contain; /* Ensure the image fits within the button */
+  border: none; /* Remove the default border */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  z-index: 1002; /* Ensure it appears /.bove the modal content */
 }
 
 .modal_opened {
@@ -74,7 +91,7 @@
   background-color: transparent; /* Remove background color */
 }
 
-.modal__form {
+.form-modal__form {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -116,7 +133,7 @@
   margin-bottom: 12px;
 }
 
-.modal__submit {
+.form-modal__submit {
   width: 124px; /* Set the width of the button */
   height: 36px; /* Set the height of the button */
   background-color: rgba(

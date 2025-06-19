@@ -9,20 +9,18 @@ function ModalWithForm({
   onSubmit,
 }) {
   return (
-    <div className={`modal ${isOpen ? "modal_opened" : ""}`}>
-        <div className="modal__overlay" onClick={(e) => e.stopPropagation()}></div> 
-      <div className="modal__content">
-        <h2 className="modal__title">{title}</h2>
-        <button type="button" className="modal__close" onClick={onClose}>
-          <img
-            src="/src/assets/Union.svg"
-            alt="Close modal button"
-            className="modal__close-icon"
-          />
-        </button>
-        <form className="modal__form" onSubmit={onSubmit}>
+    <div className={`form-modal ${isOpen ? "form-modal_opened" : ""}`}>
+      <div className="form-modal__overlay" onClick={onClose}></div>
+      <div className="form-modal__content">
+        <button
+          onClick={onClose}
+          type="button"
+          className="form-modal__close"
+        ></button>
+        <h2 className="form-modal__title">{title}</h2>
+        <form className="form-modal__form" onSubmit={onSubmit}>
           {children}
-          <button type="submit" className="modal__submit">
+          <button type="submit" className="form-modal__submit">
             {buttonText}
           </button>
         </form>
