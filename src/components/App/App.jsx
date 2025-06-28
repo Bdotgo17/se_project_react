@@ -13,6 +13,7 @@ import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnit
 import ClothesSection from "../ClothesSection/ClothesSection";
 import { getItems, addItem, deleteItem } from "../../utils/api";
 import Sidebar from "../Sidebar/Sidebar";
+import AddItemModal from "../AddItemModal/AddItemModal";
 
 const MODALS = {
   ADD_GARMENT: "add-garment",
@@ -265,6 +266,12 @@ function App() {
                   </label>
                 </fieldset>
               </ModalWithForm>
+            )}
+            {activeModal === MODALS.ADD_GARMENT && (
+              <AddItemModal
+                onClose={() => setActiveModal("")} // Close the modal
+                onSubmit={handleAddItemSubmit} // Handle form submission
+              />
             )}
             <ItemModal
               activeModal={activeModal}
