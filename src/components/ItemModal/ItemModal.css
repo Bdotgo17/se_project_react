@@ -8,32 +8,52 @@
   border-radius: 10px; /* Optional: Add rounded corners */
   padding: 20px; /* Add padding inside the modal */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-  max-width: 500px; /* Limit the modal's width */
-  width: 100%; /* Make it responsive */
+  max-width: 90%; /* Limit the modal's width */
+  width: 500px; /* Make it responsive */
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+.item-modal {
+  position: fixed; /* Ensures the modal is positioned relative to the viewport */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust for perfect centering */
+  z-index: 1001; /* Ensure it appears above the overlay */
+  background-color: white; /* Modal background */
+  border-radius: 10px; /* Optional: Add rounded corners */
+  padding: 20px; /* Add padding inside the modal */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  max-width: 90%; /* Limit the modal's width */
+  width: 500px; /* Make it responsive */
+  overflow-y: auto; /* Allow scrolling if content overflows */
+  max-height: 90vh; /* Ensure the modal doesn't exceed the viewport height */
 }
 
 .item-modal__overlay {
   position: fixed; /* Ensures the overlay covers the entire viewport */
   top: 0;
   left: 0;
-  width: 100vw; /* Full width of the screen */
-  height: 100vh; /* Full height of the screen */
+  width: 100%; /* Full width of the screen */
+  height: 100%; /* Full height of the screen */
   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
   z-index: 999; /* Ensure it appears behind the modal content */
 }
 
 .item-modal__content {
   position: absolute; /* Position relative to div.page__content */
-  top: 50%; /* Center vertically */
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Adjust for perfect centering */
   z-index: 1001; /* Ensure it appears above the overlay */
   background-color: white;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-  max-width: 450px; /* Limit the modal's width */
-  width: 100%; /* Make it responsive */
+}
+
+.item-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Add spacing between form elements */
 }
 
 .item-modal__close {
@@ -48,8 +68,11 @@
 }
 
 .modal__image {
-  width: 500px;
-  height: 500px;
+  width: 325px; /* Set the width to 325px */
+  height: 325px; /* Set the height to 325px */
+  object-fit: cover; /* Ensure the image scales properly without distortion */
+  display: block; /* Ensure the image behaves like a block element */
+  margin: 0 auto;
 }
 
 .modal__close {

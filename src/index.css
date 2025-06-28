@@ -37,3 +37,9 @@ body {
   height: 100%; /* Ensure it spans the full height */
   overflow: visible; /* Ensure no clipping occurs */
 }
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}

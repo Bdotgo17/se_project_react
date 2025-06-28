@@ -9,18 +9,38 @@
   letter-spacing: 0%;
 }
 
+.header__profile-link {
+  display: flex; /* Align username and avatar horizontally */
+  align-items: center; /* Vertically align items */
+  gap: 12px; /* Add spacing between the username and avatar */
+  text-decoration: none; /* Remove underline from the link */
+  color: inherit; /* Inherit color for the link */
+}
+
 .header__date-and-location {
   margin: 0;
 }
 
 .header__add-clothes-btn {
-  margin: 0 20px 0 auto;
+  margin: 0 20px 0 20px;
 }
 
 .header__user-container {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.header__user-container {
+  display: flex; /* Align items horizontally */
+  align-items: center; /* Vertically align items */
+  gap: 12px; /* Add spacing between the username and avatar */
+}
+
+.header__avatar {
+  width: 40px; /* Set a fixed width for the avatar */
+  height: 40px; /* Set a fixed height for the avatar */
+  border-radius: 50%; /* Optional: Make the avatar circular */
 }
 
 .header__logo {
@@ -32,8 +52,15 @@
   letter-spacing: 0%;
 }
 
+.header__profile-link {
+  text-decoration: none; /* Remove underline */
+  color: inherit;
+}
+
 .header__username {
   margin: 0;
   padding-right: 12px;
-  padding-left: 20px;
+  padding-left: 0px;
+  color: black; /* Explicitly set text color to black */
+  font-weight: 700; /* Optional: Add font weight if needed */
 }

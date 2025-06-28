@@ -3,9 +3,11 @@
 }
 
 .page__content {
-  max-width: 1360px;
-  margin: 0 auto;
-  padding: 0 20px;
+  width: 100%; /* Ensure it takes up the full width */
+  max-width: none; /* Remove any maximum width restriction */
+  margin: 0 auto; /* Center the content horizontally */
+  padding: 16px; /* Optional: Add padding */
+  box-sizing: border-box;
 }
 
 body {

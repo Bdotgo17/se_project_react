@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom";
 import "./ItemModal.css";
 
-function ItemModal({ activeModal, onClose, card }) {
+function ItemModal({ activeModal, onClose, card, handleDeleteCard }) {
   if (activeModal !== "preview") return null;
 
   return ReactDOM.createPortal(
@@ -23,6 +23,12 @@ function ItemModal({ activeModal, onClose, card }) {
         <div className="item-modal__footer">
           <h2 className="item-modal__caption">{card.name}</h2>
           <p className="item-modal__weather">Weather: {card.weather}</p>
+          <button
+            className="item-modal__delete-button"
+            onClick={() => handleDeleteCard(card)}
+          >
+            Delete
+          </button>
         </div>
       </div>
     </div>,

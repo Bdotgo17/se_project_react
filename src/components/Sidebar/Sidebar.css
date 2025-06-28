@@ -1,0 +1,19 @@
+.sidebar {
+  display: flex; /* Align avatar and username horizontally */
+  align-items: center; /* Vertically align items */
+  gap: 12px; /* Add spacing between the avatar and username */
+}
+
+.sidebar__avatar {
+  width: 40px; /* Set a fixed width for the avatar */
+  height: 40px; /* Set a fixed height for the avatar */
+  border-radius: 50%; /* Make the avatar circular */
+}
+
+.sidebar__username {
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: black;
+  margin: 0;
+}

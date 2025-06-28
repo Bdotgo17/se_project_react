@@ -57,7 +57,6 @@
 
 .form-modal__content {
   position: absolute; /* Position relative to div.page__content */
-  top: 50%; /* Center vertically */
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Adjust for perfect centering */
   z-index: 1001; /* Ensure it appears above the overlay */

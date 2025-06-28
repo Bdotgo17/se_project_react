@@ -1,0 +1,65 @@
+.clothes-section {
+  width: 100%; /* Ensure the section takes up the full width of its parent */
+  margin: 0 auto; /* Center the section horizontally */
+  padding: 16px; /* Add padding for spacing */
+  box-sizing: border-box;
+}
+
+.clothes-section__header {
+  display: flex; /* Align the button and title horizontally */
+  align-items: center; /* Vertically align items */
+  gap: 12px; /* Add spacing between the button and the title */
+  margin-bottom: 16px; /* Add spacing below the header */
+}
+
+.clothes-section__add-button {
+  background-color: #007bff; /* Button background color */
+  color: white; /* Button text color */
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.clothes-section__add-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.clothes-section__title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.clothes-section__list {
+  display: grid; /* Use grid layout for the cards */
+  grid-template-columns: repeat(3, 1fr); /* Create 3 equal-width columns */
+
+  gap: 16px; /* Add spacing between cards */
+  list-style: none; /* Remove default list styling */
+  padding: 0;
+  margin: 0;
+  width: 100%; /* Ensure the list takes up the full width of its container */
+  box-sizing: border-box;
+}
+
+.item-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.item-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  object-fit: cover; /* Ensure the image scales properly without distortion */
+  display: block;
+}
