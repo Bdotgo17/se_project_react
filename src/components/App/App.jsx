@@ -12,6 +12,7 @@ import { filterWeatherData, getWeather } from "../../utils/weatherApi";
 import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnitContext";
 import ClothesSection from "../ClothesSection/ClothesSection";
 import { getItems, addItem, deleteItem } from "../../utils/api";
+import SideBar from "../SideBar/SideBar";
 
 const MODALS = {
   ADD_GARMENT: "add-garment",
@@ -146,6 +147,7 @@ function App() {
                 weatherData={weatherData}
                 username={username}
               />
+              <SideBar username="John Doe" />
               <Routes>
                 <Route
                   path="/"
