@@ -43,3 +43,8 @@ body {
   height: 40px;
   border-radius: 50%;
 }
+
+.sidebar {
+  background-color: #f5f6f7;
+  padding: 20px;
+}
