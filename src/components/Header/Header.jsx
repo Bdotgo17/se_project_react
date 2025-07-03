@@ -38,17 +38,10 @@ function Header({ handleAddClick, weatherData, username, onProfileClick }) {
         + Add clothes
       </button>
       <div className="header__user-container">
-        <a
-          className="header__profile-link"
-          onClick={(e) => {
-            e.preventDefault(); // Prevent default link behavior
-            onProfileClick(); // Call the function to toggle Sidebar
-          }}
-          href="#"
-        >
+        <Link to="/profile" className="header__profile-link">
           <p className="header__username">{username}</p>
           <img src={avatar} alt={username} className="header__avatar" />
-        </a>
+        </Link>
       </div>
     </header>
   );
