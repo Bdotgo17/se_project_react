@@ -6,13 +6,14 @@ function ClothesSection({ clothingItems = [], onAddItemClick, onCardClick }) {
   return (
     <div className="clothes-section">
       <div className="clothes-section__header">
+        <h2 className="clothes-section__title">Your Items</h2>
+
         <button
           className="clothes-section__add-button"
           onClick={onAddItemClick}
         >
-          Add New
+          + Add new
         </button>
-        <h2 className="clothes-section__title">Your Items</h2>
       </div>
       <ul className="clothes-section__list">
         {clothingItems.map((item) => (

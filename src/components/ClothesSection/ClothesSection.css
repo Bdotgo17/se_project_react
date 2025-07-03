@@ -13,22 +13,21 @@
 }
 
 .clothes-section__add-button {
-  background-color: #007bff; /* Button background color */
-  color: white; /* Button text color */
+  background-color: none; /* Button background color */
+  color: rgba(0, 0, 0, 0.6); /* Button text color */
   border: none;
   border-radius: 4px;
   padding: 8px 16px;
   cursor: pointer;
-  font-size: 14px;
-}
-
-.clothes-section__add-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 .clothes-section__title {
-  font-size: 18px;
-  font-weight: bold;
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
   margin: 0;
 }
 

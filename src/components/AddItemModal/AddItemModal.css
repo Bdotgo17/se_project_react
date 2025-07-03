@@ -1,0 +1,85 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal__content {
+  position: relative; /* Ensure it is positioned relative to the overlay */
+  background-color: white; /* Modal background */
+  border-radius: 10px; /* Optional: Add rounded corners */
+  padding: 20px; /* Add padding inside the modal */
+  width: 496px;
+  max-width: 90%; /* Make it responsive */
+  height: 436px;
+  max-height: 90vh; /* Prevent the modal from exceeding the viewport height */
+  overflow: auto; /* Add scroll if content overflows */
+
+  z-index: 1001; /* Ensure it appears in front of the overlay */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+form label {
+  display: block; /* Make the label take up the full width */
+  margin-bottom: 8px; /* Add spacing below the label */
+  font-weight: 700; /* Optional: Make the label text bold */
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-size: 16px;
+}
+
+form input,
+form select,
+form textarea {
+  display: block; /* Ensure the input takes up its own line */
+  width: 100%; /* Optional: Make the input take up the full width */
+  margin-bottom: 16px; /* Add spacing below the input */
+  padding: 8px; /* Add padding inside the input */
+  border: none; /* Add a border */
+  border-bottom: 2px solid #ccc; /* Add a line at the bottom */
+
+  font-size: 14px; /* Adjust font size */
+  outline: none; /* Remove the outline when focused */
+}
+
+.h2 {
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+fieldset {
+  border: none; /* Remove the default border */
+  padding: 0; /* Optional: Remove padding */
+  margin: 0; /* Optional: Remove margin */
+  display: flex; /* Use flexbox for alignment */
+  flex-direction: column; /* Stack items vertically */
+  align-items: flex-start; /* Align content to the right */
+}
+
+fieldset label {
+  display: flex; /* Align the radio button and label inline */
+  align-items: center; /* Vertically align the text and radio button */
+  gap: 8px; /* Add 8px spacing between the radio button and label text */
+  margin-bottom: 8px; /* Add spacing between stacked labels */
+}
+fieldset input[type="radio"] {
+  margin: 0; /* Remove default margin */
+}
+
+.form button.add-garment-btn {
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  border: none; /* Remove default border */
+  cursor: pointer;
+}

@@ -10,9 +10,12 @@ function Main({
   clothingItems = [],
 }) {
   const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext); // Access the current unit
-  const filteredItems = clothingItems.filter(
-    (item) => item.weather === weatherData.type
-  );
+  console.log("Clothing items:", clothingItems); // Debug log
+  console.log("Weather data type:", weatherData.type); // Debug log
+
+  const filteredItems = Array.isArray(clothingItems)
+    ? clothingItems.filter((item) => item.weather === weatherData.type)
+    : [];
 
   return (
     <main>

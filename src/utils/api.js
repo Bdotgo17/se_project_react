@@ -1,7 +1,9 @@
-const baseUrl = "http://localhost:3001/items";
+const baseUrl = "http://localhost:3002/items";
 
 // Fetch all clothing items
 export const getItems = () => {
+  console.log("Fetching items from:", baseUrl); // Debug log
+
   return fetch(baseUrl)
     .then((res) => {
       if (!res.ok) {
@@ -16,25 +18,33 @@ export const getItems = () => {
 };
 
 // Add a new clothing item
-export const addItem = (name, imageUrl, weather) => {
-  console.log("Adding item:", { name, imageUrl, weather });
+export const addItem = (name, imageUrl, weather, _id) => {
+  const payload = { _id, name, imageUrl, weather };
+  console.log("Payload being sent to server:", payload); // Debug log
 
-  return fetch(baseUrl, {
+  return fetch("http://localhost:3002/items", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ name, imageUrl, weather }),
+    body: JSON.stringify(payload),
   })
     .then((res) => {
       if (!res.ok) {
-        console.error("Response error:", res);
-        throw new Error(`Error: ${res.status}`);
+        return res.text().then((errorText) => {
+          console.error("Server error response (raw):", errorText);
+          throw new Error(`Error: ${res.status} - ${errorText}`);
+        });
       }
       return res.json();
     })
+    .then((data) => {
+      console.log("Item successfully added:", data); // Debug log for success
+      return data;
+    })
     .catch((err) => {
       console.error("Failed to add item:", err);
+      throw err; // Re-throw the error for further handling
     });
 };
 

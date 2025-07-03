@@ -1,5 +1,6 @@
 .header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 32px 0px 28px;
   font-family: "Cabinet Grotesk", sans-serif;
@@ -7,6 +8,45 @@
   font-size: 20px;
   line-height: 100%;
   letter-spacing: 0%;
+}
+
+.header__left {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Space between logo and date/location */
+}
+
+.header__logo {
+  margin-right: 12px; /* Optional: Adjust spacing between logo and date */
+  font-family: Cabinet Grotesk;
+  font-weight: 900;
+  font-size: 32px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.header__date-and-location {
+  margin: 0;
+}
+
+.header__right {
+  display: flex;
+  align-items: center; /* Vertically align items */
+  gap: 20px; /* Space between button, toggle switch, and profile */
+}
+
+.header__add-clothes-btn {
+  margin-left: 0 20px 0 20px;
+  border: none;
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.header__user-container {
+  display: flex; /* Align items horizontally */
+  align-items: center; /* Vertically align items */
+  gap: 12px; /* Add spacing between the username and avatar */
 }
 
 .header__profile-link {
@@ -17,44 +57,10 @@
   color: inherit; /* Inherit color for the link */
 }
 
-.header__date-and-location {
-  margin: 0;
-}
-
-.header__add-clothes-btn {
-  margin: 0 20px 0 20px;
-}
-
-.header__user-container {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.header__user-container {
-  display: flex; /* Align items horizontally */
-  align-items: center; /* Vertically align items */
-  gap: 12px; /* Add spacing between the username and avatar */
-}
-
 .header__avatar {
   width: 40px; /* Set a fixed width for the avatar */
   height: 40px; /* Set a fixed height for the avatar */
   border-radius: 50%; /* Optional: Make the avatar circular */
-}
-
-.header__logo {
-  margin-right: 24px;
-  font-family: Cabinet Grotesk;
-  font-weight: 900;
-  font-size: 32px;
-  line-height: 100%;
-  letter-spacing: 0%;
-}
-
-.header__profile-link {
-  text-decoration: none; /* Remove underline */
-  color: inherit;
 }
 
 .header__username {

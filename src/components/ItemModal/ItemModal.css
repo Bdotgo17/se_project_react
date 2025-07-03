@@ -25,29 +25,51 @@
   padding: 20px; /* Add padding inside the modal */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
   max-width: 90%; /* Limit the modal's width */
-  width: 500px; /* Make it responsive */
-  overflow-y: auto; /* Allow scrolling if content overflows */
+  width: 500px;
+  height: 500px; /* Make it responsive */
   max-height: 90vh; /* Ensure the modal doesn't exceed the viewport height */
 }
 
-.item-modal__overlay {
-  position: fixed; /* Ensures the overlay covers the entire viewport */
+.modal-overlay {
+  position: fixed; /* Fix the overlay to the viewport */
   top: 0;
   left: 0;
-  width: 100%; /* Full width of the screen */
-  height: 100%; /* Full height of the screen */
+  width: 100vw; /* Full width of the viewport */
+  height: 100vh; /* Full height of the viewport */
   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-  z-index: 999; /* Ensure it appears behind the modal content */
+  z-index: 1000; /* Ensure it appears behind the modal content */
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.item-modal__overlay {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 }
 
 .item-modal__content {
   position: absolute; /* Position relative to div.page__content */
+  top: 50%;
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Adjust for perfect centering */
   z-index: 1001; /* Ensure it appears above the overlay */
   background-color: white;
   border-radius: 10px;
-  padding: 20px;
+  width: 498px;
+  height: 610px;
+  overflow: hidden;
 }
 
 .item-modal__form {
@@ -58,13 +80,27 @@
 
 .item-modal__close {
   position: absolute; /* Position the button relative to the modal content */
-  top: 20px; /* Adjust the vertical position */
-  right: 10px; /* Move the button to the right */
-  background-color: white; /* Set the background color to white */
-  border: 1px solid black;
-  width: 80px;
+  top: 24px; /* Adjust the vertical position */
+  right: 24px; /* Move the button to the right */
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px; /* Make the "X" larger */
   cursor: pointer; /* Change cursor to pointer on hover */
   z-index: 1002; /* Ensure it appears above the modal content */
+}
+
+.item-modal__header {
+  display: flex; /* Align items horizontally */
+  justify-content: space-between; /* Push items to opposite ends */
+  align-items: center; /* Vertically center the items */
+  margin-bottom: 10px; /* Add spacing below the header */
+}
+
+.item-modal__caption {
+  font-size: 20px; /* Adjust font size */
+  font-weight: 700; /* Make the name bold */
+  margin: 20px 0 0 32px; /* Remove default margin */
 }
 
 .modal__image {
@@ -77,6 +113,32 @@
 
 .modal__close {
   background-color: white; /* Set the background color to white */
-  border: 1px solid black;
+  border: none;
   width: 80px;
+}
+
+.item-modal__image {
+  display: block; /* Ensure the image is displayed */
+  max-width: 100%; /* Scale the image to fit its container */
+  height: auto; /* Maintain aspect ratio */
+  margin: 0 auto; /* Center the image horizontally */
+}
+
+.item-modal__weather {
+  margin: 12px 0 32px 32px;
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.item-modal__delete-button {
+  background: none;
+  color: #ff4d4f; /* Set text color to red */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 5px 10px; /* Add padding */
+  cursor: pointer; /* Change cursor to pointer */
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-size: 20px; /* Adjust font size */
+  margin: 20px 32px 0 0;
 }

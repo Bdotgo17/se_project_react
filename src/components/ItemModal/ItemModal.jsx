@@ -13,22 +13,25 @@ function ItemModal({ activeModal, onClose, card, handleDeleteCard }) {
       <div className="item-modal__overlay" onClick={onClose}></div>
       <div className="item-modal__content">
         <button onClick={onClose} type="button" className="item-modal__close">
-          CLOSE
+          &times;
         </button>
         <img
           className="item-modal__image"
-          src={card.link}
-          alt={`Image of ${card.name}`}
+          src={card.imageUrl}
+          alt={card.name}
         />
         <div className="item-modal__footer">
-          <h2 className="item-modal__caption">{card.name}</h2>
+          <div className="item-modal__header">
+            <h2 className="item-modal__caption">{card.name}</h2>
+
+            <button
+              className="item-modal__delete-button"
+              onClick={() => handleDeleteCard(card)}
+            >
+              Delete Item
+            </button>
+          </div>
           <p className="item-modal__weather">Weather: {card.weather}</p>
-          <button
-            className="item-modal__delete-button"
-            onClick={() => handleDeleteCard(card)}
-          >
-            Delete
-          </button>
         </div>
       </div>
     </div>,

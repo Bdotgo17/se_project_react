@@ -35,7 +35,7 @@ body {
   position: relative; /* Makes this element the positioning context for the overlay */
   width: 100%; /* Ensure it spans the full width */
   height: 100%; /* Ensure it spans the full height */
-  overflow: visible; /* Ensure no clipping occurs */
+  overflow: hidden; /* Ensure no clipping occurs */
 }
 
 .avatar {
