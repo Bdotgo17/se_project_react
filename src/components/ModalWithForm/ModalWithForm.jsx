@@ -1,3 +1,4 @@
+import React from "react";
 import "./ModalWithForm.css";
 
 function ModalWithForm({
@@ -8,6 +9,8 @@ function ModalWithForm({
   onClose,
   onSubmit,
 }) {
+  if (!isOpen) return null;
+  
   return (
     <div className={`form-modal ${isOpen ? "form-modal_opened" : ""}`}>
       <div className="form-modal__overlay" onClick={onClose}></div>

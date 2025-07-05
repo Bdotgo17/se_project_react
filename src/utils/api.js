@@ -1,64 +1,31 @@
-const baseUrl = "http://localhost:3002/items";
+const baseUrl = "http://localhost:3001/items";
+
+function checkResponse(res) {
+  return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
+}
 
 // Fetch all clothing items
-export const getItems = () => {
-  console.log("Fetching items from:", baseUrl); // Debug log
-
-  return fetch(baseUrl)
-    .then((res) => {
-      if (!res.ok) {
-        console.error("Response error:", res);
-        throw new Error(`Error: ${res.status}`);
-      }
-      return res.json();
-    })
-    .catch((err) => {
-      console.error("Failed to fetch items:", err);
-    });
-};
+export function getItems() {
+  return fetch(baseUrl).then(checkResponse);
+}
 
 // Add a new clothing item
-export const addItem = (name, imageUrl, weather, _id) => {
+export function addItem(name, imageUrl, weather, _id) {
   const payload = { _id, name, imageUrl, weather };
   console.log("Payload being sent to server:", payload); // Debug log
 
-  return fetch("http://localhost:3002/items", {
+  return fetch(baseUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(payload),
-  })
-    .then((res) => {
-      if (!res.ok) {
-        return res.text().then((errorText) => {
-          console.error("Server error response (raw):", errorText);
-          throw new Error(`Error: ${res.status} - ${errorText}`);
-        });
-      }
-      return res.json();
-    })
-    .then((data) => {
-      console.log("Item successfully added:", data); // Debug log for success
-      return data;
-    })
-    .catch((err) => {
-      console.error("Failed to add item:", err);
-      throw err; // Re-throw the error for further handling
-    });
-};
+  }).then(checkResponse);
+}
 
-export const deleteItem = (id) => {
+export function deleteItem(id) {
+  console.log("ID being passed to deleteItem:", id); // Debug log
   return fetch(`${baseUrl}/${id}`, {
     method: "DELETE",
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`Error: ${res.status}`);
-      }
-      return res.json();
-    })
-    .catch((err) => {
-      console.error("Failed to delete item:", err);
-    });
-};
+  }).then(checkResponse);
+}
