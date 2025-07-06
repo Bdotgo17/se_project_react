@@ -122,9 +122,8 @@ function App() {
 
     if (name && imageUrl && weather) {
       const newGarment = {
-        _id: Date.now(),
         name: name.trim(),
-        link: imageUrl.trim(),
+        imageUrl: imageUrl.trim(),
         weather,
       };
 
@@ -168,13 +167,6 @@ function App() {
                         handleCardClick={handleCardClick}
                         clothingItems={updatedClothingItems}
                       />
-                      <ClothesSection
-                        clothingItems={updatedClothingItems}
-                        onCardClick={handleCardClick} // Pass the card click handler
-                        onAddItemClick={() =>
-                          setActiveModal(MODALS.ADD_GARMENT)
-                        } // Pass the add item click handler
-                      />
                     </>
                   }
                 />
@@ -191,87 +183,12 @@ function App() {
               </Routes>
               {activeModal === MODALS.ADD_GARMENT && (
                 <AddItemModal
-                
                   onClose={() => setActiveModal("")}
                   onSubmit={handleSubmit}
                   formData={formData} // Pass form data state
                   handleChange={handleInputChange}
                 />
               )}
-              <label htmlFor="name" className="modal__label">
-                Name{" "}
-                <input
-                  type="text"
-                  className="modal__input"
-                  id="name"
-                  name="name"
-                  placeholder="Name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label htmlFor="imageUrl" className="modal__label">
-                Image{" "}
-                <input
-                  type="text"
-                  className="modal__input"
-                  id="imageUrl"
-                  name="imageUrl"
-                  placeholder="Image URL"
-                  value={formData.imageUrl}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <fieldset className="modal__radio-buttons">
-                <legend className="modal__legend">
-                  Select the weather type:
-                </legend>
-                <label
-                  htmlFor="hot"
-                  className="modal__label modal__input_type_radio"
-                >
-                  <input
-                    id="hot"
-                    type="radio"
-                    name="weather"
-                    value="hot"
-                    checked={formData.weather === "hot"}
-                    onChange={handleInputChange}
-                    className="modal__radio-input"
-                  />
-                  Hot
-                </label>
-                <label
-                  htmlFor="warm"
-                  className="modal__label modal__input_type_radio"
-                >
-                  <input
-                    id="warm"
-                    type="radio"
-                    name="weather"
-                    value="warm"
-                    checked={formData.weather === "warm"}
-                    onChange={handleInputChange}
-                    className="modal__radio-input"
-                  />
-                  Warm
-                </label>
-                <label
-                  htmlFor="cold"
-                  className="modal__label modal__input_type_radio"
-                >
-                  <input
-                    id="cold"
-                    type="radio"
-                    name="weather"
-                    value="cold"
-                    checked={formData.weather === "cold"}
-                    onChange={handleInputChange}
-                    className="modal__radio-input"
-                  />
-                  Cold
-                </label>
-              </fieldset>
               {activeModal === MODALS.PREVIEW && (
                 <ItemModal
                   activeModal={activeModal}

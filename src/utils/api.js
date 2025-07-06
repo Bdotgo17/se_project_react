@@ -10,8 +10,8 @@ export function getItems() {
 }
 
 // Add a new clothing item
-export function addItem(name, imageUrl, weather, _id) {
-  const payload = { _id, name, imageUrl, weather };
+export function addItem(name, imageUrl, weather) {
+  const payload = { name, imageUrl, weather };
   console.log("Payload being sent to server:", payload); // Debug log
 
   return fetch(baseUrl, {
