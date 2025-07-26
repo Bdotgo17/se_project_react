@@ -10,7 +10,7 @@ export function getItems() {
 }
 
 // Add a new clothing item
-export function addItem(name, imageUrl, weather) {
+export function addItem(name, imageUrl, weather, token) {
   const payload = { name, imageUrl, weather };
   console.log("Payload being sent to server:", payload); // Debug log
 
@@ -18,6 +18,7 @@ export function addItem(name, imageUrl, weather) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(payload),
   }).then(checkResponse);

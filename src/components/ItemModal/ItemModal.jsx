@@ -1,8 +1,16 @@
 import ReactDOM from "react-dom";
 import "./ItemModal.css";
+import React, { useContext } from "react";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
 
 function ItemModal({ activeModal, onClose, card, handleDeleteCard }) {
   if (activeModal !== "preview") return null;
+  const currentUser = useContext(CurrentUserContext);
+  
+  const isOwn = card.owner === currentUser?._id; // Check if the current user owns the item
+  const itemDeleteButtonClassName = `modal__delete-button ${
+    isOwn ? "" : "modal__delete-button_hidden"
+  }`;
 
   return ReactDOM.createPortal(
     <div
@@ -24,12 +32,14 @@ function ItemModal({ activeModal, onClose, card, handleDeleteCard }) {
           <div className="item-modal__header">
             <h2 className="item-modal__caption">{card.name}</h2>
 
-            <button
-              className="item-modal__delete-button"
-              onClick={() => handleDeleteCard(card)}
-            >
-              Delete Item
-            </button>
+            {isOwn && (
+              <button
+                className={itemDeleteButtonClassName}
+                onClick={() => handleDeleteCard(card)}
+              >
+                Delete Item
+              </button>
+            )}
           </div>
           <p className="item-modal__weather">Weather: {card.weather}</p>
         </div>
