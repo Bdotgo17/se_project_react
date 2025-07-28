@@ -3,10 +3,12 @@ import "./Main.css";
 import WeatherCard from "../WeatherCard/WeatherCard";
 import ItemCard from "../ItemCard/ItemCard";
 import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnitContext"; // Import the context
+import App from "../App/App"; // Adjust the relative path as needed
 
 function Main({
   weatherData = { temp: { F: 0, C: 0 }, type: "" },
   handleCardClick,
+  onCardLike,
   clothingItems = [],
 }) {
   const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext); // Access the current unit
@@ -35,6 +37,7 @@ function Main({
                   key={item._id}
                   item={item}
                   onCardClick={handleCardClick}
+                  onCardLike={onCardLike} // Pass the onCardLike function to ItemCard
                 />
               ))
             : null}

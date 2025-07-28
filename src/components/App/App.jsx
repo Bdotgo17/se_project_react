@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { signup, signin, checkToken } from "./utils/auth";
-import RegisterModal from "./components/RegisterModal";
-import LoginModal from "./components/LoginModal";
+import { signup, signin, checkToken } from "../../utils/auth";
+import RegisterModal from "../RegisterModal/RegisterModal";
+import LoginModal from "../LoginModal/LoginModal";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { coordinates, APIkey } from "../../utils/constants";
@@ -189,6 +189,36 @@ function App() {
     }
   };
 
+  const handleCardLike = ({ id, isLiked }) => {
+    const token = localStorage.getItem("jwt");
+    // Check if this card is not currently liked
+    !isLiked
+      ? // Add the user's like
+        api
+          .addCardLike(id, token)
+          .then((updatedCard) => {
+            setUpdatedClothingItems((cards) =>
+              cards.map((item) => (item._id === id ? updatedCard : item))
+            );
+          })
+          .catch((err) => console.log(err))
+      : // Remove the user's like
+        api
+          .removeCardLike(id, token)
+          .then((updatedCard) => {
+            setUpdatedClothingItems((cards) =>
+              cards.map((item) => (item._id === id ? updatedCard : item))
+            );
+          })
+          .catch((err) => console.log(err));
+  };
+
+  const handleSignOut = () => {
+    localStorage.removeItem("jwt"); // Remove the token from local storage
+    setIsLoggedIn(false); // Set the isLoggedIn state to false
+    setCurrentUser(null); // Clear the current user data
+  };
+
   const closeActiveModal = () => {
     setSelectedCard(null);
     setActiveModal(""); // Close the modal by resetting the activeModal state
@@ -211,6 +241,8 @@ function App() {
                   weatherData={weatherData}
                   username={username}
                   onProfileClick={handleProfileClick}
+                  currentTemperatureUnit={currentTemperatureUnit}
+                  onToggleSwitchChange={handleToggleSwitchChange}
                 />
                 {isProfileOpen && <Sidebar username={username} />}{" "}
                 <Routes>
@@ -245,6 +277,7 @@ function App() {
                             weatherData={weatherData}
                             handleCardClick={handleCardClick}
                             clothingItems={updatedClothingItems}
+                            onCardLike={handleCardLike}
                           />
                         )}
                       </>
@@ -261,6 +294,7 @@ function App() {
                               setActiveModal(MODALS.ADD_GARMENT)
                             }
                             username={username}
+                            onSignOut={handleSignOut}
                           />
                         </ProtectedRoute>
                       ) : (

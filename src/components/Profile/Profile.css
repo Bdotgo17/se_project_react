@@ -1,0 +1,13 @@
+.profile__sign-out-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.profile__sign-out-button:hover {
+  background-color: #ff1a1a;
+}

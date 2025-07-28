@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import "./Header.css";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 import avatar from "../../assets/avatar.svg";
 import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
 import logo from "../../assets/logo.svg";
+import "./Header.css";
 
 function Header({
   handleAddClick,
   weatherData,
   username,
   onProfileClick,
-  currentDate,
+  currentTemperatureUnit,
+  onToggleSwitchChange,
 }) {
   const [isProfileLinkVisible, setIsProfileLinkVisible] = useState(false);
   const currentUser = useContext(CurrentUserContext);
@@ -20,6 +21,7 @@ function Header({
     setIsProfileLinkVisible((prev) => !prev);
   };
 
+  // Declare currentDate as a local variable
   const currentDate = new Date().toLocaleString("default", {
     month: "long",
     day: "numeric",
@@ -31,10 +33,12 @@ function Header({
         <img className="header__logo" src={logo} alt="Company logo" />
       </Link>
       <p className="header__date-and-location">
-        {currentDate}, {weatherData.city}
-        {currentDate}, {weatherData.city}
+        {currentTemperatureUnit === "F"
+          ? weatherData.temp?.F
+          : weatherData.temp?.C}
+        ° {currentDate}, {weatherData.city}
       </p>
-      <ToggleSwitch />
+      <ToggleSwitch />{" "}
       <button
         onClick={() => {
           console.log("Header button clicked!"); // Debug log
