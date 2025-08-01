@@ -10,6 +10,7 @@ function RegisterModal({ onRegister, onClose }) {
 
   function handleSubmit(e) {
     e.preventDefault();
+    console.log("Register form submitted:", formData); // Debug log
     onRegister(formData);
   }
 

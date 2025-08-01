@@ -38,7 +38,10 @@ function App() {
   const [username, setUsername] = useState("Terrence Tegegne"); // Shared username state
   const [formData, setFormData] = useState({
     name: "",
-    imageUrl: "",
+    avatar: "",
+    email: "",
+    password: "",
+    imageUrl: "", // For AddItemModal
     weather: "",
   });
   const [isProfileOpen, setIsProfileOpen] = useState(false); // State to control visibility
@@ -106,14 +109,16 @@ function App() {
   };
 
   const handleLogin = ({ email, password }) => {
+    console.log("Attempting to log in with:", { email, password }); // Debug log
     signin(email, password)
       .then((res) => {
+        console.log("Login successful, token:", res.token); // Debug log
         localStorage.setItem("jwt", res.token);
         setToken(res.token);
         setIsLoggedIn(true);
         setShowLoginModal(false);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error("Login failed:", err));
   };
 
   const handleProfileClick = () => {
@@ -137,13 +142,22 @@ function App() {
   const handleAddItemSubmit = (newItem) => {
     console.log("New item to add:", newItem);
 
-    addItem(newItem.name, newItem.imageUrl, newItem.weather, token)
+    addItem(newItem.name, newItem.imageUrl, newItem.weather)
       .then((addedItem) => {
         console.log("Added item from API:", addedItem);
-        setUpdatedClothingItems((prev) => [addedItem, ...prev]);
+
+        setUpdatedClothingItems((prev) => {
+          const updatedItems = [addedItem, ...prev];
+          console.log("Updated clothing items:", updatedItems); // Debug log
+          return updatedItems;
+        });
+
         setActiveModal("");
       })
-      .catch((err) => console.error("Error adding item:", err));
+      .catch((err) => {
+        console.error("Error adding item:", err);
+        alert("Failed to add item. Please try again."); // Display error to the user
+      });
   };
 
   const handleDeleteCard = (cardToDelete) => {
@@ -252,33 +266,122 @@ function App() {
                       <>
                         {!isLoggedIn && (
                           <>
-                            <button onClick={() => setShowRegisterModal(true)}>
-                              Register
+                            <button
+                              onClick={() => {
+                                console.log("Register button clicked");
+                                setShowRegisterModal(true);
+                              }}
+                            >
+                              Sign Up
                             </button>
-                            <button onClick={() => setShowLoginModal(true)}>
+                            <button
+                              onClick={() => {
+                                console.log("Login button clicked");
+                                setShowLoginModal(true);
+                              }}
+                            >
                               Login
                             </button>
                           </>
                         )}
+
                         {showRegisterModal && (
-                          <RegisterModal
-                            onRegister={handleRegister}
-                            onClose={() => setShowRegisterModal(false)}
-                          />
+                          <ModalWithForm
+                            isOpen={showRegisterModal}
+                            title="Sign Up"
+                            onSubmit={(e) => {
+                              e.preventDefault();
+                              console.log("Register form submitted:", formData);
+                              handleRegister(formData); // Call handleRegister with the form data
+                            }}
+                            onClose={() => {
+                              console.log("Register modal closed");
+                              setShowRegisterModal(false);
+                            }}
+                          >
+                            <input
+                              type="text"
+                              name="name"
+                              placeholder="Name"
+                              value={formData.name}
+                              onChange={handleInputChange}
+                              required
+                            />
+                            <input
+                              type="text"
+                              name="avatar"
+                              placeholder="Avatar URL"
+                              value={formData.avatar}
+                              onChange={handleInputChange}
+                            />
+                            <input
+                              type="email"
+                              name="email"
+                              placeholder="Email"
+                              value={formData.email}
+                              onChange={handleInputChange}
+                              required
+                            />
+                            <input
+                              type="password"
+                              name="password"
+                              placeholder="Password"
+                              value={formData.password}
+                              onChange={handleInputChange}
+                              required
+                            />
+                          </ModalWithForm>
                         )}
+
                         {showLoginModal && (
-                          <LoginModal
-                            onLogin={handleLogin}
-                            onClose={() => setShowLoginModal(false)}
-                          />
+                          <ModalWithForm
+                            isOpen={showLoginModal}
+                            title="Login"
+                            onSubmit={(e) => {
+                              e.preventDefault();
+                              console.log("Login form submitted:", formData);
+                              handleLogin(formData); // Call handleLogin with the form data
+                            }}
+                            onClose={() => {
+                              console.log("Login modal closed");
+                              setShowLoginModal(false);
+                            }}
+                          >
+                            <input
+                              type="email"
+                              name="email"
+                              placeholder="Email"
+                              value={formData.email}
+                              onChange={handleInputChange}
+                              required
+                            />
+                            <input
+                              type="password"
+                              name="password"
+                              placeholder="Password"
+                              value={formData.password}
+                              onChange={handleInputChange}
+                              required
+                            />
+                          </ModalWithForm>
                         )}
+
                         {isLoggedIn && (
-                          <Main
-                            weatherData={weatherData}
-                            handleCardClick={handleCardClick}
-                            clothingItems={updatedClothingItems}
-                            onCardLike={handleCardLike}
-                          />
+                          <>
+                            <Main
+                              weatherData={weatherData}
+                              clothingItems={updatedClothingItems}
+                              handleCardClick={handleCardClick}
+                              onCardLike={handleCardLike}
+                            />
+                            <ClothesSection
+                              clothingItems={updatedClothingItems}
+                              onCardClick={handleCardClick}
+                              onAddItemClick={() =>
+                                setActiveModal(MODALS.ADD_GARMENT)
+                              }
+                            />
+                          </>
                         )}
                       </>
                     }

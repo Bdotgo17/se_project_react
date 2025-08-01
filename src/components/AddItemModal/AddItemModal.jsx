@@ -2,30 +2,13 @@ import React, { useState } from "react";
 import "./AddItemModal.css";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 
-function AddItemModal({ onClose, onSubmit, formData, handleChange }) {
-  // // State to manage form inputs
-  // const [formData, setFormData] = useState({
-  //   name: "",
-  //   imageUrl: "",
-  //   weather: "",
-  // });
-
-  // // Handle input changes
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
-
-  // // Handle form submission
-  // const handleSubmit = (e) => {
-  //   e.preventDefault(); // Prevent default form submission behavior
-  //   console.log("Form submitted with data:", formData); // Debug log
-  //   onSubmit(formData); // Pass form data to the parent component
-  //   onClose(); // Close the modal after submission
-  // };
+function AddItemModal({
+  onClose,
+  onSubmit,
+  formData = { name: "", imageUrl: "", weather: "" },
+  handleChange,
+}) {
+  console.log("formData in AddItemModal:", formData); // Debug log
 
   return (
     <ModalWithForm

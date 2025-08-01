@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 import "../ItemCard/ItemCard.css";
 
-function ItemCard({ item, onCardClick }) {
+function ItemCard({ item, onCardClick, onCardLike, currentWeatherType }) {
   const handleCardClick = () => {
     onCardClick(item);
   };
@@ -19,6 +19,15 @@ function ItemCard({ item, onCardClick }) {
   const handleLike = () => {
     onCardLike({ id: item._id, isLiked });
   };
+
+  // Only render the card if the item's weather matches the current weather type
+  if (
+    !item.weather ||
+    !currentWeatherType ||
+    item.weather.toLowerCase() !== currentWeatherType.toLowerCase()
+  ) {
+    return null; // Do not render the card if it doesn't match the weather
+  }
 
   return (
     <li className="card">

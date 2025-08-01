@@ -12,11 +12,17 @@ function Main({
   clothingItems = [],
 }) {
   const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext); // Access the current unit
+
   console.log("Clothing items:", clothingItems); // Debug log
   console.log("Weather data type:", weatherData.type); // Debug log
 
   const filteredItems = Array.isArray(clothingItems)
-    ? clothingItems.filter((item) => item.weather === weatherData.type)
+    ? clothingItems.filter(
+        (item) =>
+          item.weather &&
+          weatherData.type &&
+          item.weather.toLowerCase() === weatherData.type.toLowerCase()
+      )
     : [];
 
   return (
@@ -31,16 +37,19 @@ function Main({
           &deg; {currentTemperatureUnit} / You may want to wear:
         </p>
         <ul className="cards__list">
-          {filteredItems.length > 0
-            ? filteredItems.map((item) => (
-                <ItemCard
-                  key={item._id}
-                  item={item}
-                  onCardClick={handleCardClick}
-                  onCardLike={onCardLike} // Pass the onCardLike function to ItemCard
-                />
-              ))
-            : null}
+          {filteredItems.length > 0 ? (
+            filteredItems.map((item) => (
+              <ItemCard
+                key={item._id}
+                item={item}
+                onCardClick={handleCardClick}
+                onCardLike={onCardLike} // Pass the onCardLike function to ItemCard
+                currentWeatherType={weatherData.type} // Pass the current weather type
+              />
+            ))
+          ) : (
+            <p>No items match the current weather.</p>
+          )}
         </ul>
       </section>
     </main>

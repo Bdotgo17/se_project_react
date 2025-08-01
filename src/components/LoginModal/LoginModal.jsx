@@ -16,10 +16,33 @@ function LoginModal({ onLogin, onClose }) {
   return (
     <div className="modal">
       <form onSubmit={handleSubmit}>
-        <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
-        <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
-        <button type="submit">Login</button>
-        <button type="button" onClick={onClose}>Close</button>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          autoComplete="email"
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+          autoComplete="current-password"
+        />
+        <button
+          type="submit"
+          onClick={() => console.log("Login button clicked")}
+        >
+          Login
+        </button>
+        <button type="button" onClick={onClose}>
+          Close
+        </button>
       </form>
     </div>
   );
