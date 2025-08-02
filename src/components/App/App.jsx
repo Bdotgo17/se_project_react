@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { signup, signin, checkToken } from "../../utils/auth";
 import RegisterModal from "../RegisterModal/RegisterModal";
 import LoginModal from "../LoginModal/LoginModal";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { coordinates, APIkey } from "../../utils/constants";
 import Header from "../Header/Header";
@@ -19,6 +19,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import AddItemModal from "../AddItemModal/AddItemModal";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import CurrentUserContext from "../../contexts/CurrentUserContext"; // Import the context
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const MODALS = {
   ADD_GARMENT: "add-garment",
@@ -53,6 +54,7 @@ function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   const [currentUser, setCurrentUser] = useState(null); // State for current user
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     getWeather(coordinates, APIkey)
@@ -231,6 +233,8 @@ function App() {
     localStorage.removeItem("jwt"); // Remove the token from local storage
     setIsLoggedIn(false); // Set the isLoggedIn state to false
     setCurrentUser(null); // Clear the current user data
+    setUpdatedClothingItems([]); // Clear clothing items
+    navigate("/"); // Redirect to the home page
   };
 
   const closeActiveModal = () => {
@@ -238,197 +242,216 @@ function App() {
     setActiveModal(""); // Close the modal by resetting the activeModal state
   };
 
+  const handleLoginClick = () => {
+    console.log("Login button clicked"); // Debug log
+    setShowLoginModal(true); // Open the login modal
+  };
+
   return (
-    <Router>
-      <CurrentUserContext.Provider value={currentUser}>
-        <CurrentTemperatureUnitContext.Provider
-          value={{ currentTemperatureUnit, handleToggleSwitchChange }}
-        >
-          <div className="App">
-            <div className="page">
-              <div className="page__content">
-                <Header
-                  handleAddClick={() => {
-                    console.log("Add Clothes button clicked"); // Debug log
-                    setActiveModal(MODALS.ADD_GARMENT);
-                  }}
-                  weatherData={weatherData}
-                  username={username}
-                  onProfileClick={handleProfileClick}
-                  currentTemperatureUnit={currentTemperatureUnit}
-                  onToggleSwitchChange={handleToggleSwitchChange}
-                />
-                {isProfileOpen && <Sidebar username={username} />}{" "}
-                <Routes>
-                  <Route
-                    path="/"
-                    element={
-                      <>
-                        {!isLoggedIn && (
-                          <>
-                            <button
-                              onClick={() => {
-                                console.log("Register button clicked");
-                                setShowRegisterModal(true);
-                              }}
-                            >
-                              Sign Up
-                            </button>
-                            <button
-                              onClick={() => {
-                                console.log("Login button clicked");
-                                setShowLoginModal(true);
-                              }}
-                            >
-                              Login
-                            </button>
-                          </>
-                        )}
-
-                        {showRegisterModal && (
-                          <ModalWithForm
-                            isOpen={showRegisterModal}
-                            title="Sign Up"
-                            onSubmit={(e) => {
-                              e.preventDefault();
-                              console.log("Register form submitted:", formData);
-                              handleRegister(formData); // Call handleRegister with the form data
-                            }}
-                            onClose={() => {
-                              console.log("Register modal closed");
-                              setShowRegisterModal(false);
+    <CurrentUserContext.Provider value={currentUser}>
+      <CurrentTemperatureUnitContext.Provider
+        value={{ currentTemperatureUnit, handleToggleSwitchChange }}
+      >
+        <div className="App">
+          <div className="page">
+            <div className="page__content">
+              <Header
+                handleAddClick={() => {
+                  console.log("Add Clothes button clicked"); // Debug log
+                  setActiveModal(MODALS.ADD_GARMENT);
+                }}
+                handleLoginClick={() => {
+                  console.log("Login button clicked in header"); // Debug log
+                  setShowLoginModal(true); // Open the login modal
+                }}
+                weatherData={weatherData}
+                currentUser={currentUser}
+                username={username}
+                onProfileClick={handleProfileClick}
+                currentTemperatureUnit={currentTemperatureUnit}
+                onToggleSwitchChange={handleToggleSwitchChange}
+                currentDate={new Date().toLocaleDateString()} // Pass the current date
+              />
+              {isProfileOpen && <Sidebar username={username} />}{" "}
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <>
+                      {!isLoggedIn && (
+                        <>
+                          <button
+                            onClick={() => {
+                              console.log("Register button clicked");
+                              setShowRegisterModal(true);
                             }}
                           >
-                            <input
-                              type="text"
-                              name="name"
-                              placeholder="Name"
-                              value={formData.name}
-                              onChange={handleInputChange}
-                              required
-                            />
-                            <input
-                              type="text"
-                              name="avatar"
-                              placeholder="Avatar URL"
-                              value={formData.avatar}
-                              onChange={handleInputChange}
-                            />
-                            <input
-                              type="email"
-                              name="email"
-                              placeholder="Email"
-                              value={formData.email}
-                              onChange={handleInputChange}
-                              required
-                            />
-                            <input
-                              type="password"
-                              name="password"
-                              placeholder="Password"
-                              value={formData.password}
-                              onChange={handleInputChange}
-                              required
-                            />
-                          </ModalWithForm>
-                        )}
-
-                        {showLoginModal && (
-                          <ModalWithForm
-                            isOpen={showLoginModal}
-                            title="Login"
-                            onSubmit={(e) => {
-                              e.preventDefault();
-                              console.log("Login form submitted:", formData);
-                              handleLogin(formData); // Call handleLogin with the form data
-                            }}
-                            onClose={() => {
-                              console.log("Login modal closed");
-                              setShowLoginModal(false);
+                            Sign Up
+                          </button>
+                          <button
+                            onClick={() => {
+                              console.log("Login button clicked");
+                              setShowLoginModal(true);
                             }}
                           >
-                            <input
-                              type="email"
-                              name="email"
-                              placeholder="Email"
-                              value={formData.email}
-                              onChange={handleInputChange}
-                              required
-                            />
-                            <input
-                              type="password"
-                              name="password"
-                              placeholder="Password"
-                              value={formData.password}
-                              onChange={handleInputChange}
-                              required
-                            />
-                          </ModalWithForm>
-                        )}
+                            Login
+                          </button>
+                        </>
+                      )}
 
-                        {isLoggedIn && (
-                          <>
-                            <Main
-                              weatherData={weatherData}
-                              clothingItems={updatedClothingItems}
-                              handleCardClick={handleCardClick}
-                              onCardLike={handleCardLike}
-                            />
-                            <ClothesSection
-                              clothingItems={updatedClothingItems}
-                              onCardClick={handleCardClick}
-                              onAddItemClick={() =>
-                                setActiveModal(MODALS.ADD_GARMENT)
-                              }
-                            />
-                          </>
-                        )}
-                      </>
-                    }
-                  />
-                  <Route
-                    path="/profile"
-                    element={
-                      isLoggedIn ? (
-                        <ProtectedRoute isLoggedIn={isLoggedIn}>
-                          <Profile
+                      {showRegisterModal && (
+                        <ModalWithForm
+                          isOpen={showRegisterModal}
+                          title="Sign Up"
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            console.log("Register form submitted:", formData);
+                            handleRegister(formData); // Call handleRegister with the form data
+                          }}
+                          onClose={() => {
+                            console.log("Register modal closed");
+                            setShowRegisterModal(false);
+                          }}
+                        >
+                          <input
+                            type="text"
+                            name="name"
+                            placeholder="Name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            required
+                          />
+                          <input
+                            type="text"
+                            name="avatar"
+                            placeholder="Avatar URL"
+                            value={formData.avatar}
+                            onChange={handleInputChange}
+                          />
+                          <input
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                          />
+                          <input
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            required
+                          />
+                        </ModalWithForm>
+                      )}
+
+                      {showLoginModal && (
+                        <ModalWithForm
+                          isOpen={showLoginModal}
+                          title="Login"
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            console.log("Login form submitted:", formData);
+                            handleLogin(formData); // Call handleLogin with the form data
+                          }}
+                          onClose={() => {
+                            console.log("Login modal closed");
+                            setShowLoginModal(false);
+                          }}
+                        >
+                          <input
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                          />
+                          <input
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            required
+                          />
+                        </ModalWithForm>
+                      )}
+
+                      {isLoggedIn && (
+                        <>
+                          <Main
+                            weatherData={weatherData}
                             clothingItems={updatedClothingItems}
+                            handleCardClick={handleCardClick}
+                            onCardLike={handleCardLike}
+                          />
+                          <ClothesSection
+                            clothingItems={updatedClothingItems}
+                            onCardClick={handleCardClick}
                             onAddItemClick={() =>
                               setActiveModal(MODALS.ADD_GARMENT)
                             }
-                            username={username}
-                            onSignOut={handleSignOut}
                           />
-                        </ProtectedRoute>
-                      ) : (
-                        <p>Please log in to view your profile.</p>
-                      )
-                    }
-                  />
-                </Routes>
-                {activeModal === MODALS.ADD_GARMENT && (
-                  <AddItemModal
-                    onClose={() => setActiveModal("")}
-                    onSubmit={handleSubmit}
-                    formData={formData} // Pass form data state
-                    handleChange={handleInputChange}
-                  />
-                )}
-                {activeModal === MODALS.PREVIEW && (
-                  <ItemModal
-                    activeModal={activeModal}
-                    card={selectedCard} // Pass the selected card details
-                    onClose={closeActiveModal} // Close the modal
-                    handleDeleteCard={handleDeleteCard} // Pass the delete handler
-                  />
-                )}
-                <Footer />
-              </div>
+                        </>
+                      )}
+                    </>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    isLoggedIn ? (
+                      <ProtectedRoute isLoggedIn={isLoggedIn}>
+                        <Profile
+                          clothingItems={updatedClothingItems}
+                          onAddItemClick={() =>
+                            setActiveModal(MODALS.ADD_GARMENT)
+                          }
+                          username={username}
+                          onSignOut={handleSignOut}
+                        />
+                      </ProtectedRoute>
+                    ) : (
+                      <p>
+                        Please log in to view your profile.{" "}
+                        <button
+                          onClick={() => {
+                            console.log("Log In button clicked"); // Debug log
+                            setShowLoginModal(true); // Open the login modal
+                          }}
+                        >
+                          Log In
+                        </button>
+                      </p>
+                    )
+                  }
+                />
+              </Routes>
+              {activeModal === MODALS.ADD_GARMENT && (
+                <AddItemModal
+                  onClose={() => setActiveModal("")}
+                  onSubmit={handleSubmit}
+                  formData={formData} // Pass form data state
+                  handleChange={handleInputChange}
+                />
+              )}
+              {activeModal === MODALS.PREVIEW && (
+                <ItemModal
+                  activeModal={activeModal}
+                  card={selectedCard} // Pass the selected card details
+                  onClose={closeActiveModal} // Close the modal
+                  handleDeleteCard={handleDeleteCard} // Pass the delete handler
+                />
+              )}
+              <Footer />
             </div>
           </div>
-        </CurrentTemperatureUnitContext.Provider>
-      </CurrentUserContext.Provider>
-    </Router>
+        </div>
+      </CurrentTemperatureUnitContext.Provider>
+    </CurrentUserContext.Provider>
   );
 }
 

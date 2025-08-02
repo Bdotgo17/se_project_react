@@ -7,7 +7,8 @@ import logo from "../../assets/logo.svg";
 import "./Header.css";
 
 function Header({
-  handleAddClick,
+  handleAdClick,
+  handleLoginClick,
   weatherData,
   username,
   onProfileClick,
@@ -66,7 +67,10 @@ function Header({
             <p className="header__username">{currentUser.name}</p>
           </Link>
         ) : (
-          <button onClick={onProfileClick} className="header__login-button">
+          <button
+            onClick={handleLoginClick} // Use the new handleLoginClick prop
+            className="header__login-button"
+          >
             Log In
           </button>
         )}
