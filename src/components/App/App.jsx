@@ -103,6 +103,14 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    console.log("showLoginModal updated:", showLoginModal);
+  }, [showLoginModal]);
+
+  useEffect(() => {
+    console.log("isLoggedIn updated:", isLoggedIn); // Debug log
+  }, [isLoggedIn]);
+
   const handleRegister = ({ name, avatar, email, password }) => {
     signup(name, avatar, email, password)
       .then(() => handleLogin({ email, password }))
@@ -118,9 +126,30 @@ function App() {
         localStorage.setItem("jwt", res.token);
         setToken(res.token);
         setIsLoggedIn(true);
+        console.log("Closing login modal after successful login"); // Debug log
         setShowLoginModal(false);
+        fetchUserData(res.token); // Fetch user data after login
+        console.log("JWT token in localStorage:", localStorage.getItem("jwt"));
       })
-      .catch((err) => console.error("Login failed:", err));
+      .catch((err) => {
+        console.error("Login failed:", err);
+        alert("Login failed. Please check your email and password."); // Optional user feedback
+      });
+  };
+
+  const fetchUserData = (token) => {
+    fetch(`${BASE_URL}/users/me`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("User data fetched:", data); // Debug log
+        setCurrentUser(data); // Update user state
+      })
+      .catch((err) => console.error("Failed to fetch user data:", err));
   };
 
   const handleProfileClick = () => {
@@ -184,6 +213,7 @@ function App() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Input changed: ${name} = ${value}`); // Debug log
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -247,6 +277,11 @@ function App() {
     setShowLoginModal(true); // Open the login modal
   };
 
+  const handleAddClick = () => {
+    console.log("Add button clicked"); // Debug log
+    setActiveModal(MODALS.ADD_GARMENT); // Example action
+  };
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <CurrentTemperatureUnitContext.Provider
@@ -263,6 +298,7 @@ function App() {
                 handleLoginClick={() => {
                   console.log("Login button clicked in header"); // Debug log
                   setShowLoginModal(true); // Open the login modal
+                  console.log("handleAddClick:", handleAddClick);
                 }}
                 weatherData={weatherData}
                 currentUser={currentUser}
@@ -357,7 +393,9 @@ function App() {
                             handleLogin(formData); // Call handleLogin with the form data
                           }}
                           onClose={() => {
-                            console.log("Login modal closed");
+                            console.log(
+                              "Login modal closed via onClose handler"
+                            );
                             setShowLoginModal(false);
                           }}
                         >
@@ -421,6 +459,7 @@ function App() {
                           onClick={() => {
                             console.log("Log In button clicked"); // Debug log
                             setShowLoginModal(true); // Open the login modal
+                            console.log("showLoginModal:", showLoginModal); // Debug log
                           }}
                         >
                           Log In

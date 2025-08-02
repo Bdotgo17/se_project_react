@@ -1,11 +1,11 @@
-const baseUrl = "http://localhost:3001/items";
+const BASE_URL = "http://localhost:3001";
 
 function checkResponse(res) {
   return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
 }
 
 export function getItems() {
-  return fetch(baseUrl)
+  return fetch(`${BASE_URL}/items`) // Use BASE_URL and append /items
     .then((res) => {
       console.log("Raw response from getItems:", res);
       return checkResponse(res);
@@ -56,7 +56,7 @@ export function deleteItem(id) {
   console.log("ID being passed to deleteItem:", id); // Debug log
   console.log("JWT token:", token); // Debug log
 
-  return fetch(`${baseUrl}/${id}`, {
+  return fetch(`${BASE_URL}/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -75,7 +75,7 @@ export function deleteItem(id) {
 
 export function addCardLike(id) {
   const token = localStorage.getItem("jwt"); // Retrieve the token from local storage
-  return fetch(`${baseUrl}/${id}/likes`, {
+  return fetch(`${BASE_URL}/${id}/likes`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -89,7 +89,7 @@ export function removeCardLike(id) {
   console.log("ID passed to removeCardLike:", id); // Debug log
   console.log("JWT token:", token); // Debug log
 
-  return fetch(`${baseUrl}/${id}/likes`, {
+  return fetch(`${BASE_URL}/${id}/likes`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

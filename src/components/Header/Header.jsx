@@ -7,7 +7,7 @@ import logo from "../../assets/logo.svg";
 import "./Header.css";
 
 function Header({
-  handleAdClick,
+  handleAddClick,
   handleLoginClick,
   weatherData,
   username,

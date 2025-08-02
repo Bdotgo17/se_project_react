@@ -1,23 +1,4 @@
 @import url(./vendor/normalize.css);
-@import url("https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@700&display=swap");
-
-@font-face {
-  font-family: "Cabinet Grotesk";
-  src: url("/src/assets/fonts/CabinetGrotesk-Regular.woff2") format("woff2"),
-    url("/src/assets/fonts/CabinetGrotesk-Regular.woff") format("woff"),
-    url("/src/assets/fonts/CabinetGrotesk-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Cabinet Grotesk";
-  src: url("/src/assets/fonts/CabinetGrotesk-Bold.woff2") format("woff2"),
-    url("/src/assets/fonts/CabinetGrotesk-Bold.woff") format("woff"),
-    url("/src/assets/fonts/CabinetGrotesk-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-}
 
 /* Global styles for html and body */
 html,

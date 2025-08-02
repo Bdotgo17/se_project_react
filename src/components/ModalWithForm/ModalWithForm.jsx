@@ -9,8 +9,9 @@ function ModalWithForm({
   onClose,
   onSubmit,
 }) {
+  console.log("ModalWithForm rendered with isOpen:", isOpen);
   if (!isOpen) return null;
-  
+
   return (
     <div className={`form-modal ${isOpen ? "form-modal_opened" : ""}`}>
       <div className="form-modal__overlay" onClick={onClose}></div>
