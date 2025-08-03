@@ -20,6 +20,7 @@ import AddItemModal from "../AddItemModal/AddItemModal";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import CurrentUserContext from "../../contexts/CurrentUserContext"; // Import the context
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import AddGarmentForm from "../AddGarmentForm/AddGarmentForm";
 
 const MODALS = {
   ADD_GARMENT: "add-garment",
@@ -55,6 +56,7 @@ function App() {
 
   const [currentUser, setCurrentUser] = useState(null); // State for current user
   const navigate = useNavigate(); // Initialize useNavigate
+  const [isAddGarmentModalOpen, setIsAddGarmentModalOpen] = useState(false);
 
   useEffect(() => {
     getWeather(coordinates, APIkey)
@@ -282,6 +284,18 @@ function App() {
     setActiveModal(MODALS.ADD_GARMENT); // Example action
   };
 
+  const handleAddGarment = (name, imageUrl, weather) => {
+    addItem(name, imageUrl, weather)
+      .then((newItem) => {
+        console.log("New item added:", newItem);
+        // Update state or UI with the new item
+        // Example: setItems((prevItems) => [...prevItems, newItem]);
+      })
+      .catch((err) => {
+        console.error("Error adding garment:", err);
+      });
+  };
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <CurrentTemperatureUnitContext.Provider
@@ -334,7 +348,16 @@ function App() {
                           </button>
                         </>
                       )}
-
+                      {isLoggedIn && (
+                        <>
+                          {/* Add Garment Form */}
+                          <AddGarmentForm
+                            onAddGarment={handleAddGarment}
+                            isOpen={isAddGarmentModalOpen}
+                            onClose={() => setIsAddGarmentModalOpen(false)}
+                          />
+                        </>
+                      )}
                       {showRegisterModal && (
                         <ModalWithForm
                           isOpen={showRegisterModal}
