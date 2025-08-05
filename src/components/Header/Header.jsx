@@ -7,6 +7,8 @@ import logo from "../../assets/logo.svg";
 import "./Header.css";
 
 function Header({
+  handleChangeProfileData,
+  handleLogout,
   handleAddClick,
   handleLoginClick,
   weatherData,
@@ -14,6 +16,10 @@ function Header({
   onProfileClick,
   currentTemperatureUnit,
   onToggleSwitchChange,
+  isLoggedIn, // Add this prop to determine login state
+  setShowRegisterModal, // Add this prop for the Sign Up button
+  setShowLoginModal, // Add this prop for the Log In button
+  setActiveModal,
 }) {
   const [isProfileLinkVisible, setIsProfileLinkVisible] = useState(false);
   const currentUser = useContext(CurrentUserContext);
@@ -22,11 +28,22 @@ function Header({
     setIsProfileLinkVisible((prev) => !prev);
   };
 
+  const handleSidebarToggle = () => {
+    setIsSidebarOpen((prev) => !prev); // Toggle sidebar visibility
+    onProfileClick(); // Trigger the parent logic for opening the sidebar
+  };
+
   // Declare currentDate as a local variable
   const currentDate = new Date().toLocaleString("default", {
     month: "long",
     day: "numeric",
   });
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const handleProfileClick = () => {
+    setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar visibility
+  };
 
   return (
     <header className="header">
@@ -39,20 +56,27 @@ function Header({
           : weatherData.temp?.C}
         ° {currentDate}, {weatherData.city}
       </p>
-      <ToggleSwitch />{" "}
-      <button
-        onClick={() => {
-          console.log("Header button clicked!"); // Debug log
-          handleAddClick();
-        }}
-        type="button"
-        className="header__add-clothes-btn"
-      >
-        + Add clothes
-      </button>
+
+      <ToggleSwitch onToggleSwitchChange={onToggleSwitchChange} />
+
+      {isLoggedIn && (
+        <button
+          onClick={() => setActiveModal("ADD_GARMENT")}
+          type="button"
+          className="header__add-clothes-btn"
+        >
+          + Add clothes
+        </button>
+      )}
+
       <div className="header__user-container">
-        {currentUser ? (
-          <Link to="/profile" className="header__profile-link">
+        {isLoggedIn ? (
+          <div
+            className="header__profile-link"
+            onClick={handleSidebarToggle} // Trigger the sidebar opening
+          >
+            <p className="header__username">{currentUser?.name || "User"}</p>
+            {/* Username first */}
             {currentUser.avatar ? (
               <img
                 src={currentUser.avatar}
@@ -61,18 +85,33 @@ function Header({
               />
             ) : (
               <div className="header__avatar-placeholder">
-                {currentUser.name.charAt(0).toUpperCase()}
+                {currentUser?.name?.charAt(0).toUpperCase() || "U"}
               </div>
             )}
-            <p className="header__username">{currentUser.name}</p>
-          </Link>
+          </div>
         ) : (
-          <button
-            onClick={handleLoginClick} // Use the new handleLoginClick prop
-            className="header__login-button"
-          >
-            Log In
-          </button>
+          <>
+            {/* Sign Up and Log In Buttons */}
+            <button
+              onClick={() => setShowRegisterModal(true)}
+              className="header__signup-button"
+            >
+              Sign Up
+            </button>
+            <button
+              onClick={() => setShowLoginModal(true)}
+              className="header__login-button"
+            >
+              Log In
+            </button>
+          </>
+        )}
+        {isSidebarOpen && (
+          <SideBar
+            currentUser={currentUser} // Pass currentUser as a prop
+            onChangeProfileData={handleChangeProfileData} // Pass the handler for changing profile data
+            onLogout={handleLogout} // Pass the handler for logging out
+          />
         )}
       </div>
     </header>

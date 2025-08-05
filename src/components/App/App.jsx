@@ -33,7 +33,7 @@ function App() {
     temp: { F: 0, C: 0 },
     city: "",
   });
-  const [activeModal, setActiveModal] = useState("");
+  const [activeModal, setActiveModal] = useState(null);
   const [selectedCard, setSelectedCard] = useState(null);
   const [updatedClothingItems, setUpdatedClothingItems] = useState([]);
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
@@ -128,6 +128,8 @@ function App() {
         localStorage.setItem("jwt", res.token);
         setToken(res.token);
         setIsLoggedIn(true);
+        setCurrentUser(user);
+
         console.log("Closing login modal after successful login"); // Debug log
         setShowLoginModal(false);
         fetchUserData(res.token); // Fetch user data after login
@@ -155,7 +157,10 @@ function App() {
   };
 
   const handleProfileClick = () => {
-    setIsProfileOpen((prev) => !prev); // Toggle visibility
+    setIsProfileOpen((prev) => {
+      console.log("isProfileOpen:", !prev); // Debug log
+      return !prev;
+    });
   };
 
   const handleToggleSwitchChange = () => {
@@ -296,12 +301,32 @@ function App() {
       });
   };
 
+  const handleChangeProfileData = () => {
+    console.log("Change Profile Data clicked");
+    // Add logic to handle profile data change, e.g., open a modal
+  };
+
+  const handleLogout = () => {
+    console.log("Logout button clicked");
+    localStorage.removeItem("jwt"); // Remove the JWT token
+    setIsLoggedIn(false); // Update the logged-in state
+    setCurrentUser(null); // Clear the current user data
+    navigate("/"); // Redirect to the home page
+  };
+
+  const handleAddGarmentClick = () => {
+    console.log("Add Garment button clicked");
+    setActiveModal(MODALS.ADD_GARMENT);
+  };
+
+  console.log("Current User in App:", currentUser); // Debug log
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <CurrentTemperatureUnitContext.Provider
         value={{ currentTemperatureUnit, handleToggleSwitchChange }}
       >
-        <div className="App">
+        <div className={`App ${isProfileOpen ? "sidebar-open" : ""}`}>
           <div className="page">
             <div className="page__content">
               <Header
@@ -309,53 +334,56 @@ function App() {
                   console.log("Add Clothes button clicked"); // Debug log
                   setActiveModal(MODALS.ADD_GARMENT);
                 }}
-                handleLoginClick={() => {
-                  console.log("Login button clicked in header"); // Debug log
-                  setShowLoginModal(true); // Open the login modal
-                  console.log("handleAddClick:", handleAddClick);
-                }}
+                setShowRegisterModal={setShowRegisterModal} // Pass the function to show the register modal
+                handleLoginClick={() => setShowLoginModal(true)} // Pass the function to show the login modal
+                setShowLoginModal={setShowLoginModal}
                 weatherData={weatherData}
                 currentUser={currentUser}
                 username={username}
+                isLoggedIn={isLoggedIn}
+                setActiveModal={setActiveModal}
                 onProfileClick={handleProfileClick}
                 currentTemperatureUnit={currentTemperatureUnit}
                 onToggleSwitchChange={handleToggleSwitchChange}
                 currentDate={new Date().toLocaleDateString()} // Pass the current date
+                handleChangeProfileData={handleChangeProfileData}
+                handleLogout={handleLogout}
+                onChangeProfileData={handleChangeProfileData}
+                onLogout={handleLogout}
               />
-              {isProfileOpen && <Sidebar username={username} />}{" "}
+              {isProfileOpen && (
+                <Sidebar
+                  isOpen={isProfileOpen}
+                  onClose={() => setIsProfileOpen(false)}
+                  currentUser={currentUser}
+                  username={username}
+                  onProfileClick={handleProfileClick}
+                  onSignOut={handleSignOut}
+                  onAddGarmentClick={handleAddGarmentClick}
+                  clothingItems={updatedClothingItems}
+                  onCardClick={handleCardClick}
+                  onCardLike={handleCardLike}
+                  handleDeleteCard={handleDeleteCard}
+                  handleAddItemSubmit={handleAddItemSubmit}
+                  handleInputChange={handleInputChange}
+                  formData={formData} // Pass form data state
+                  handleSubmit={handleSubmit} // Pass the submit handler
+                />
+              )}
               <Routes>
                 <Route
                   path="/"
                   element={
                     <>
-                      {!isLoggedIn && (
-                        <>
-                          <button
-                            onClick={() => {
-                              console.log("Register button clicked");
-                              setShowRegisterModal(true);
-                            }}
-                          >
-                            Sign Up
-                          </button>
-                          <button
-                            onClick={() => {
-                              console.log("Login button clicked");
-                              setShowLoginModal(true);
-                            }}
-                          >
-                            Login
-                          </button>
-                        </>
-                      )}
                       {isLoggedIn && (
                         <>
-                          {/* Add Garment Form */}
-                          <AddGarmentForm
-                            onAddGarment={handleAddGarment}
-                            isOpen={isAddGarmentModalOpen}
-                            onClose={() => setIsAddGarmentModalOpen(false)}
-                          />
+                          {activeModal === "ADD_GARMENT" && (
+                            <AddGarmentForm
+                              onAddGarment={handleAddGarment}
+                              isOpen={activeModal === "ADD_GARMENT"}
+                              onClose={() => setActiveModal(null)}
+                            />
+                          )}
                         </>
                       )}
                       {showRegisterModal && (
@@ -372,37 +400,71 @@ function App() {
                             setShowRegisterModal(false);
                           }}
                         >
-                          <input
-                            type="text"
-                            name="name"
-                            placeholder="Name"
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            required
-                          />
-                          <input
-                            type="text"
-                            name="avatar"
-                            placeholder="Avatar URL"
-                            value={formData.avatar}
-                            onChange={handleInputChange}
-                          />
-                          <input
-                            type="email"
-                            name="email"
-                            placeholder="Email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            required
-                          />
-                          <input
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                            value={formData.password}
-                            onChange={handleInputChange}
-                            required
-                          />
+                          <label className="form__label">
+                            Email*
+                            <input
+                              type="email"
+                              name="email"
+                              placeholder="Email"
+                              value={formData.email}
+                              onChange={handleInputChange}
+                              required
+                            />
+                          </label>
+                          <label className="form__label">
+                            Password*
+                            <input
+                              type="password"
+                              name="password"
+                              placeholder="Password"
+                              value={formData.password}
+                              onChange={handleInputChange}
+                              required
+                            />
+                          </label>
+                          <label className="form__label">
+                            Name*
+                            <input
+                              type="text"
+                              name="name"
+                              placeholder="Name"
+                              value={formData.name}
+                              onChange={handleInputChange}
+                              required
+                            />
+                          </label>
+                          <label className="form__label">
+                            Avatar URL*
+                            <input
+                              type="text"
+                              name="avatar"
+                              placeholder="Avatar URL"
+                              value={formData.avatar}
+                              onChange={handleInputChange}
+                            />
+                          </label>
+                          {/* Submit Button and Toggle Link */}
+                          <div className="form__actions">
+                            <button
+                              type="submit"
+                              className="form__submit-button"
+                            >
+                              Sign Up
+                            </button>
+                            <span className="form__toggle-link">
+                              or{" "}
+                              <button
+                                type="button"
+                                className="form__toggle-button"
+                                onClick={() => {
+                                  setShowRegisterModal(false); // Close the Sign Up modal
+                                  setShowLoginModal(true); // Open the Log In modal
+                                }}
+                              >
+                                Log In
+                              </button>
+                            </span>
+                          </div>
                         </ModalWithForm>
                       )}
 
@@ -422,22 +484,50 @@ function App() {
                             setShowLoginModal(false);
                           }}
                         >
-                          <input
-                            type="email"
-                            name="email"
-                            placeholder="Email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            required
-                          />
-                          <input
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                            value={formData.password}
-                            onChange={handleInputChange}
-                            required
-                          />
+                          <label className="form__label">
+                            Email
+                            <input
+                              type="email"
+                              name="email"
+                              placeholder="Email"
+                              value={formData.email}
+                              onChange={handleInputChange}
+                              required
+                            />
+                          </label>
+                          <label className="form__label">
+                            Password
+                            <input
+                              type="password"
+                              name="password"
+                              placeholder="Password"
+                              value={formData.password}
+                              onChange={handleInputChange}
+                              required
+                            />
+                          </label>
+                          {/* Submit Button and Toggle Link */}
+                          <div className="form__actions">
+                            <button
+                              type="submit"
+                              className="form__submit-button"
+                            >
+                              Log In
+                            </button>
+                            <span className="form__toggle-link">
+                              or{" "}
+                              <button
+                                type="button"
+                                className="form__toggle-button"
+                                onClick={() => {
+                                  setShowLoginModal(false); // Close the Log In modal
+                                  setShowRegisterModal(true); // Open the Sign Up modal
+                                }}
+                              >
+                                Sign Up
+                              </button>
+                            </span>
+                          </div>
                         </ModalWithForm>
                       )}
 
@@ -492,6 +582,7 @@ function App() {
                   }
                 />
               </Routes>
+
               {activeModal === MODALS.ADD_GARMENT && (
                 <AddItemModal
                   onClose={() => setActiveModal("")}
@@ -510,6 +601,7 @@ function App() {
               )}
               <Footer />
             </div>
+            <div className="page__sidebar"></div>
           </div>
         </div>
       </CurrentTemperatureUnitContext.Provider>

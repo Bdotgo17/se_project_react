@@ -3,7 +3,7 @@ import CurrentUserContext from "../../contexts/CurrentUserContext";
 import ItemCard from "../ItemCard/ItemCard";
 import "./ClothesSection.css";
 
-function ClothesSection({ clothingItems, onCardClick, onAddItemClick }) {
+function ClothesSection({ clothingItems= [], onCardClick, onAddItemClick }) {
   const currentUser = useContext(CurrentUserContext);
 
   const userClothingItems = clothingItems.filter(

@@ -1,0 +1,40 @@
+/* General styles for input, select, and textarea */
+form input:not([type="radio"]),
+form select,
+form textarea {
+  display: block;
+  width: 100%; /* Keep full width for text inputs, selects, and textareas */
+  padding: 8px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  font-size: 14px;
+  outline: none;
+}
+
+/* Styles for radio buttons */
+.form__radio-input {
+  width: auto; /* Ensure radio buttons are not stretched */
+  margin: 0; /* Reset margin */
+  accent-color: black; /* Customize the color of the radio button */
+  cursor: pointer; /* Add a pointer cursor */
+}
+
+/* Align radio buttons and labels */
+.form__radio-label {
+  display: flex;
+  align-items: center; /* Align the radio button and label text vertically */
+  gap: 8px; /* Space between the radio button and the label */
+}
+
+/* Group radio buttons vertically */
+.form__radio-group {
+  display: flex;
+  flex-direction: column; /* Stack the radio buttons vertically */
+  gap: 15px; /* Space between each radio button */
+  margin-top: 10px;
+}
+
+.form-modal__content .form__radio-group {
+  text-align: left !important;
+  justify-content: flex-start !important;
+}

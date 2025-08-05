@@ -24,9 +24,11 @@ function ModalWithForm({
         <h2 className="form-modal__title">{title}</h2>
         <form className="form-modal__form" onSubmit={onSubmit}>
           {children}
-          <button type="submit" className="form-modal__submit">
-            {buttonText}
-          </button>
+          {buttonText && (
+            <button type="submit" className="form-modal__submit">
+              {buttonText}
+            </button>
+          )}
         </form>
       </div>
     </div>

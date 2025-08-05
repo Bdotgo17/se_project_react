@@ -83,6 +83,9 @@
   font-size: 16px;
   line-height: 20px;
   box-sizing: border-box; /*  Include padding and border in width/height */
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+  overflow-y: auto; /* Enable scrolling if content overflows */
 }
 
 .form-modal__close {
@@ -116,14 +119,15 @@
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   z-index: 1000;
 }
 
 .form-modal__form {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  gap: 16px; /* Add spacing between form elements */
+  flex-grow: 1; /* Allow the form to grow and fill the modal */
+  justify-content: space-between; /* Push the Add button to the bottom */
 }
 
 .modal__input {
@@ -184,4 +188,76 @@
   display: flex; /* Use flexbox for centering */
   justify-content: center; /* Center text horizontally */
   align-items: center;
+}
+
+.form__label {
+  border: none; /* Remove any default border */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margin */
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Stack child elements vertically */
+  align-items: flex-start; /* Align child elements to the left */
+}
+
+.form__radio-label {
+  display: flex; /* Align radio button and label text horizontally */
+  align-items: center; /* Vertically align the radio button and text */
+  gap: 8px; /* Add space between the radio button and the label text */
+  margin-bottom: 8px; /* Optional: Add spacing between each radio button group */
+}
+.form__radio-group {
+  display: flex;
+  flex-direction: column; /* Stack radio button groups vertically */
+}
+
+.form__radio-input {
+  width: auto; /* Ensure radio buttons are not stretched */
+  margin: 0; /* Reset margin */
+  accent-color: black; /* Customize the color of the radio button */
+  cursor: pointer; /* Add a pointer cursor */
+}
+.form__radio-group {
+  display: flex;
+  flex-direction: column; /* Stack the radio buttons vertically */
+  gap: 15px; /* Space between each radio button */
+  margin-top: 10px; /* Add spacing above the radio button group */
+}
+
+.form__actions {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.form__submit-button {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white; /* White text */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.form__submit-button:hover {
+  background: rgba(0, 0, 0, 1);
+}
+
+.form__toggle-link {
+  margin-left: 10px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.3); /* Set text color to rgba(0, 0, 0, 0.3) */
+}
+
+.form__toggle-button {
+  background: none; /* Remove the background */
+  border: none; /* Remove the box around the button */
+  color: rgba(0, 0, 0, 0.3); /* Match the text color */
+  cursor: pointer;
+  text-decoration: none; /* Optional: Add underline for emphasis */
+  font-size: 14px;
+}
+
+.form__toggle-button:hover {
+  color: rgba(0, 0, 0, 0.5); /* Slightly darker color on hover */
 }

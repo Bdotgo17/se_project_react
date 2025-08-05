@@ -37,7 +37,12 @@
 
 .header__add-clothes-btn {
   margin-left: 0 20px 0 20px;
-  border: none;
+  border: none !important;
+  border-radius: 5px !important;
+  padding: 10px 20px !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease !important;
   font-family: "Cabinet Grotesk", sans-serif;
   font-weight: 700;
   font-size: 20px;
