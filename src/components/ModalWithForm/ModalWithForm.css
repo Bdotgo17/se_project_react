@@ -261,3 +261,65 @@
 .form__toggle-button:hover {
   color: rgba(0, 0, 0, 0.5); /* Slightly darker color on hover */
 }
+
+/* Styles specific to the Change Profile Data modal */
+.change-profile-modal .form-modal__content {
+  width: 496px;
+  height: 305px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: fixed;
+}
+/* Save Changes button styles */
+.change-profile-modal .form-modal__submit {
+  background-color: gray; /* Default color */
+  color: white;
+  border: none;
+  width: 128px; /* Set width */
+  height: 36px; /* Set height */
+  padding: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center; /* Center text inside the button */
+  transition: background-color 0.3s ease; /* Smooth transition */
+  margin-top: 20px; /* Add spacing from the form fields */
+  align-self: flex-start;
+}
+
+.change-profile-modal .form-modal__submit:hover {
+  background-color: black; /* Change to black on hover */
+}
+
+.change-profile-modal .form-modal__submit:active {
+  background-color: black; /* Keep black when clicked */
+}
+
+button.modal__submit-button {
+  background: rgba(0, 0, 0, 0.3);
+  color: white; /* Set text color to white */
+  border: none;
+  width: 128px; /* Set width */
+  height: 36px; /* Set height */
+  padding: 0; /* Remove extra padding */
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center; /* Center text inside the button */
+  transition: background-color 0.3s ease; /* Smooth transition */
+  margin-top: 20px; /* Add spacing from the form fields */
+  align-self: flex-start; /* Align the button to the left */
+}
+
+button.modal__submit-button:hover {
+  background-color: black; /* Change to gray on hover */
+}
+
+button.modal__submit-button:active {
+  background-color: black; /* Change to black when clicked */
+}

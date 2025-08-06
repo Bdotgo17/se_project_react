@@ -38,3 +38,26 @@
   margin-bottom: 16px; /* Add spacing below the text */
 }
 
+.item-card__like-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.item-card__like-icon {
+  width: 24px;
+  height: 24px;
+  /* Optional: transition for hover effect */
+  transition: filter 0.2s;
+}
+
+.item-card__like-button_active .item-card__like-icon {
+  filter: none;
+  color: black; /* red */
+  /* Or use filter: invert(27%) sepia(98%) saturate(7491%) hue-rotate(357deg) brightness(101%) contrast(108%); for red */
+}
+
+.item-card__like-button:hover .item-card__like-icon {
+  filter: brightness(0.8);
+}

@@ -21,17 +21,25 @@ export function signin(email, password) {
     body: JSON.stringify({ email, password }),
   })
     .then((res) => {
+      // Check if the response is not OK
       if (!res.ok) {
         return res
           .json()
           .then((err) => Promise.reject(`Error: ${err.message || res.status}`));
       }
-      return res.json();
+      return res.json(); // Parse the response JSON
     })
     .then((data) => {
+      if (!data.token) {
+        throw new Error("Token is missing from the response");
+      }
       console.log("Token received:", data.token); // Debug log
       localStorage.setItem("jwt", data.token); // Save token to local storage
-      return data;
+      return data; // Return the full response data
+    })
+    .catch((err) => {
+      console.error("Signin failed:", err); // Log the error
+      throw err; // Re-throw the error for further handling
     });
 }
 
@@ -44,14 +52,25 @@ export function checkToken(token) {
       "Content-Type": "application/json",
       authorization: `Bearer ${token}`,
     },
-  }).then((res) => {
-    if (!res.ok) {
-      if (res.status === 401) {
-        localStorage.removeItem("jwt"); // Clear expired token
-        window.location.href = "/login"; // Redirect to login page
+  })
+    .then((res) => {
+      console.log("Raw response from checkToken:", res); // Debug log
+      if (!res.ok) {
+        if (res.status === 401) {
+          localStorage.removeItem("jwt"); // Clear expired token
+          window.location.href = "/login"; // Redirect to login page
+        }
+        return Promise.reject(`Error: ${res.status}`);
       }
-      return Promise.reject(`Error: ${res.status}`);
-    }
-    return res.json();
-  });
+      return res.json();
+    })
+    .then((data) => {
+      console.log("Parsed user data from checkToken:", data); // Debug log
+      return data;
+    })
+    .catch((err) => {
+      console.error("Error in checkToken:", err);
+      throw err;
+    });
 }
+

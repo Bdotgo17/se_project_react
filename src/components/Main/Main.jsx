@@ -10,6 +10,7 @@ function Main({
   handleCardClick,
   onCardLike,
   clothingItems = [],
+  updatedClothingItems,
 }) {
   const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext); // Access the current unit
 
@@ -25,8 +26,15 @@ function Main({
       )
     : [];
 
+  const filteredClothingItems = updatedClothingItems.filter(
+    (item) =>
+      item.weather === weatherData.type &&
+      item.weather.toLowerCase() === weatherData.type.toLowerCase()
+  );
+
   return (
     <main>
+    
       <WeatherCard temperature={weatherData.temp} />
       <section className="cards">
         <p className="cards__text">
@@ -36,6 +44,7 @@ function Main({
             : weatherData.temp.C}{" "}
           &deg; {currentTemperatureUnit} / You may want to wear:
         </p>
+
         <ul className="cards__list">
           {filteredItems.length > 0 ? (
             filteredItems.map((item) => (

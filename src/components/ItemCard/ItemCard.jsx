@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 import "../ItemCard/ItemCard.css";
+import heartIcon from "../../assets/heartlike.svg";
+import heartIconActive from "../../assets/blackLikeHeart.svg";
 
 function ItemCard({ item, onCardClick, onCardLike, currentWeatherType }) {
   const handleCardClick = () => {
@@ -11,6 +13,12 @@ function ItemCard({ item, onCardClick, onCardLike, currentWeatherType }) {
   // Check if the item was liked by the current user
   const isLiked = item.likes.some((id) => id === currentUser?._id);
 
+    <img
+    src={isLiked ? heartIconActive : heartIcon}
+    alt="Like"
+    className="item-card__like-icon"
+  />
+  
   // Create a variable for the like button's class
   const itemLikeButtonClassName = `item-card__like-button ${
     isLiked ? "item-card__like-button_active" : ""
@@ -41,7 +49,7 @@ function ItemCard({ item, onCardClick, onCardLike, currentWeatherType }) {
       <div className="card__info">
         {currentUser && ( // Hide the like button for unauthorized users
           <button className={itemLikeButtonClassName} onClick={handleLike}>
-            Like
+            <img src={heartIcon} alt="Like" className="item-card__like-icon" />
           </button>
         )}
       </div>

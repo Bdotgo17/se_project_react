@@ -7,12 +7,14 @@ import logo from "../../assets/logo.svg";
 import "./Header.css";
 
 function Header({
+  onSidebarToggle,
   handleChangeProfileData,
   handleLogout,
   handleAddClick,
   handleLoginClick,
   weatherData,
   username,
+  currentUser,
   onProfileClick,
   currentTemperatureUnit,
   onToggleSwitchChange,
@@ -22,11 +24,12 @@ function Header({
   setActiveModal,
 }) {
   const [isProfileLinkVisible, setIsProfileLinkVisible] = useState(false);
-  const currentUser = useContext(CurrentUserContext);
 
   const toggleProfileLink = () => {
     setIsProfileLinkVisible((prev) => !prev);
   };
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen((prev) => !prev); // Toggle sidebar visibility
@@ -38,8 +41,6 @@ function Header({
     month: "long",
     day: "numeric",
   });
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleProfileClick = () => {
     setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar visibility
@@ -70,7 +71,7 @@ function Header({
       )}
 
       <div className="header__user-container">
-        {isLoggedIn ? (
+        {isLoggedIn && currentUser ? (
           <div
             className="header__profile-link"
             onClick={handleSidebarToggle} // Trigger the sidebar opening
@@ -105,13 +106,6 @@ function Header({
               Log In
             </button>
           </>
-        )}
-        {isSidebarOpen && (
-          <SideBar
-            currentUser={currentUser} // Pass currentUser as a prop
-            onChangeProfileData={handleChangeProfileData} // Pass the handler for changing profile data
-            onLogout={handleLogout} // Pass the handler for logging out
-          />
         )}
       </div>
     </header>

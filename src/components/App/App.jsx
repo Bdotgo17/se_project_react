@@ -21,6 +21,9 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import CurrentUserContext from "../../contexts/CurrentUserContext"; // Import the context
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import AddGarmentForm from "../AddGarmentForm/AddGarmentForm";
+import WeatherCard from "../WeatherCard/WeatherCard";
+
+const BASE_URL = "http://localhost:3001"; // or your actual API URL
 
 const MODALS = {
   ADD_GARMENT: "add-garment",
@@ -54,9 +57,20 @@ function App() {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  const [currentUser, setCurrentUser] = useState(null); // State for current user
+  const [currentUser, setCurrentUser] = useState({
+    name: "Default User",
+    avatar: "https://via.placeholder.com/150", // Default avatar
+  });
   const navigate = useNavigate(); // Initialize useNavigate
   const [isAddGarmentModalOpen, setIsAddGarmentModalOpen] = useState(false);
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+  const filteredClothingItems = updatedClothingItems.filter(
+    (item) => item.weather === weatherData.type
+  );
 
   useEffect(() => {
     getWeather(coordinates, APIkey)
@@ -95,6 +109,7 @@ function App() {
     if (localStorage.getItem("jwt")) {
       checkToken(localStorage.getItem("jwt"))
         .then((user) => {
+          console.log("User fetched from token:", user); // Debug log
           setCurrentUser(user); // Set the current user data
           setIsLoggedIn(true);
         })
@@ -120,40 +135,77 @@ function App() {
       .catch((err) => console.error(err));
   };
 
-  const handleLogin = ({ email, password }) => {
+  const handleLogin = async ({ email, password }) => {
     console.log("Attempting to log in with:", { email, password }); // Debug log
-    signin(email, password)
-      .then((res) => {
-        console.log("Login successful, token:", res.token); // Debug log
-        localStorage.setItem("jwt", res.token);
-        setToken(res.token);
-        setIsLoggedIn(true);
-        setCurrentUser(user);
 
-        console.log("Closing login modal after successful login"); // Debug log
-        setShowLoginModal(false);
-        fetchUserData(res.token); // Fetch user data after login
-        console.log("JWT token in localStorage:", localStorage.getItem("jwt"));
-      })
-      .catch((err) => {
-        console.error("Login failed:", err);
-        alert("Login failed. Please check your email and password."); // Optional user feedback
-      });
+    try {
+      // Call the signin API
+      const res = await signin(email, password);
+      console.log("Signin response:", res); // Debug log
+
+      // Validate the token
+      if (!res.token) {
+        throw new Error("Token is missing from the signin response");
+      }
+
+      // Save the token to localStorage
+      localStorage.setItem("jwt", res.token);
+      setToken(res.token);
+
+      // Fetch user data after login
+      const user = await fetchUserData(res.token);
+      console.log("Fetched user data:", user); // Debug log
+
+      // Validate the user data
+      if (!user) {
+        throw new Error("User data is missing from the fetchUserData response");
+      }
+
+      // Update state
+      setCurrentUser(user); // Set the current user
+      setIsLoggedIn(true); // Update the logged-in state
+
+      console.log("Login successful:", user);
+
+      // Close the login modal
+      setShowLoginModal(false);
+      console.log("Login modal closed"); // Debug log
+
+      console.log("JWT token in localStorage:", localStorage.getItem("jwt"));
+    } catch (error) {
+      console.error("Login failed:", error);
+      alert("Login failed. Please check your email and password."); // Optional user feedback
+    }
   };
 
   const fetchUserData = (token) => {
-    fetch(`${BASE_URL}/users/me`, {
+    return fetch(`${BASE_URL}/users/me`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          // Handle non-OK responses
+          return res
+            .json()
+            .then((err) =>
+              Promise.reject(`Error: ${err.message || res.status}`)
+            );
+        }
+        return res.json(); // Parse the response JSON
+      })
       .then((data) => {
         console.log("User data fetched:", data); // Debug log
         setCurrentUser(data); // Update user state
+        return data; // Return the user data for further use
       })
-      .catch((err) => console.error("Failed to fetch user data:", err));
+      .catch((err) => {
+        console.error("Failed to fetch user data:", err); // Log the error
+        throw err; // Re-throw the error for further handling
+      });
   };
 
   const handleProfileClick = () => {
@@ -301,17 +353,13 @@ function App() {
       });
   };
 
-  const handleChangeProfileData = () => {
-    console.log("Change Profile Data clicked");
-    // Add logic to handle profile data change, e.g., open a modal
-  };
-
   const handleLogout = () => {
     console.log("Logout button clicked");
     localStorage.removeItem("jwt"); // Remove the JWT token
     setIsLoggedIn(false); // Update the logged-in state
     setCurrentUser(null); // Clear the current user data
     navigate("/"); // Redirect to the home page
+    setIsSidebarOpen(false); // Close the sidebar
   };
 
   const handleAddGarmentClick = () => {
@@ -319,7 +367,40 @@ function App() {
     setActiveModal(MODALS.ADD_GARMENT);
   };
 
-  console.log("Current User in App:", currentUser); // Debug log
+  // Define the handleSidebarToggle function
+  const handleSidebarToggle = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
+
+  const handleChangeProfileData = () => {
+    setFormData({
+      name: currentUser.name,
+      avatar: currentUser.avatar,
+    });
+    setIsSidebarOpen(false); // Close the sidebar
+    setIsProfileModalOpen(true); // Open the modal
+  };
+
+  const handleProfileSubmit = (e) => {
+    e.preventDefault();
+    // Update the currentUser state with the new form data
+    setCurrentUser((prev) => ({
+      ...prev,
+      name: formData.name,
+      avatar: formData.avatar,
+    }));
+    console.log("Updated Profile Data:", formData);
+    setIsProfileModalOpen(false); // Close the modal after submission
+  };
+
+  const openProfileModal = () => {
+    setFormData({
+      ...formData, // keep other fields if needed
+      name: currentUser?.name || "",
+      avatar: currentUser?.avatar || "",
+    });
+    setIsProfileModalOpen(true);
+  };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -334,6 +415,7 @@ function App() {
                   console.log("Add Clothes button clicked"); // Debug log
                   setActiveModal(MODALS.ADD_GARMENT);
                 }}
+                onSidebarToggle={handleSidebarToggle} // Pass the toggle function to Header
                 setShowRegisterModal={setShowRegisterModal} // Pass the function to show the register modal
                 handleLoginClick={() => setShowLoginModal(true)} // Pass the function to show the login modal
                 setShowLoginModal={setShowLoginModal}
@@ -351,6 +433,59 @@ function App() {
                 onChangeProfileData={handleChangeProfileData}
                 onLogout={handleLogout}
               />
+
+              {!isLoggedIn && <WeatherCard temperature={weatherData.temp} />}
+
+              {isSidebarOpen && (
+                <SideBar
+                  isOpen={isSidebarOpen}
+                  onClose={() => setIsSidebarOpen(false)}
+                  currentUser={currentUser}
+                  username={username}
+                  onProfileClick={handleProfileClick}
+                  onSignOut={handleSignOut}
+                  onAddGarmentClick={handleAddGarmentClick}
+                  clothingItems={updatedClothingItems}
+                  onCardClick={handleCardClick}
+                  onCardLike={handleCardLike}
+                  onChangeProfileData={handleChangeProfileData} // Pass the function to Sidebar
+                  isLoggedIn={isLoggedIn} // Pass isLoggedIn to Sidebar
+                  onLogout={handleLogout} // Pass the logout function
+                />
+              )}
+              <ModalWithForm
+                isOpen={isProfileModalOpen}
+                title="Change Profile Data"
+                onSubmit={handleProfileSubmit}
+                onClose={() => setIsProfileModalOpen(false)}
+                className="change-profile-modal"
+              >
+                <label className="modal__label">
+                  Name*
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name || ""}
+                    onChange={handleInputChange}
+                    className="modal__input"
+                    required
+                  />
+                </label>
+                <label className="modal__label">
+                  Avatar*
+                  <input
+                    type="url"
+                    name="avatar"
+                    value={formData.avatar || ""}
+                    onChange={handleInputChange}
+                    className="modal__input"
+                    required
+                  />
+                </label>
+                <button type="submit" className="modal__submit-button">
+                  Save Changes
+                </button>
+              </ModalWithForm>
               {isProfileOpen && (
                 <Sidebar
                   isOpen={isProfileOpen}
@@ -359,6 +494,7 @@ function App() {
                   username={username}
                   onProfileClick={handleProfileClick}
                   onSignOut={handleSignOut}
+                  onChangeProfileData={handleChangeProfileData} // Pass the function
                   onAddGarmentClick={handleAddGarmentClick}
                   clothingItems={updatedClothingItems}
                   onCardClick={handleCardClick}
@@ -368,6 +504,7 @@ function App() {
                   handleInputChange={handleInputChange}
                   formData={formData} // Pass form data state
                   handleSubmit={handleSubmit} // Pass the submit handler
+                  onLogout={handleLogout} // Pass the logout function
                 />
               )}
               <Routes>
@@ -406,7 +543,7 @@ function App() {
                               type="email"
                               name="email"
                               placeholder="Email"
-                              value={formData.email}
+                              value={formData.email || ""}
                               onChange={handleInputChange}
                               required
                             />
@@ -417,7 +554,7 @@ function App() {
                               type="password"
                               name="password"
                               placeholder="Password"
-                              value={formData.password}
+                              value={formData.password || ""}
                               onChange={handleInputChange}
                               required
                             />
@@ -428,7 +565,7 @@ function App() {
                               type="text"
                               name="name"
                               placeholder="Name"
-                              value={formData.name}
+                              value={formData.name || ""}
                               onChange={handleInputChange}
                               required
                             />
@@ -439,7 +576,7 @@ function App() {
                               type="text"
                               name="avatar"
                               placeholder="Avatar URL"
-                              value={formData.avatar}
+                              value={formData.avatar || ""}
                               onChange={handleInputChange}
                             />
                           </label>
@@ -490,7 +627,7 @@ function App() {
                               type="email"
                               name="email"
                               placeholder="Email"
-                              value={formData.email}
+                              value={formData.email || ""}
                               onChange={handleInputChange}
                               required
                             />
@@ -501,7 +638,7 @@ function App() {
                               type="password"
                               name="password"
                               placeholder="Password"
-                              value={formData.password}
+                              value={formData.password || ""}
                               onChange={handleInputChange}
                               required
                             />
@@ -536,6 +673,7 @@ function App() {
                           <Main
                             weatherData={weatherData}
                             clothingItems={updatedClothingItems}
+                            updatedClothingItems={updatedClothingItems}
                             handleCardClick={handleCardClick}
                             onCardLike={handleCardLike}
                           />
