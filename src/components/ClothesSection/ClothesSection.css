@@ -5,7 +5,16 @@
   box-sizing: border-box;
 }
 
-.clothes-section__header {
+/* .clothes-section__header {
+  display: none;
+} */
+
+/* Hide the header in the main section */
+.main .clothes-section__header {
+  display: none;
+}
+
+.sidebar-layout .clothes-section__header {
   display: flex; /* Align the button and title horizontally */
   align-items: center; /* Vertically align items */
   gap: 12px; /* Add spacing between the button and the title */
@@ -34,7 +43,6 @@
 .clothes-section__list {
   display: grid; /* Use grid layout for the cards */
   grid-template-columns: repeat(3, 1fr); /* Create 3 equal-width columns */
-
   gap: 16px; /* Add spacing between cards */
   list-style: none; /* Remove default list styling */
   padding: 0;

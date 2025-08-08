@@ -3,22 +3,20 @@ import "./Main.css";
 import WeatherCard from "../WeatherCard/WeatherCard";
 import ItemCard from "../ItemCard/ItemCard";
 import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnitContext"; // Import the context
-import App from "../App/App"; // Adjust the relative path as needed
+import ClothesSection from "../ClothesSection/ClothesSection";
 
 function Main({
   weatherData = { temp: { F: 0, C: 0 }, type: "" },
   handleCardClick,
   onCardLike,
-  clothingItems = [],
   updatedClothingItems,
+  clothingItems = [],
 }) {
+  console.log("clothingItems in Main:", clothingItems);
   const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext); // Access the current unit
 
-  console.log("Clothing items:", clothingItems); // Debug log
-  console.log("Weather data type:", weatherData.type); // Debug log
-
-  const filteredItems = Array.isArray(clothingItems)
-    ? clothingItems.filter(
+  const filteredItems = Array.isArray(updatedClothingItems)
+    ? updatedClothingItems.filter(
         (item) =>
           item.weather &&
           weatherData.type &&
@@ -26,15 +24,10 @@ function Main({
       )
     : [];
 
-  const filteredClothingItems = updatedClothingItems.filter(
-    (item) =>
-      item.weather === weatherData.type &&
-      item.weather.toLowerCase() === weatherData.type.toLowerCase()
-  );
-
+  console.log("Filtered items:", filteredItems); // Debug log
+  console.log("Weather data type:", weatherData.type); // Debug log
   return (
     <main>
-    
       <WeatherCard temperature={weatherData.temp} />
       <section className="cards">
         <p className="cards__text">
@@ -57,10 +50,19 @@ function Main({
               />
             ))
           ) : (
-            <p>No items match the current weather.</p>
+            <p className="cards__empty-message">
+              No items match the current weather.
+            </p>
           )}
         </ul>
       </section>
+      {/* Add ClothesSection without the header */}
+      <ClothesSection
+        showHeader={false} // Hide the header
+        clothingItems={clothingItems} // Pass the clothing items for this section
+        onCardClick={handleCardClick} // Handle card clicks
+        onAddGarmentClick={() => {}} // Optional: No need for adding garments here
+      />
     </main>
   );
 }

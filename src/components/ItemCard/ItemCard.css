@@ -2,22 +2,19 @@
   width: 323px;
   position: relative;
   display: flex;
-  justify-content: center;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center the card content */
 }
 
 .card__name {
-  position: absolute;
-  top: 15px;
-  margin: 0;
-  font-family: Cabinet Grotesk;
+  font-family: "Cabinet Grotesk", sans-serif; /* Apply the desired font */
   font-weight: 700;
   font-size: 16px;
   line-height: 20px;
   letter-spacing: 0%;
-  padding: 8px; /* Add padding inside the box */
-  border-radius: 4px; /* Optional: Add rounded corners */
-  background-color: #f8f9fa; /* Optional: Add a background color */
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.6); /* Gray text */
+  margin: 0;
+  margin-right: 8px; /* Add spacing between the name and the heart */
 }
 
 .card__image {
@@ -61,3 +58,44 @@
 .item-card__like-button:hover .item-card__like-icon {
   filter: brightness(0.8);
 }
+
+.card__header {
+  position: absolute; /* Position the header on top of the image */
+  top: 10px; /* Adjust the distance from the top of the card */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center the header */
+  display: flex;
+  align-items: center; /* Vertically align the name and heart */
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.8
+  ); /* White background with slight transparency */
+  padding: 4px 8px; /* Add padding inside the header */
+  border-radius: 8px; /* Rounded corners for the header */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+.card__header-container {
+  position: absolute; /* Position the header container on top of the image */
+  top: 10px; /* Adjust the distance from the top of the card */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center the container */
+  display: flex;
+  align-items: center; /* Vertically align the name and heart */
+  gap: 8px; /* Add spacing between the name and the heart */
+}
+
+.card__header-box {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.8
+  ); /* White background with slight transparency */
+  padding: 4px 8px; /* Add padding inside the box */
+  border-radius: 8px; /* Rounded corners for the box */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+

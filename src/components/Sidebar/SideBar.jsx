@@ -18,6 +18,14 @@ function SideBar({
   updatedClothingItems = [], // Default empty array if not provided
 }) {
   console.log("Current User in Sidebar:", currentUser); // Debug log
+  console.log("Clothing Items in Sidebar:", clothingItems); // Debug log
+
+  // Define handleCardClick
+  const handleCardClick = (item) => {
+    console.log("Card clicked:", item);
+    // Add your logic here
+  };
+
   // Check if currentUser is null or undefined
   if (!currentUser) {
     return null; // Render nothing if currentUser is null
@@ -25,9 +33,17 @@ function SideBar({
 
   if (!isOpen) return null;
 
+  const sidebarClothingItems = clothingItems.filter(
+    (item) => item.owner === currentUser?._id
+  );
+  console.log("clothingItems in Sidebar:", clothingItems);
+  console.log("currentUser in Sidebar:", currentUser);
+  console.log("sidebarClothingItems:", sidebarClothingItems);
+
   return (
     <div className="sidebar-layout">
       {/* Sidebar Profile and Actions */}
+
       <div className="sidebar__content">
         <div className="sidebar__profile">
           <img
@@ -55,8 +71,15 @@ function SideBar({
           </button>
         </div>
       </div>
-      {/* Cards Section */}
-      <ClothesSection onAddGarmentClick={onAddGarmentClick} />{" "}
+      {sidebarClothingItems.length > 0 && (
+        <ClothesSection
+          showHeader={true}
+          clothingItems={sidebarClothingItems}
+          onCardClick={handleCardClick}
+          onAddGarmentClick={onAddGarmentClick}
+        />
+      )}
+
       <ul
         className={`cards__list ${isProfileOpen ? "cards__list--shifted" : ""}`}
       ></ul>

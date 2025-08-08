@@ -1,7 +1,13 @@
 const BASE_URL = "http://localhost:3001";
 
 function checkResponse(res) {
-  return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
+  if (!res.ok) {
+    return res.json().then((err) => {
+      console.error("Error response from server:", err);
+      throw new Error(err.message || "Something went wrong");
+    });
+  }
+  return res.json();
 }
 
 export function getItems() {
@@ -56,7 +62,7 @@ export function deleteItem(id) {
   console.log("ID being passed to deleteItem:", id); // Debug log
   console.log("JWT token:", token); // Debug log
 
-  return fetch(`${BASE_URL}/${id}`, {
+  return fetch(`${BASE_URL}/items/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -64,7 +70,11 @@ export function deleteItem(id) {
     },
   })
     .then((res) => {
-      console.log("Raw response from deleteItem:", res); // Debug log
+      console.log("Raw response from deleteItem:", res);
+      if (res.status === 404) {
+        console.error("Item not found on the server.");
+        throw new Error("Item not found.");
+      }
       return checkResponse(res);
     })
     .catch((err) => {
@@ -73,34 +83,40 @@ export function deleteItem(id) {
     });
 }
 
-export function addCardLike(id) {
-  const token = localStorage.getItem("jwt"); // Retrieve the token from local storage
-  return fetch(`${BASE_URL}/${id}/likes`, {
+export const addCardLike = (cardId) => {
+  const token = localStorage.getItem("jwt");
+  if (!token) {
+    return Promise.reject("Error: No token found");
+  }
+  return fetch(`${BASE_URL}/items/${cardId}/likes`, {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
-  }).then(checkResponse);
-}
+  }).then((res) => {
+    if (!res.ok) {
+      return Promise.reject(`Error: ${res.status}`);
+    }
+    return res.json(); // Ensure the updated card is returned
+  });
+};
 
-export function removeCardLike(id) {
-  const token = localStorage.getItem("jwt"); // Retrieve the token from local storage
-  console.log("ID passed to removeCardLike:", id); // Debug log
-  console.log("JWT token:", token); // Debug log
-
-  return fetch(`${BASE_URL}/${id}/likes`, {
+export const removeCardLike = (cardId) => {
+  const token = localStorage.getItem("jwt"); // Retrieve the token from localStorage
+  if (!token) {
+    return Promise.reject("Error: No token found"); // Handle missing token
+  }
+  return fetch(`${BASE_URL}/items/${cardId}/likes`, {
     method: "DELETE",
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
-  })
-    .then((res) => {
-      console.log("Raw response from removeCardLike:", res); // Debug log
-      return checkResponse(res);
-    })
-    .catch((err) => {
-      console.error("Error in removeCardLike:", err); // Debug log
-    });
-}
+  }).then((res) => {
+    if (!res.ok) {
+      return Promise.reject(`Error: ${res.status}`);
+    }
+    return res.json(); // Ensure the updated card is returned
+  });
+};

@@ -22,6 +22,8 @@ import CurrentUserContext from "../../contexts/CurrentUserContext"; // Import th
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import AddGarmentForm from "../AddGarmentForm/AddGarmentForm";
 import WeatherCard from "../WeatherCard/WeatherCard";
+import { addCardLike, removeCardLike } from "../../utils/api.js"; // Adjust the path if needed
+import ItemCard from "../ItemCard/ItemCard.jsx"; // Adjust the path if needed
 
 const BASE_URL = "http://localhost:3001"; // or your actual API URL
 
@@ -71,6 +73,8 @@ function App() {
   const filteredClothingItems = updatedClothingItems.filter(
     (item) => item.weather === weatherData.type
   );
+
+  const [cards, setCards] = useState([]);
 
   useEffect(() => {
     getWeather(coordinates, APIkey)
@@ -261,12 +265,17 @@ function App() {
       .then(() => {
         setUpdatedClothingItems((prev) => {
           console.log("Previous items before delete:", prev); // Debug log
-          return prev.filter((item) => item._id !== cardToDelete._id);
+          const updatedItems = prev.filter(
+            (item) => item._id !== cardToDelete._id
+          );
+          console.log("Updated items after delete:", updatedItems); // Debug log
+          return updatedItems;
         });
         setActiveModal("");
       })
       .catch((err) => {
         console.error("Error deleting item:", err);
+        alert("Failed to delete the item. Please try again.");
       });
   };
 
@@ -294,28 +303,43 @@ function App() {
     }
   };
 
-  const handleCardLike = ({ id, isLiked }) => {
-    const token = localStorage.getItem("jwt");
-    // Check if this card is not currently liked
-    !isLiked
-      ? // Add the user's like
-        api
-          .addCardLike(id, token)
-          .then((updatedCard) => {
-            setUpdatedClothingItems((cards) =>
-              cards.map((item) => (item._id === id ? updatedCard : item))
+  const handleCardLike = (card) => {
+    console.log("Card object:", card); // Debug log
+    console.log("Likes:", card.likes);
+
+    const isLiked = card.likes.some((id) => id === currentUser._id);
+
+    if (isLiked) {
+      // Call removeCardLike if the card is already liked
+      removeCardLike(card._id)
+        .then((updatedCard) => {
+          console.log("Updated card after removing like:", updatedCard); // Debug log
+
+          setCards((state) => {
+            const updatedState = state.map((c) =>
+              c._id === card._id ? updatedCard : c
             );
-          })
-          .catch((err) => console.log(err))
-      : // Remove the user's like
-        api
-          .removeCardLike(id, token)
-          .then((updatedCard) => {
-            setUpdatedClothingItems((cards) =>
-              cards.map((item) => (item._id === id ? updatedCard : item))
+            console.log("Updated cards state:", updatedState); // Debug log
+            return updatedState;
+          });
+        })
+        .catch((err) => console.error("Error removing like:", err));
+    } else {
+      // Call addCardLike if the card is not liked
+      addCardLike(card._id)
+        .then((updatedCard) => {
+          console.log("Updated card after adding like:", updatedCard); // Debug log
+
+          setCards((state) => {
+            const updatedState = state.map((c) =>
+              c._id === card._id ? updatedCard : c
             );
-          })
-          .catch((err) => console.log(err));
+            console.log("Updated cards state:", updatedState); // Debug log
+            return updatedState;
+          });
+        })
+        .catch((err) => console.error("Error adding like:", err));
+    }
   };
 
   const handleSignOut = () => {
@@ -401,6 +425,51 @@ function App() {
     });
     setIsProfileModalOpen(true);
   };
+
+ const handleLikeClick = (item) => {
+  const isLiked = item.likes.some((id) => id === currentUser._id);
+
+  // Optimistically update the state
+  setCards((prevCards) =>
+    prevCards.map((card) =>
+      card._id === item._id
+        ? {
+            ...card,
+            likes: isLiked
+              ? card.likes.filter((id) => id !== currentUser._id)
+              : [...card.likes, currentUser._id],
+          }
+        : card
+    )
+  );
+
+  // Call the API to update the backend
+  if (isLiked) {
+    removeCardLike(item._id)
+      .then((updatedCard) => {
+        setCards((prevCards) =>
+          prevCards.map((card) =>
+            card._id === updatedCard._id ? updatedCard : card
+          )
+        );
+      })
+      .catch((err) => {
+        console.error("Error removing like:", err);
+      });
+  } else {
+    addCardLike(item._id)
+      .then((updatedCard) => {
+        setCards((prevCards) =>
+          prevCards.map((card) =>
+            card._id === updatedCard._id ? updatedCard : card
+          )
+        );
+      })
+      .catch((err) => {
+        console.error("Error adding like:", err);
+      });
+  }
+};
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -675,9 +744,22 @@ function App() {
                             clothingItems={updatedClothingItems}
                             updatedClothingItems={updatedClothingItems}
                             handleCardClick={handleCardClick}
+                            cards={cards}
                             onCardLike={handleCardLike}
                           />
+                          <div className="cards-container">
+                            {cards.map((card) => (
+                              <ItemCard
+                                key={card._id}
+                                item={card}
+                                onCardClick={handleCardClick}
+                                onCardLike={handleLikeClick}
+                                currentWeatherType={currentWeatherType}
+                              />
+                            ))}
+                          </div>
                           <ClothesSection
+                            showHeader={true}
                             clothingItems={updatedClothingItems}
                             onCardClick={handleCardClick}
                             onAddItemClick={() =>
