@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
+import "./AddGarmentForm.css";
 
 function AddGarmentForm({ onAddGarment, isOpen, onClose }) {
   const [name, setName] = useState("");

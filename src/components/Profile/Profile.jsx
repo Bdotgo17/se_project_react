@@ -1,6 +1,7 @@
 import React from "react";
 import SideBar from "../Sidebar/Sidebar";
 import ClothesSection from "../ClothesSection/ClothesSection";
+import "./Profile.css";
 
 function Profile({ clothingItems, onAddItemClick, username, onSignOut }) {
   return (
