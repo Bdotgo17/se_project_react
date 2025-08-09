@@ -24,8 +24,7 @@ import AddGarmentForm from "../AddGarmentForm/AddGarmentForm";
 import WeatherCard from "../WeatherCard/WeatherCard";
 import { addCardLike, removeCardLike } from "../../utils/api.js"; // Adjust the path if needed
 import ItemCard from "../ItemCard/ItemCard.jsx"; // Adjust the path if needed
-
-const BASE_URL = "http://localhost:3001"; // or your actual API URL
+import { BASE_URL } from "../../utils/constants";
 
 const MODALS = {
   ADD_GARMENT: "add-garment",

@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3001";
+import { BASE_URL } from "../utils/constants";
 
 function checkResponse(res) {
   if (!res.ok) {
@@ -33,7 +33,7 @@ export function addItem(name, imageUrl, weather) {
 
   const payload = { name, imageUrl, weather };
 
-  return fetch("http://localhost:3001/items", {
+  return fetch(`${BASE_URL}/items`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
