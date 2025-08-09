@@ -72,10 +72,14 @@ function Header({
 
       <div className="header__user-container">
         {isLoggedIn && currentUser ? (
-          <div
-            className="header__profile-link"
-            onClick={handleSidebarToggle} // Trigger the sidebar opening
-          >
+          <div>
+            <Link
+              to="/profile"
+              className="header__profile-link"
+              onClick={handleSidebarToggle} // Trigger the sidebar opening
+            >
+              Profile
+            </Link>
             <p className="header__username">{currentUser?.name || "User"}</p>
             {/* Username first */}
             {currentUser.avatar ? (
