@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 import avatar from "../../assets/avatar.svg";
@@ -72,14 +72,12 @@ function Header({
 
       <div className="header__user-container">
         {isLoggedIn && currentUser ? (
-          <div>
+          <div className="header__user-info">
             <Link
               to="/profile"
               className="header__profile-link"
               onClick={handleSidebarToggle} // Trigger the sidebar opening
-            >
-              Profile
-            </Link>
+            ></Link>
             <p className="header__username">{currentUser?.name || "User"}</p>
             {/* Username first */}
             {currentUser.avatar ? (

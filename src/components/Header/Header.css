@@ -75,3 +75,9 @@
   color: black; /* Explicitly set text color to black */
   font-weight: 700; /* Optional: Add font weight if needed */
 }
+
+.header__user-info {
+  display: flex;
+  align-items: center; /* Vertically align username and avatar */
+  gap: 10px; /* Add spacing between username and avatar */
+}
