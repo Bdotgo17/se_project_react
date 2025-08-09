@@ -10,7 +10,6 @@ function ModalWithForm({
   onSubmit,
   className,
 }) {
-  console.log("ModalWithForm rendered with isOpen:", isOpen);
   if (!isOpen) return null;
 
   return (

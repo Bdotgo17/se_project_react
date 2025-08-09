@@ -12,7 +12,6 @@ function Main({
   updatedClothingItems,
   clothingItems = [],
 }) {
-  console.log("clothingItems in Main:", clothingItems);
   const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext); // Access the current unit
 
   const filteredItems = Array.isArray(updatedClothingItems)
@@ -24,8 +23,6 @@ function Main({
       )
     : [];
 
-  console.log("Filtered items:", filteredItems); // Debug log
-  console.log("Weather data type:", weatherData.type); // Debug log
   return (
     <main>
       <WeatherCard temperature={weatherData.temp} />

@@ -33,7 +33,6 @@ export function signin(email, password) {
       if (!data.token) {
         throw new Error("Token is missing from the response");
       }
-      console.log("Token received:", data.token); // Debug log
       localStorage.setItem("jwt", data.token); // Save token to local storage
       return data; // Return the full response data
     })
@@ -54,7 +53,6 @@ export function checkToken(token) {
     },
   })
     .then((res) => {
-      console.log("Raw response from checkToken:", res); // Debug log
       if (!res.ok) {
         if (res.status === 401) {
           localStorage.removeItem("jwt"); // Clear expired token
@@ -65,7 +63,6 @@ export function checkToken(token) {
       return res.json();
     })
     .then((data) => {
-      console.log("Parsed user data from checkToken:", data); // Debug log
       return data;
     })
     .catch((err) => {

@@ -13,11 +13,9 @@ function checkResponse(res) {
 export function getItems() {
   return fetch(`${BASE_URL}/items`) // Use BASE_URL and append /items
     .then((res) => {
-      console.log("Raw response from getItems:", res);
       return checkResponse(res);
     })
     .then((data) => {
-      console.log("Parsed items:", data);
       return data;
     })
     .catch((err) => {
@@ -34,7 +32,6 @@ export function addItem(name, imageUrl, weather) {
   }
 
   const payload = { name, imageUrl, weather };
-  console.log("Payload being sent to server:", payload); // Debug log
 
   return fetch("http://localhost:3001/items", {
     method: "POST",
@@ -45,23 +42,19 @@ export function addItem(name, imageUrl, weather) {
     body: JSON.stringify(payload),
   })
     .then((res) => {
-      console.log("Raw response from addItem:", res);
       if (!res.ok) {
         return res.json().then((err) => Promise.reject(err));
       }
       return res.json();
     })
     .then((data) => {
-      console.log("Added item:", data);
       return data;
     });
 }
 
 export function deleteItem(id) {
   const token = localStorage.getItem("jwt"); // Retrieve the token from local storage
-  console.log("ID being passed to deleteItem:", id); // Debug log
-  console.log("JWT token:", token); // Debug log
-
+ 
   return fetch(`${BASE_URL}/items/${id}`, {
     method: "DELETE",
     headers: {
@@ -70,7 +63,6 @@ export function deleteItem(id) {
     },
   })
     .then((res) => {
-      console.log("Raw response from deleteItem:", res);
       if (res.status === 404) {
         console.error("Item not found on the server.");
         throw new Error("Item not found.");
