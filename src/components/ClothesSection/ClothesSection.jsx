@@ -10,18 +10,12 @@ function ClothesSection({
   onAddItemClick,
   onAddGarmentClick,
 }) {
-  console.log("Rendering ClothesSection with showHeader:", showHeader); // Debug log
 
   const currentUser = useContext(CurrentUserContext);
-
-  console.log("clothingItems:", clothingItems); // Debug log
-  console.log("currentUser:", currentUser); // Debug log
 
   const userClothingItems = clothingItems.filter(
     (item) => item.owner === currentUser?._id
   );
-
-  console.log("userClothingItems:", userClothingItems);
 
   return (
     <div className="clothes-section">

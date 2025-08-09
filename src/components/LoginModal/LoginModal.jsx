@@ -34,10 +34,7 @@ function LoginModal({ onLogin, onClose }) {
           required
           autoComplete="current-password"
         />
-        <button
-          type="submit"
-          onClick={() => console.log("Login button clicked")}
-        >
+        <button type="submit" onClick={handleLogin}>
           Login
         </button>
         <button type="button" onClick={onClose}>

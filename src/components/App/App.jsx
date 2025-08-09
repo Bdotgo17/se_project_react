@@ -90,7 +90,6 @@ function App() {
   useEffect(() => {
     getItems()
       .then((items) => {
-        console.log("Fetched items:", items); // Debug log
         setUpdatedClothingItems(items);
       })
       .catch((err) => {
@@ -113,7 +112,6 @@ function App() {
     if (localStorage.getItem("jwt")) {
       checkToken(localStorage.getItem("jwt"))
         .then((user) => {
-          console.log("User fetched from token:", user); // Debug log
           setCurrentUser(user); // Set the current user data
           setIsLoggedIn(true);
         })
@@ -124,13 +122,9 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    console.log("showLoginModal updated:", showLoginModal);
-  }, [showLoginModal]);
+  useEffect(() => {}, [showLoginModal]);
 
-  useEffect(() => {
-    console.log("isLoggedIn updated:", isLoggedIn); // Debug log
-  }, [isLoggedIn]);
+  useEffect(() => {}, [isLoggedIn]);
 
   const handleRegister = ({ name, avatar, email, password }) => {
     signup(name, avatar, email, password)
@@ -140,12 +134,9 @@ function App() {
   };
 
   const handleLogin = async ({ email, password }) => {
-    console.log("Attempting to log in with:", { email, password }); // Debug log
-
     try {
       // Call the signin API
       const res = await signin(email, password);
-      console.log("Signin response:", res); // Debug log
 
       // Validate the token
       if (!res.token) {
@@ -158,7 +149,6 @@ function App() {
 
       // Fetch user data after login
       const user = await fetchUserData(res.token);
-      console.log("Fetched user data:", user); // Debug log
 
       // Validate the user data
       if (!user) {
@@ -169,13 +159,8 @@ function App() {
       setCurrentUser(user); // Set the current user
       setIsLoggedIn(true); // Update the logged-in state
 
-      console.log("Login successful:", user);
-
       // Close the login modal
       setShowLoginModal(false);
-      console.log("Login modal closed"); // Debug log
-
-      console.log("JWT token in localStorage:", localStorage.getItem("jwt"));
     } catch (error) {
       console.error("Login failed:", error);
       alert("Login failed. Please check your email and password."); // Optional user feedback
@@ -202,7 +187,6 @@ function App() {
         return res.json(); // Parse the response JSON
       })
       .then((data) => {
-        console.log("User data fetched:", data); // Debug log
         setCurrentUser(data); // Update user state
         return data; // Return the user data for further use
       })
@@ -214,7 +198,6 @@ function App() {
 
   const handleProfileClick = () => {
     setIsProfileOpen((prev) => {
-      console.log("isProfileOpen:", !prev); // Debug log
       return !prev;
     });
   };
@@ -228,21 +211,15 @@ function App() {
   };
 
   const handleCardClick = (card) => {
-    console.log("Selected card:", card); // Debug log
     setSelectedCard(card);
     setActiveModal(MODALS.PREVIEW);
   };
 
   const handleAddItemSubmit = (newItem) => {
-    console.log("New item to add:", newItem);
-
     addItem(newItem.name, newItem.imageUrl, newItem.weather)
       .then((addedItem) => {
-        console.log("Added item from API:", addedItem);
-
         setUpdatedClothingItems((prev) => {
           const updatedItems = [addedItem, ...prev];
-          console.log("Updated clothing items:", updatedItems); // Debug log
           return updatedItems;
         });
 
@@ -255,7 +232,6 @@ function App() {
   };
 
   const handleDeleteCard = (cardToDelete) => {
-    console.log("Card to delete:", cardToDelete); // Debug log
     if (!cardToDelete || !cardToDelete._id) {
       console.error("Invalid card object:", cardToDelete);
       return;
@@ -264,11 +240,9 @@ function App() {
     deleteItem(cardToDelete._id, token)
       .then(() => {
         setUpdatedClothingItems((prev) => {
-          console.log("Previous items before delete:", prev); // Debug log
           const updatedItems = prev.filter(
             (item) => item._id !== cardToDelete._id
           );
-          console.log("Updated items after delete:", updatedItems); // Debug log
           return updatedItems;
         });
         setActiveModal("");
@@ -281,7 +255,6 @@ function App() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(`Input changed: ${name} = ${value}`); // Debug log
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -296,7 +269,6 @@ function App() {
         weather,
       };
 
-      console.log("Submitting new garment:", newGarment); // Debug log
       handleAddItemSubmit(newGarment);
     } else {
       console.error("Form is incomplete. Please fill out all fields.");
@@ -304,22 +276,16 @@ function App() {
   };
 
   const handleCardLike = (card) => {
-    console.log("Card object:", card); // Debug log
-    console.log("Likes:", card.likes);
-
     const isLiked = card.likes.some((id) => id === currentUser._id);
 
     if (isLiked) {
       // Call removeCardLike if the card is already liked
       removeCardLike(card._id)
         .then((updatedCard) => {
-          console.log("Updated card after removing like:", updatedCard); // Debug log
-
           setCards((state) => {
             const updatedState = state.map((c) =>
               c._id === card._id ? updatedCard : c
             );
-            console.log("Updated cards state:", updatedState); // Debug log
             return updatedState;
           });
         })
@@ -328,13 +294,10 @@ function App() {
       // Call addCardLike if the card is not liked
       addCardLike(card._id)
         .then((updatedCard) => {
-          console.log("Updated card after adding like:", updatedCard); // Debug log
-
           setCards((state) => {
             const updatedState = state.map((c) =>
               c._id === card._id ? updatedCard : c
             );
-            console.log("Updated cards state:", updatedState); // Debug log
             return updatedState;
           });
         })
@@ -356,29 +319,22 @@ function App() {
   };
 
   const handleLoginClick = () => {
-    console.log("Login button clicked"); // Debug log
     setShowLoginModal(true); // Open the login modal
   };
 
   const handleAddClick = () => {
-    console.log("Add button clicked"); // Debug log
     setActiveModal(MODALS.ADD_GARMENT); // Example action
   };
 
   const handleAddGarment = (name, imageUrl, weather) => {
     addItem(name, imageUrl, weather)
-      .then((newItem) => {
-        console.log("New item added:", newItem);
-        // Update state or UI with the new item
-        // Example: setItems((prevItems) => [...prevItems, newItem]);
-      })
+      .then((newItem) => {})
       .catch((err) => {
         console.error("Error adding garment:", err);
       });
   };
 
   const handleLogout = () => {
-    console.log("Logout button clicked");
     localStorage.removeItem("jwt"); // Remove the JWT token
     setIsLoggedIn(false); // Update the logged-in state
     setCurrentUser(null); // Clear the current user data
@@ -387,7 +343,6 @@ function App() {
   };
 
   const handleAddGarmentClick = () => {
-    console.log("Add Garment button clicked");
     setActiveModal(MODALS.ADD_GARMENT);
   };
 
@@ -413,7 +368,6 @@ function App() {
       name: formData.name,
       avatar: formData.avatar,
     }));
-    console.log("Updated Profile Data:", formData);
     setIsProfileModalOpen(false); // Close the modal after submission
   };
 
@@ -426,50 +380,50 @@ function App() {
     setIsProfileModalOpen(true);
   };
 
- const handleLikeClick = (item) => {
-  const isLiked = item.likes.some((id) => id === currentUser._id);
+  const handleLikeClick = (item) => {
+    const isLiked = item.likes.some((id) => id === currentUser._id);
 
-  // Optimistically update the state
-  setCards((prevCards) =>
-    prevCards.map((card) =>
-      card._id === item._id
-        ? {
-            ...card,
-            likes: isLiked
-              ? card.likes.filter((id) => id !== currentUser._id)
-              : [...card.likes, currentUser._id],
-          }
-        : card
-    )
-  );
+    // Optimistically update the state
+    setCards((prevCards) =>
+      prevCards.map((card) =>
+        card._id === item._id
+          ? {
+              ...card,
+              likes: isLiked
+                ? card.likes.filter((id) => id !== currentUser._id)
+                : [...card.likes, currentUser._id],
+            }
+          : card
+      )
+    );
 
-  // Call the API to update the backend
-  if (isLiked) {
-    removeCardLike(item._id)
-      .then((updatedCard) => {
-        setCards((prevCards) =>
-          prevCards.map((card) =>
-            card._id === updatedCard._id ? updatedCard : card
-          )
-        );
-      })
-      .catch((err) => {
-        console.error("Error removing like:", err);
-      });
-  } else {
-    addCardLike(item._id)
-      .then((updatedCard) => {
-        setCards((prevCards) =>
-          prevCards.map((card) =>
-            card._id === updatedCard._id ? updatedCard : card
-          )
-        );
-      })
-      .catch((err) => {
-        console.error("Error adding like:", err);
-      });
-  }
-};
+    // Call the API to update the backend
+    if (isLiked) {
+      removeCardLike(item._id)
+        .then((updatedCard) => {
+          setCards((prevCards) =>
+            prevCards.map((card) =>
+              card._id === updatedCard._id ? updatedCard : card
+            )
+          );
+        })
+        .catch((err) => {
+          console.error("Error removing like:", err);
+        });
+    } else {
+      addCardLike(item._id)
+        .then((updatedCard) => {
+          setCards((prevCards) =>
+            prevCards.map((card) =>
+              card._id === updatedCard._id ? updatedCard : card
+            )
+          );
+        })
+        .catch((err) => {
+          console.error("Error adding like:", err);
+        });
+    }
+  };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -481,7 +435,6 @@ function App() {
             <div className="page__content">
               <Header
                 handleAddClick={() => {
-                  console.log("Add Clothes button clicked"); // Debug log
                   setActiveModal(MODALS.ADD_GARMENT);
                 }}
                 onSidebarToggle={handleSidebarToggle} // Pass the toggle function to Header
@@ -598,11 +551,9 @@ function App() {
                           title="Sign Up"
                           onSubmit={(e) => {
                             e.preventDefault();
-                            console.log("Register form submitted:", formData);
                             handleRegister(formData); // Call handleRegister with the form data
                           }}
                           onClose={() => {
-                            console.log("Register modal closed");
                             setShowRegisterModal(false);
                           }}
                         >
@@ -680,13 +631,9 @@ function App() {
                           title="Login"
                           onSubmit={(e) => {
                             e.preventDefault();
-                            console.log("Login form submitted:", formData);
                             handleLogin(formData); // Call handleLogin with the form data
                           }}
                           onClose={() => {
-                            console.log(
-                              "Login modal closed via onClose handler"
-                            );
                             setShowLoginModal(false);
                           }}
                         >
@@ -790,9 +737,7 @@ function App() {
                         Please log in to view your profile.{" "}
                         <button
                           onClick={() => {
-                            console.log("Log In button clicked"); // Debug log
                             setShowLoginModal(true); // Open the login modal
-                            console.log("showLoginModal:", showLoginModal); // Debug log
                           }}
                         >
                           Log In

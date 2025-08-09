@@ -8,7 +8,6 @@ function AddItemModal({
   formData = { name: "", imageUrl: "", weather: "" },
   handleChange,
 }) {
-  console.log("formData in AddItemModal:", formData); // Debug log
 
   return (
     <ModalWithForm

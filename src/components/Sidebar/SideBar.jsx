@@ -17,13 +17,9 @@ function SideBar({
   weatherData = { temp: { F: 0, C: 0 }, type: "" }, // Default weather data
   updatedClothingItems = [], // Default empty array if not provided
 }) {
-  console.log("Current User in Sidebar:", currentUser); // Debug log
-  console.log("Clothing Items in Sidebar:", clothingItems); // Debug log
-
+ 
   // Define handleCardClick
   const handleCardClick = (item) => {
-    console.log("Card clicked:", item);
-    // Add your logic here
   };
 
   // Check if currentUser is null or undefined
@@ -36,10 +32,7 @@ function SideBar({
   const sidebarClothingItems = clothingItems.filter(
     (item) => item.owner === currentUser?._id
   );
-  console.log("clothingItems in Sidebar:", clothingItems);
-  console.log("currentUser in Sidebar:", currentUser);
-  console.log("sidebarClothingItems:", sidebarClothingItems);
-
+ 
   return (
     <div className="sidebar-layout">
       {/* Sidebar Profile and Actions */}
@@ -63,7 +56,6 @@ function SideBar({
           <button
             className="sidebar__button"
             onClick={() => {
-              console.log("Log Out button clicked");
               onLogout();
             }}
           >
