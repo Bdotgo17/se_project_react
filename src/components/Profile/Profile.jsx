@@ -3,19 +3,30 @@ import SideBar from "../Sidebar/Sidebar";
 import ClothesSection from "../ClothesSection/ClothesSection";
 import "./Profile.css";
 
-function Profile({ clothingItems, onAddItemClick, username, onSignOut }) {
+function Profile({
+  clothingItems,
+  onAddItemClick,
+  username,
+  onSignOutcurrentUser,
+  onChangeProfileData,
+  onCardClick,
+  onCardLike,
+}) {
   return (
     <div className="profile">
-      {/* <SideBar username={username} />
-      <h1 className="profile__welcome">Welcome, {username}!</h1>
-
+      <SideBar
+        currentUser={currentUser}
+        onChangeProfileData={onChangeProfileData}
+        onLogout={onSignOut}
+        clothingItems={clothingItems}
+        onCardClick={onCardClick}
+        onCardLike={onCardLike}
+      />
       <ClothesSection
         clothingItems={clothingItems}
         onAddItemClick={onAddItemClick}
-      /> */}
-      {/* <button onClick={onSignOut} className="profile__sign-out-button">
-        Sign Out
-      </button> */}
+        onCardClick={onCardClick}
+      />
     </div>
   );
 }
