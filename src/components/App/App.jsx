@@ -144,6 +144,23 @@ function App() {
       .catch((err) => console.error("Error fetching user data:", err));
   }, []);
 
+  useEffect(() => {
+    fetch("/api/user-data")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setCurrentUser(data); // Save the user data to state
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+  }, []); // Empty dependency array ensures this runs once on mount
+
   const handleLogin = async ({ email, password }) => {
     try {
       // Call the signin API
