@@ -145,7 +145,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/user-data")
+    fetch("/user-data")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
