@@ -8,6 +8,12 @@ function AddItemModal({
   formData = { name: "", imageUrl: "", weather: "" },
   handleChange,
 }) {
+  useEffect(() => {
+    console.log("AddItemModal mounted");
+    return () => {
+      console.log("AddItemModal unmounted");
+    };
+  }, []);
 
   return (
     <ModalWithForm

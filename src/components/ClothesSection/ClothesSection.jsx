@@ -10,7 +10,6 @@ function ClothesSection({
   onAddItemClick,
   onAddGarmentClick,
 }) {
-
   const currentUser = useContext(CurrentUserContext);
 
   const userClothingItems = clothingItems.filter(
@@ -22,11 +21,8 @@ function ClothesSection({
       {showHeader && ( // Conditionally render the header
         <div className="clothes-section__header">
           <h2 className="clothes-section__title">Your Items</h2>
-          <button
-            className="clothes-section__add-button"
-            onClick={onAddGarmentClick}
-          >
-            + Add new
+          <button className="add-new-button" onClick={onAddItemClick}>
+            + Add New
           </button>
         </div>
       )}

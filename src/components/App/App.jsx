@@ -424,6 +424,33 @@ function App() {
     }
   };
 
+  const handleProfileChange = (updatedProfile) => {
+    fetch(`${BASE_URL}/users/me`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedProfile),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          return Promise.reject(`Error: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setCurrentUser(data); // Update the current user state
+      })
+      .catch((err) => {
+        console.error("Error updating profile:", err);
+      });
+  };
+
+  const handleAddItemClick = () => {
+    setActiveModal(MODALS.ADD_GARMENT); // Set the modal to open
+  };
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <CurrentTemperatureUnitContext.Provider
@@ -535,10 +562,11 @@ function App() {
                     <>
                       {isLoggedIn && (
                         <>
-                          {activeModal === "ADD_GARMENT" && (
+                          {activeModal === MODALS.ADD_GARMENT && (
                             <AddGarmentForm
                               onAddGarment={handleAddGarment}
-                              isOpen={activeModal === "ADD_GARMENT"}
+                              isOpen={activeModal === MODALS.ADD_GARMENT}
+                              onSubmit={handleSubmit}
                               onClose={() => setActiveModal(null)}
                             />
                           )}
@@ -701,6 +729,7 @@ function App() {
                                 onCardClick={handleCardClick}
                                 onCardLike={handleLikeClick}
                                 currentWeatherType={currentWeatherType}
+                                currentUser={currentUser}
                               />
                             ))}
                           </div>
@@ -708,9 +737,7 @@ function App() {
                             showHeader={true}
                             clothingItems={updatedClothingItems}
                             onCardClick={handleCardClick}
-                            onAddItemClick={() =>
-                              setActiveModal(MODALS.ADD_GARMENT)
-                            }
+                            onAddItemClick={handleAddItemClick} // Pass the handler here
                           />
                         </>
                       )}
@@ -722,14 +749,27 @@ function App() {
                   element={
                     isLoggedIn ? (
                       <ProtectedRoute isLoggedIn={isLoggedIn}>
-                        <Profile
-                          clothingItems={updatedClothingItems}
-                          onAddItemClick={() =>
-                            setActiveModal(MODALS.ADD_GARMENT)
-                          }
-                          username={username}
-                          onSignOut={handleSignOut}
-                        />
+                        <>
+                          <Sidebar
+                            currentUser={currentUser}
+                            onChangeProfileData={handleProfileChange}
+                          />
+                          <ClothesSection
+                            clothingItems={updatedClothingItems}
+                            onCardClick={handleCardClick}
+                            onAddItemClick={() =>
+                              setActiveModal(MODALS.ADD_GARMENT)
+                            }
+                          />
+                          <Profile
+                            clothingItems={updatedClothingItems}
+                            onAddItemClick={() =>
+                              setActiveModal(MODALS.ADD_GARMENT)
+                            }
+                            username={username}
+                            onSignOut={handleSignOut}
+                          />
+                        </>
                       </ProtectedRoute>
                     ) : (
                       <p>
@@ -747,14 +787,6 @@ function App() {
                 />
               </Routes>
 
-              {activeModal === MODALS.ADD_GARMENT && (
-                <AddItemModal
-                  onClose={() => setActiveModal("")}
-                  onSubmit={handleSubmit}
-                  formData={formData} // Pass form data state
-                  handleChange={handleInputChange}
-                />
-              )}
               {activeModal === MODALS.PREVIEW && (
                 <ItemModal
                   activeModal={activeModal}

@@ -77,20 +77,21 @@ function Header({
               to="/profile"
               className="header__profile-link"
               onClick={handleSidebarToggle} // Trigger the sidebar opening
-            ></Link>
-            <p className="header__username">{currentUser?.name || "User"}</p>
-            {/* Username first */}
-            {currentUser.avatar ? (
-              <img
-                src={currentUser.avatar}
-                alt={`${currentUser.name}'s avatar`}
-                className="header__avatar"
-              />
-            ) : (
-              <div className="header__avatar-placeholder">
-                {currentUser?.name?.charAt(0).toUpperCase() || "U"}
-              </div>
-            )}
+            >
+              <p className="header__username">{currentUser?.name || "User"}</p>
+              {/* Username first */}
+              {currentUser.avatar ? (
+                <img
+                  src={currentUser.avatar}
+                  alt={`${currentUser.name}'s avatar`}
+                  className="header__avatar"
+                />
+              ) : (
+                <div className="header__avatar-placeholder">
+                  {currentUser?.name?.charAt(0).toUpperCase() || "U"}
+                </div>
+              )}
+            </Link>
           </div>
         ) : (
           <>

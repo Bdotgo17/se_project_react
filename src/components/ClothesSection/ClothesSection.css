@@ -5,9 +5,9 @@
   box-sizing: border-box;
 }
 
-/* .clothes-section__header {
+.clothes-section__header {
   display: none;
-} */
+}
 
 /* Hide the header in the main section */
 .main .clothes-section__header {

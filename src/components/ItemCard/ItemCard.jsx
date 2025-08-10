@@ -4,9 +4,8 @@ import "../ItemCard/ItemCard.css";
 import heartIcon from "../../assets/heartlike.svg";
 import heartIconActive from "../../assets/blackLikeHeart.svg";
 
-function ItemCard({ item, onCardClick, onCardLike, currentWeatherType }) {
-  const currentUser = useContext(CurrentUserContext);
-
+function ItemCard({ item, onCardClick, currentUser,onCardLike, currentWeatherType }) {
+ 
   const isLiked = item.likes.includes(currentUser._id); // Check if the current user has liked the item
 
   const handleCardClick = () => {
