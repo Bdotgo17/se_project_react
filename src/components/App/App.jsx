@@ -25,6 +25,7 @@ import WeatherCard from "../WeatherCard/WeatherCard";
 import { addCardLike, removeCardLike } from "../../utils/api.js"; // Adjust the path if needed
 import ItemCard from "../ItemCard/ItemCard.jsx"; // Adjust the path if needed
 import { BASE_URL } from "../../utils/constants";
+import { updateUserProfile } from "../../utils/api"; // Import the updateUserProfile function
 
 const MODALS = {
   ADD_GARMENT: "add-garment",
@@ -60,10 +61,9 @@ function App() {
 
   const [currentUser, setCurrentUser] = useState({
     name: "Default User",
-    avatar: "https://via.placeholder.com/150", // Default avatar
+    avatar: "", // Default avatar
   });
   const navigate = useNavigate(); // Initialize useNavigate
-  const [isAddGarmentModalOpen, setIsAddGarmentModalOpen] = useState(false);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -131,6 +131,18 @@ function App() {
       .then(() => setShowRegisterModal(false))
       .catch((err) => console.error(err));
   };
+
+  useEffect(() => {
+    // Fetch user data from the backend and set it in state
+    fetch("/users/me", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((userData) => setCurrentUser(userData))
+      .catch((err) => console.error("Error fetching user data:", err));
+  }, []);
 
   const handleLogin = async ({ email, password }) => {
     try {
@@ -277,6 +289,19 @@ function App() {
   const handleCardLike = (card) => {
     const isLiked = card.likes.some((id) => id === currentUser._id);
 
+    // Optimistically update the state for updatedClothingItems
+    setUpdatedClothingItems((prevItems) =>
+      prevItems.map((item) =>
+        item._id === card._id
+          ? {
+              ...item,
+              likes: isLiked
+                ? item.likes.filter((id) => id !== currentUser._id)
+                : [...item.likes, currentUser._id],
+            }
+          : item
+      )
+    );
     if (isLiked) {
       // Call removeCardLike if the card is already liked
       removeCardLike(card._id)
@@ -327,7 +352,10 @@ function App() {
 
   const handleAddGarment = (name, imageUrl, weather) => {
     addItem(name, imageUrl, weather)
-      .then((newItem) => {})
+      .then((newItem) => {
+        setUpdatedClothingItems((prevItems) => [...prevItems, newItem]); // Update state
+        setActiveModal(null); // Close the modal after submission
+      })
       .catch((err) => {
         console.error("Error adding garment:", err);
       });
@@ -361,13 +389,17 @@ function App() {
 
   const handleProfileSubmit = (e) => {
     e.preventDefault();
-    // Update the currentUser state with the new form data
-    setCurrentUser((prev) => ({
-      ...prev,
-      name: formData.name,
-      avatar: formData.avatar,
-    }));
-    setIsProfileModalOpen(false); // Close the modal after submission
+
+    // Send PATCH request to update the profile on the backend
+    updateUserProfile({ name: formData.name, avatar: formData.avatar })
+      .then((updatedUser) => {
+        // Update the currentUser state with the response from the backend
+        setCurrentUser(updatedUser);
+        setIsProfileModalOpen(false); // Close the modal after submission
+      })
+      .catch((err) => {
+        console.error("Error updating profile:", err);
+      });
   };
 
   const openProfileModal = () => {
@@ -564,9 +596,11 @@ function App() {
                         <>
                           {activeModal === MODALS.ADD_GARMENT && (
                             <AddGarmentForm
+                              formData={formData}
+                              setFormData={setFormData}
                               onAddGarment={handleAddGarment}
                               isOpen={activeModal === MODALS.ADD_GARMENT}
-                              onSubmit={handleSubmit}
+                              onSubmit={handleAddGarment}
                               onClose={() => setActiveModal(null)}
                             />
                           )}
@@ -766,7 +800,6 @@ function App() {
                             onAddItemClick={() =>
                               setActiveModal(MODALS.ADD_GARMENT)
                             }
-                            username={username}
                             onSignOut={handleSignOut}
                           />
                         </>

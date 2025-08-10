@@ -9,10 +9,7 @@ function AddItemModal({
   handleChange,
 }) {
   useEffect(() => {
-    console.log("AddItemModal mounted");
-    return () => {
-      console.log("AddItemModal unmounted");
-    };
+    return () => {};
   }, []);
 
   return (

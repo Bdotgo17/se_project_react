@@ -2,14 +2,27 @@ import React, { useState } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import "./AddGarmentForm.css";
 
-function AddGarmentForm({ onAddGarment, isOpen, onClose }) {
+function AddGarmentForm({
+  onAddGarment,
+  isOpen,
+  onClose,
+  formData,
+  setFormData,
+  onSubmit,
+}) {
   const [name, setName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [weather, setWeather] = useState("");
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddGarment(name, imageUrl, weather); // Call the onAddGarment prop
+    onSubmit(formData.name, formData.imageUrl, formData.weather);
+
     onClose(); // Close the modal after submission
   };
 

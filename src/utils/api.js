@@ -54,7 +54,7 @@ export function addItem(name, imageUrl, weather) {
 
 export function deleteItem(id) {
   const token = localStorage.getItem("jwt"); // Retrieve the token from local storage
- 
+
   return fetch(`${BASE_URL}/items/${id}`, {
     method: "DELETE",
     headers: {
@@ -110,5 +110,21 @@ export const removeCardLike = (cardId) => {
       return Promise.reject(`Error: ${res.status}`);
     }
     return res.json(); // Ensure the updated card is returned
+  });
+};
+
+export const updateUserProfile = (profileData) => {
+  return fetch("/users/me", {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    },
+    body: JSON.stringify(profileData),
+  }).then((res) => {
+    if (!res.ok) {
+      return Promise.reject(`Error: ${res.status}`);
+    }
+    return res.json();
   });
 };

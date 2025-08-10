@@ -71,3 +71,8 @@ export function checkToken(token) {
     });
 }
 
+// filepath: /Users/adam/wtwr/se_project_react/src/utils/auth.js
+
+export const onSignOut = () => {
+  localStorage.removeItem("jwt"); // Example: Remove token from localStorage
+};
