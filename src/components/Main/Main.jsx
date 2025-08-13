@@ -11,6 +11,7 @@ function Main({
   onCardLike,
   updatedClothingItems,
   clothingItems = [],
+  isLoggedIn, // Pass the isLoggedIn state as a prop
 }) {
   const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext); // Access the current unit
 
@@ -36,21 +37,17 @@ function Main({
         </p>
 
         <ul className="cards__list">
-          {filteredItems.length > 0 ? (
-            filteredItems.map((item) => (
-              <ItemCard
-                key={item._id}
-                item={item}
-                onCardClick={handleCardClick}
-                onCardLike={onCardLike} // Pass the onCardLike function to ItemCard
-                currentWeatherType={weatherData.type} // Pass the current weather type
-              />
-            ))
-          ) : (
-            <p className="cards__empty-message">
-              No items match the current weather.
-            </p>
-          )}
+          {filteredItems.length > 0
+            ? filteredItems.map((item) => (
+                <ItemCard
+                  key={item._id}
+                  item={item}
+                  onCardClick={handleCardClick}
+                  onCardLike={onCardLike} // Pass the onCardLike function to ItemCard
+                  currentWeatherType={weatherData.type} // Pass the current weather type
+                />
+              ))
+            : isLoggedIn && <p className="cards__empty-message"></p>}
         </ul>
       </section>
       {/* Add ClothesSection without the header */}
@@ -58,7 +55,7 @@ function Main({
         showHeader={false} // Hide the header
         clothingItems={clothingItems} // Pass the clothing items for this section
         onCardClick={handleCardClick} // Handle card clicks
-        onAddGarmentClick={() => {}} // Optional: No need for adding garments here
+        onAddItemClick={() => {}} // Standardized prop name
       />
     </main>
   );

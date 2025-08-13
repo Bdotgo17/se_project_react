@@ -75,8 +75,8 @@
   background-color: white;
   border-radius: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-  width: 496px; /* Set exact width */
-  height: 436px;
+  max-height: 90vh; /* Ensure the modal content does not exceed 90% of the viewport height */
+  width: 496px;
   padding: 20px;
   font-family: "Cabinet Grotesk", sans-serif;
   font-weight: 700;
@@ -85,7 +85,7 @@
   box-sizing: border-box; /*  Include padding and border in width/height */
   display: flex;
   flex-direction: column; /* Stack content vertically */
-  overflow-y: auto; /* Enable scrolling if content overflows */
+  overflow: hidden; /* Enable scrolling if content overflows */
 }
 
 .form-modal__close {

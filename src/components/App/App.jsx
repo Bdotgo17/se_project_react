@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { signup, signin, checkToken } from "../../utils/auth";
+import { signup, signin } from "../../utils/auth";
 import RegisterModal from "../RegisterModal/RegisterModal";
 import LoginModal from "../LoginModal/LoginModal";
-import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { coordinates, APIkey } from "../../utils/constants";
 import Header from "../Header/Header";
@@ -26,6 +25,9 @@ import { addCardLike, removeCardLike } from "../../utils/api.js"; // Adjust the 
 import ItemCard from "../ItemCard/ItemCard.jsx"; // Adjust the path if needed
 import { BASE_URL } from "../../utils/constants";
 import { updateUserProfile } from "../../utils/api"; // Import the updateUserProfile function
+import { checkToken } from "../../utils/api";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { defaultClothingItems } from "../../utils/constants.js";
 
 const MODALS = {
   ADD_GARMENT: "add-garment",
@@ -40,7 +42,10 @@ function App() {
   });
   const [activeModal, setActiveModal] = useState(null);
   const [selectedCard, setSelectedCard] = useState(null);
-  const [updatedClothingItems, setUpdatedClothingItems] = useState([]);
+
+  const [updatedClothingItems, setUpdatedClothingItems] =
+    useState(defaultClothingItems);
+
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
   const [username, setUsername] = useState("Terrence Tegegne"); // Shared username state
   const [formData, setFormData] = useState({
@@ -52,30 +57,37 @@ function App() {
     weather: "",
   });
   const [isProfileOpen, setIsProfileOpen] = useState(false); // State to control visibility
-
-  // Authentication states
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("jwt"));
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-
   const [currentUser, setCurrentUser] = useState({
     name: "Default User",
     avatar: "", // Default avatar
   });
   const navigate = useNavigate(); // Initialize useNavigate
-
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
-  const filteredClothingItems = updatedClothingItems.filter(
-    (item) => item.weather === weatherData.type
-  );
+  const currentWeatherType = weatherData?.type || "default"; // Replace "default" with a fallback value
+
+  console.log("Current Weather Type:", currentWeatherType);
+  console.log("Updated Clothing Items:", updatedClothingItems);
+
+  const filteredClothingItems =
+    updatedClothingItems.length > 0
+      ? updatedClothingItems.filter(
+          (item) =>
+            item.weather.toLowerCase() === currentWeatherType.toLowerCase()
+        )
+      : [];
+
+  console.log("Filtered clothing items:", filteredClothingItems);
 
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
+    console.log("Checking weather...");
     getWeather(coordinates, APIkey)
       .then((data) => {
         const filteredData = filterWeatherData(data);
@@ -87,9 +99,12 @@ function App() {
   }, []);
 
   useEffect(() => {
+    console.log("useEffect is running...");
     getItems()
       .then((items) => {
+        console.log("Fetching clothing items...");
         setUpdatedClothingItems(items);
+        console.log("Updated clothing items state:", items); // Debugging: Log the updated state
       })
       .catch((err) => {
         console.error("Error fetching items:", err);
@@ -97,69 +112,39 @@ function App() {
   }, []);
 
   useEffect(() => {
+    console.log("Checking token on component mount...");
+    const token = localStorage.getItem("jwt");
     if (token) {
       checkToken(token)
-        .then((user) => setIsLoggedIn(true))
-        .catch(() => {
-          localStorage.removeItem("jwt");
-          setIsLoggedIn(false);
-        });
-    }
-  }, [token]);
-
-  useEffect(() => {
-    if (localStorage.getItem("jwt")) {
-      checkToken(localStorage.getItem("jwt"))
-        .then((user) => {
-          setCurrentUser(user); // Set the current user data
-          setIsLoggedIn(true);
+        .then((userData) => {
+          setCurrentUser(userData); // Update the state with user data
+          setIsLoggedIn(true); // Mark the user as logged in
         })
-        .catch(() => {
-          localStorage.removeItem("jwt");
-          setIsLoggedIn(false);
+        .catch((err) => {
+          console.error("Error fetching user data:", err);
+          localStorage.removeItem("jwt"); // Clear invalid token
+          setIsLoggedIn(false); // Mark the user as logged out
         });
+    } else {
+      console.log("No token found, redirecting to login...");
     }
   }, []);
 
-  useEffect(() => {}, [showLoginModal]);
+  const handleRegister = async ({ name, avatar, email, password }) => {
+    try {
+      // Call the signup API
+      await signup(name, avatar, email, password);
 
-  useEffect(() => {}, [isLoggedIn]);
+      // Log the user in after successful registration
+      await handleLogin({ email, password });
 
-  const handleRegister = ({ name, avatar, email, password }) => {
-    signup(name, avatar, email, password)
-      .then(() => handleLogin({ email, password }))
-      .then(() => setShowRegisterModal(false))
-      .catch((err) => console.error(err));
+      // Close the register modal
+      setShowRegisterModal(false);
+    } catch (err) {
+      console.error("Registration failed:", err);
+      alert("Registration failed. Please try again."); // Optional user feedback
+    }
   };
-
-  useEffect(() => {
-    // Fetch user data from the backend and set it in state
-    fetch("/users/me", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((userData) => setCurrentUser(userData))
-      .catch((err) => console.error("Error fetching user data:", err));
-  }, []);
-
-  useEffect(() => {
-    fetch("/user-data")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        setCurrentUser(data); // Save the user data to state
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-      });
-  }, []); // Empty dependency array ensures this runs once on mount
 
   const handleLogin = async ({ email, password }) => {
     try {
@@ -175,13 +160,8 @@ function App() {
       localStorage.setItem("jwt", res.token);
       setToken(res.token);
 
-      // Fetch user data after login
-      const user = await fetchUserData(res.token);
-
-      // Validate the user data
-      if (!user) {
-        throw new Error("User data is missing from the fetchUserData response");
-      }
+      // Fetch user data after login using checkToken
+      const user = await checkToken(res.token);
 
       // Update state
       setCurrentUser(user); // Set the current user
@@ -195,33 +175,15 @@ function App() {
     }
   };
 
-  const fetchUserData = (token) => {
-    return fetch(`${BASE_URL}/users/me`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          // Handle non-OK responses
-          return res
-            .json()
-            .then((err) =>
-              Promise.reject(`Error: ${err.message || res.status}`)
-            );
-        }
-        return res.json(); // Parse the response JSON
-      })
-      .then((data) => {
-        setCurrentUser(data); // Update user state
-        return data; // Return the user data for further use
-      })
-      .catch((err) => {
-        console.error("Failed to fetch user data:", err); // Log the error
-        throw err; // Re-throw the error for further handling
-      });
+  const fetchUserData = async (token) => {
+    try {
+      const data = await checkToken(token);
+      setCurrentUser(data); // Update user state
+      return data;
+    } catch (err) {
+      console.error("Failed to fetch user data:", err); // Log the error
+      throw err; // Re-throw the error for further handling
+    }
   };
 
   const handleProfileClick = () => {
@@ -251,7 +213,7 @@ function App() {
           return updatedItems;
         });
 
-        setActiveModal("");
+        closeActiveModal();
       })
       .catch((err) => {
         console.error("Error adding item:", err);
@@ -273,7 +235,7 @@ function App() {
           );
           return updatedItems;
         });
-        setActiveModal("");
+        closeActiveModal();
       })
       .catch((err) => {
         console.error("Error deleting item:", err);
@@ -364,14 +326,14 @@ function App() {
   };
 
   const handleAddClick = () => {
-    setActiveModal(MODALS.ADD_GARMENT); // Example action
+    closeActiveModal(MODALS.ADD_GARMENT); // Example action
   };
 
   const handleAddGarment = (name, imageUrl, weather) => {
     addItem(name, imageUrl, weather)
       .then((newItem) => {
         setUpdatedClothingItems((prevItems) => [...prevItems, newItem]); // Update state
-        setActiveModal(null); // Close the modal after submission
+        closeActiveModal(null); // Close the modal after submission
       })
       .catch((err) => {
         console.error("Error adding garment:", err);
@@ -382,6 +344,8 @@ function App() {
     localStorage.removeItem("jwt"); // Remove the JWT token
     setIsLoggedIn(false); // Update the logged-in state
     setCurrentUser(null); // Clear the current user data
+    setUpdatedClothingItems([]); // Clear clothing items
+
     navigate("/"); // Redirect to the home page
     setIsSidebarOpen(false); // Close the sidebar
   };
@@ -474,25 +438,13 @@ function App() {
   };
 
   const handleProfileChange = (updatedProfile) => {
-    fetch(`${BASE_URL}/users/me`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedProfile),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          return Promise.reject(`Error: ${res.status}`);
-        }
-        return res.json();
-      })
+    updateUserProfile(updatedProfile)
       .then((data) => {
         setCurrentUser(data); // Update the current user state
+        closeActiveModal(); // Close the modal after a successful update (if applicable)
       })
       .catch((err) => {
-        console.error("Error updating profile:", err);
+        console.error("Error updating profile:", err); // Log the error
       });
   };
 
@@ -517,7 +469,6 @@ function App() {
                 handleLoginClick={() => setShowLoginModal(true)} // Pass the function to show the login modal
                 setShowLoginModal={setShowLoginModal}
                 weatherData={weatherData}
-                currentUser={currentUser}
                 username={username}
                 isLoggedIn={isLoggedIn}
                 setActiveModal={setActiveModal}
@@ -530,11 +481,11 @@ function App() {
                 onChangeProfileData={handleChangeProfileData}
                 onLogout={handleLogout}
               />
-
-              {!isLoggedIn && <WeatherCard temperature={weatherData.temp} />}
+{/* 
+              {!isLoggedIn && <WeatherCard temperature={weatherData.temp} />} */}
 
               {isSidebarOpen && (
-                <SideBar
+                <Sidebar
                   isOpen={isSidebarOpen}
                   onClose={() => setIsSidebarOpen(false)}
                   currentUser={currentUser}
@@ -762,36 +713,39 @@ function App() {
                         </ModalWithForm>
                       )}
 
-                      {isLoggedIn && (
-                        <>
-                          <Main
-                            weatherData={weatherData}
-                            clothingItems={updatedClothingItems}
-                            updatedClothingItems={updatedClothingItems}
-                            handleCardClick={handleCardClick}
-                            cards={cards}
-                            onCardLike={handleCardLike}
-                          />
-                          <div className="cards-container">
-                            {cards.map((card) => (
+                      <>
+                        <Main
+                          isLoggedIn={isLoggedIn} // Pass the isLoggedIn state as a prop
+
+                          weatherData={weatherData}
+                          clothingItems={updatedClothingItems}
+                          handleCardClick={handleCardClick}
+                          cards={cards}
+                          onCardLike={handleCardLike}
+                        />
+                        <div className="cards-container">
+                          {filteredClothingItems.length > 0 ? (
+                            filteredClothingItems.map((item) => (
                               <ItemCard
-                                key={card._id}
-                                item={card}
+                                key={item._id}
+                                item={item}
                                 onCardClick={handleCardClick}
                                 onCardLike={handleLikeClick}
                                 currentWeatherType={currentWeatherType}
                                 currentUser={currentUser}
                               />
-                            ))}
-                          </div>
-                          <ClothesSection
-                            showHeader={true}
-                            clothingItems={updatedClothingItems}
-                            onCardClick={handleCardClick}
-                            onAddItemClick={handleAddItemClick} // Pass the handler here
-                          />
-                        </>
-                      )}
+                            ))
+                          ) : (
+                            <p>No items to display for the current weather.</p>
+                          )}
+                        </div>
+                        <ClothesSection
+                          showHeader={true}
+                          clothingItems={updatedClothingItems}
+                          onCardClick={handleCardClick}
+                          onAddItemClick={handleAddItemClick} // Pass the handler here
+                        />
+                      </>
                     </>
                   }
                 />
@@ -806,6 +760,7 @@ function App() {
                             onChangeProfileData={handleProfileChange}
                           />
                           <ClothesSection
+                            showHeader={false} // Hide the header in the sidebar if needed
                             clothingItems={updatedClothingItems}
                             onCardClick={handleCardClick}
                             onAddItemClick={() =>

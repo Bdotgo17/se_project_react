@@ -1,6 +1,6 @@
 import { BASE_URL } from "../utils/constants";
 
-function checkResponse(res) {
+export function checkResponse(res) {
   if (!res.ok) {
     return res.json().then((err) => {
       console.error("Error response from server:", err);
@@ -128,3 +128,30 @@ export const updateUserProfile = (profileData) => {
     return res.json();
   });
 };
+
+export function checkToken(token) {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      if (!res.ok) {
+        if (res.status === 401) {
+          localStorage.removeItem("jwt"); // Clear expired token
+          window.location.href = "/login"; // Redirect to login page
+        }
+        return Promise.reject(`Error: ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((err) => {
+      console.error("Error in checkToken:", err);
+      throw err;
+    });
+}

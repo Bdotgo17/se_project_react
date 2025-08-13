@@ -4,7 +4,7 @@ import ItemCard from "../ItemCard/ItemCard";
 import "./ClothesSection.css";
 
 function ClothesSection({
-  showHeader = true,
+  showHeader = false,
   clothingItems = [],
   onCardClick,
   onAddItemClick,
@@ -15,6 +15,8 @@ function ClothesSection({
   const userClothingItems = clothingItems.filter(
     (item) => item.owner === currentUser?._id
   );
+
+  console.log("Clothing items:", clothingItems);
 
   return (
     <div className="clothes-section">
@@ -32,7 +34,7 @@ function ClothesSection({
             <ItemCard key={item._id} item={item} onCardClick={onCardClick} />
           ))
         ) : (
-          <p className="clothes-section__empty">No items to display.</p>
+          <p className="clothes-section__empty"></p>
         )}
       </ul>
     </div>

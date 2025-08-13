@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 import avatar from "../../assets/avatar.svg";
@@ -14,7 +14,6 @@ function Header({
   handleLoginClick,
   weatherData,
   username,
-  currentUser,
   onProfileClick,
   currentTemperatureUnit,
   onToggleSwitchChange,
@@ -23,6 +22,8 @@ function Header({
   setShowLoginModal, // Add this prop for the Log In button
   setActiveModal,
 }) {
+  const currentUser = useContext(CurrentUserContext); // Use CurrentUserContext directly
+
   const [isProfileLinkVisible, setIsProfileLinkVisible] = useState(false);
 
   const toggleProfileLink = () => {

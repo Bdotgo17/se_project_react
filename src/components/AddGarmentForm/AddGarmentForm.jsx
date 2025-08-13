@@ -21,9 +21,16 @@ function AddGarmentForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData.name, formData.imageUrl, formData.weather);
 
-    onClose(); // Close the modal after submission
+    // Ensure onSubmit returns a Promise
+    onSubmit(formData.name, formData.imageUrl, formData.weather)
+      .then(() => {
+        onClose(); // Close the modal only after a successful response
+      })
+      .catch((error) => {
+        console.error("Error submitting garment:", error);
+        // Optionally, handle the error (e.g., show an error message)
+      });
   };
 
   return (

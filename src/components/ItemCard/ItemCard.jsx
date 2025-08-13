@@ -11,7 +11,9 @@ function ItemCard({
   onCardLike,
   currentWeatherType,
 }) {
-  const isLiked = item.likes.includes(currentUser?._id); // Check if the current user has liked the item
+  console.log("ItemCard props:", { item, currentWeatherType, currentUser });
+
+  const isLiked = item.likes?.includes(currentUser?._id) ?? false;
 
   const handleCardClick = () => {
     onCardClick(item);

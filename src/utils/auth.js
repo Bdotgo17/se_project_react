@@ -1,4 +1,5 @@
 import { BASE_URL } from "../utils/constants";
+import { checkResponse } from "./api";
 
 export function signup(name, avatar, email, password) {
   return fetch(`${BASE_URL}/signup`, {
@@ -7,9 +8,7 @@ export function signup(name, avatar, email, password) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ name, avatar, email, password }),
-  }).then((res) =>
-    res.ok ? res.json() : Promise.reject(`Error: ${res.status}`)
-  );
+  }).then(checkResponse);
 }
 
 export function signin(email, password) {
@@ -20,15 +19,7 @@ export function signin(email, password) {
     },
     body: JSON.stringify({ email, password }),
   })
-    .then((res) => {
-      // Check if the response is not OK
-      if (!res.ok) {
-        return res
-          .json()
-          .then((err) => Promise.reject(`Error: ${err.message || res.status}`));
-      }
-      return res.json(); // Parse the response JSON
-    })
+    .then(checkResponse) // Use the centralized checkResponse function
     .then((data) => {
       if (!data.token) {
         throw new Error("Token is missing from the response");
@@ -41,37 +32,6 @@ export function signin(email, password) {
       throw err; // Re-throw the error for further handling
     });
 }
-
-window.signin = signin;
-
-export function checkToken(token) {
-  return fetch(`${BASE_URL}/users/me`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      authorization: `Bearer ${token}`,
-    },
-  })
-    .then((res) => {
-      if (!res.ok) {
-        if (res.status === 401) {
-          localStorage.removeItem("jwt"); // Clear expired token
-          window.location.href = "/login"; // Redirect to login page
-        }
-        return Promise.reject(`Error: ${res.status}`);
-      }
-      return res.json();
-    })
-    .then((data) => {
-      return data;
-    })
-    .catch((err) => {
-      console.error("Error in checkToken:", err);
-      throw err;
-    });
-}
-
-// filepath: /Users/adam/wtwr/se_project_react/src/utils/auth.js
 
 export const onSignOut = () => {
   localStorage.removeItem("jwt"); // Example: Remove token from localStorage

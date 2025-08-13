@@ -15,3 +15,11 @@
   letter-spacing: 0%; /* Adjust letter spacing */
   color: rgba(255, 255, 255, 1);
 }
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap; /* Allows cards to wrap to the next row */
+  gap: 16px; /* Adds spacing between cards */
+  justify-content: flex-start; /* Align cards to the left */
+  align-items: flex-start; /* Align cards to the top */
+}
