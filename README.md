@@ -4,8 +4,7 @@ This is the front-end repository for the WTWR project.
 
 ## Back-End Repository
 The back-end repository for this project can be found here:  
-[se_project_express (Project 13)] git@github.com:Bdotgo17/se_project_express.git
-
+https://github.com/Bdotgo17/se_project_express
 
 ## Description
 WTWR is a weather-based clothing recommendation app. Users can add, view, and manage clothing items based on the current weather.

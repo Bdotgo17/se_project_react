@@ -67,6 +67,12 @@
 }
 
 .form-modal__content {
+  flex-grow: 1; /* Allow the content to grow and fill the form */
+  height: 100%; /* Ensure the content takes up the full height of the form */
+  overflow-y: auto; /* Enable scrolling if the content overflows */
+
+  visibility: visible;
+  display: flex; /* Use flexbox to center the modal content */
   position: fixed; /* Position relative to the viewport */
   left: 50%; /* Center horizontally */
   top: 50%; /* Center vertically */
@@ -85,7 +91,6 @@
   box-sizing: border-box; /*  Include padding and border in width/height */
   display: flex;
   flex-direction: column; /* Stack content vertically */
-  overflow: hidden; /* Enable scrolling if content overflows */
 }
 
 .form-modal__close {
@@ -119,7 +124,13 @@
   position: fixed;
   top: 50%;
   left: 50%;
+
   z-index: 1000;
+  width: 90%;
+  max-width: 600px; /* Optional: Limit the modal's width */
+  height: 80%; /* Adjust modal height */
+  max-height: 700px; /* Optional: Limit the modal's height */
+
 }
 
 .form-modal__form {
@@ -127,8 +138,12 @@
   flex-direction: column;
   gap: 16px; /* Add spacing between form elements */
   flex-grow: 1; /* Allow the form to grow and fill the modal */
+  padding: 20px;
+  height: 100%; /* Make the form take up the full height of the modal */
+  overflow-y: visible; /* Enable vertical scrolling if content overflows */
   justify-content: space-between; /* Push the Add button to the bottom */
 }
+
 
 .modal__input {
   display: block;
@@ -265,7 +280,7 @@
 /* Styles specific to the Change Profile Data modal */
 .change-profile-modal .form-modal__content {
   width: 496px;
-  height: 305px;
+  height: auto;
   background-color: white;
   padding: 20px;
   border-radius: 8px;
@@ -275,6 +290,7 @@
   justify-content: space-between;
   position: fixed;
 }
+
 /* Save Changes button styles */
 .change-profile-modal .form-modal__submit {
   background-color: gray; /* Default color */
@@ -323,3 +339,44 @@ button.modal__submit-button:hover {
 button.modal__submit-button:active {
   background-color: black; /* Change to black when clicked */
 }
+
+.modal__submit-button {
+  display: block; /* Ensure the button is visible */
+  padding: 10px 20px;
+  background-color: #007bff; /* Add a background color */
+  color: white; /* Set text color */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.modal__submit-button:hover {
+  background-color: #0056b3; /* Darken the background on hover */
+}
+
+.form-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Add spacing between form elements */
+  flex-grow: 1; /* Allow the form to grow and fill the modal */
+  padding: 20px;
+  box-sizing: border-box; /* Include padding in width/height calculations */
+  height: 100%; /* Make the form take up the full height of the modal */
+  overflow-y: visible; /* Disable vertical scrolling */
+  justify-content: space-between; /* Push the Save button to the bottom */
+}
+
+.form-modal__content {
+  flex-grow: 1; /* Allow the content to grow and fill the form */
+  height: auto; /* Let the content grow naturally */
+  max-height: 100%; /* Ensure the content does not exceed the form's height */
+  overflow-y: auto; /* Enable scrolling if the content overflows */
+  box-sizing: border-box; /* Include padding in width/height calculations */
+  background-color: white; /* Ensure the white box is visible */
+  border-radius: 20px; /* Add rounded corners */
+  padding: 20px;
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+}
+

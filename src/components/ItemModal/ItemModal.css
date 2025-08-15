@@ -51,12 +51,14 @@
 }
 
 .item-modal__overlay {
-  position: fixed;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  position: fixed; /* Ensure it covers the viewport */
+  top: 0; /* Start at the top */
+  left: 0; /* Start at the left */
+  width: 100%; /* Cover the full width */
+  height: 100%; /* Cover the full height */
+  background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
+  z-index: 999; /* Ensure it appears below the modal */
+  border-radius: 10px; /* Match the modal's curved edges */
 }
 
 .item-modal__content {

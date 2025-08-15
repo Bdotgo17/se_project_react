@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 
-function RegisterModal({ isOpen, onRegister, onClose }) {
+function RegisterModal({ isOpen, onRegister, onClose, onToggleLogin }) {
+  if (!isOpen) return null;
+
   const [formData, setFormData] = useState({
     name: "",
     avatar: "",
@@ -25,92 +27,67 @@ function RegisterModal({ isOpen, onRegister, onClose }) {
       title="Sign Up"
       onSubmit={handleSubmit}
       onClose={onClose}
-      buttonText="Register"
     >
       <label className="form__label">
-        Name
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-      </label>
-      <label className="form__label">
-        Email
+        Email*
         <input
           type="email"
           name="email"
           placeholder="Email"
-          value={formData.email}
+          value={formData.email || ""}
           onChange={handleChange}
           required
         />
       </label>
       <label className="form__label">
-        Password
+        Password*
         <input
           type="password"
           name="password"
           placeholder="Password"
-          value={formData.password}
+          value={formData.password || ""}
           onChange={handleChange}
           required
         />
       </label>
       <label className="form__label">
-        Avatar URL
+        Name*
         <input
-          type="url"
+          type="text"
+          name="name"
+          placeholder="Name"
+          value={formData.name || ""}
+          onChange={handleChange}
+          required
+        />
+      </label>
+      <label className="form__label">
+        Avatar URL*
+        <input
+          type="text"
           name="avatar"
           placeholder="Avatar URL"
-          value={formData.avatar}
+          value={formData.avatar || ""}
           onChange={handleChange}
         />
       </label>
+      {/* Submit Button and Toggle Link */}
+      <div className="form__actions">
+        <button type="submit" className="form__submit-button">
+          Sign Up
+        </button>
+        <span className="form__toggle-link">
+          or{" "}
+          <button
+            type="button"
+            className="form__toggle-button"
+            onClick={onToggleLogin} // Use the onToggleLogin prop to switch to the login modal
+          >
+            Log In
+          </button>
+        </span>
+      </div>
     </ModalWithForm>
-    // <div className="modal">
-    //   <form onSubmit={handleSubmit}>
-    //     <input
-    //       type="text"
-    //       name="name"
-    //       placeholder="Name"
-    //       value={formData.name}
-    //       onChange={handleChange}
-    //       required
-    //     />
-    //     <input
-    //       type="text"
-    //       name="avatar"
-    //       placeholder="Avatar URL"
-    //       value={formData.avatar}
-    //       onChange={handleChange}
-    //       required
-    //     />
-    //     <input
-    //       type="email"
-    //       name="email"
-    //       placeholder="Email"
-    //       value={formData.email}
-    //       onChange={handleChange}
-    //       required
-    //     />
-    //     <input
-    //       type="password"
-    //       name="password"
-    //       placeholder="Password"
-    //       value={formData.password}
-    //       onChange={handleChange}
-    //       required
-    //     />
-    //     <button type="submit">Register</button>
-    //     <button type="button" onClick={onClose}>
-    //       Close
-    //     </button>
-    //   </form>
-    // </div>
   );
 }
 

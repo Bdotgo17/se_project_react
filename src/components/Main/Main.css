@@ -22,4 +22,24 @@
   gap: 16px; /* Adds spacing between cards */
   justify-content: flex-start; /* Align cards to the left */
   align-items: flex-start; /* Align cards to the top */
+  max-height: 400px; /* Set a maximum height for the container */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 10px; /* Optional: Add padding for better spacing */
+  background-color: #f9f9f9; /* Optional: Add a background color */
+  border: 1px solid #ddd; /* Optional: Add a border for better visibility */
+  border-radius: 8px; /* Optional: Add rounded corners */
+}
+
+/* Optional: Customize the scrollbar */
+.cards-container::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.cards-container::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color of the scrollbar thumb */
+  border-radius: 4px; /* Rounded corners for the scrollbar thumb */
+}
+
+.cards-container::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Darker color on hover */
 }

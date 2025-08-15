@@ -102,11 +102,8 @@ function Header({
               className="header__signup-button"
             >
               Sign Up
-            </button>
-            <button
-              onClick={() => setShowLoginModal(true)}
-              className="header__login-button"
-            >
+            </button>                        
+            <button onClick={handleLoginClick} className="header__login-button">
               Log In
             </button>
           </>

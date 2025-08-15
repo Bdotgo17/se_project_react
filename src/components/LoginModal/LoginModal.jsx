@@ -7,7 +7,10 @@ function LoginModal({
   onClose,
   onSubmit,
   onInputChange,
+  onToggleRegister,
 }) {
+  if (!isOpen) return null; // Don't render the modal if it's not open
+
   const [formData, setFormData] = useState({ email: "", password: "" });
 
   function handleChange(e) {
@@ -20,12 +23,14 @@ function LoginModal({
     onLogin(formData);
   }
 
+  if (!isOpen) return null;
+
   return (
     <ModalWithForm
       isOpen={isOpen}
       title="Login"
-      onSubmit={handleSubmit} // Pass the handleSubmit function
-      onClose={onClose} // Pass the onClose function
+      onSubmit={handleSubmit} // Use the handleSubmit function
+      onClose={onClose} // Use the onClose prop to close the modal
     >
       <label className="form__label">
         Email
@@ -33,10 +38,9 @@ function LoginModal({
           type="email"
           name="email"
           placeholder="Email"
-          value={formData.email}
+          value={formData.email || ""}
           onChange={handleChange}
           required
-          autoComplete="email"
         />
       </label>
       <label className="form__label">
@@ -45,15 +49,27 @@ function LoginModal({
           type="password"
           name="password"
           placeholder="Password"
-          value={formData.password}
+          value={formData.password || ""}
           onChange={handleChange}
           required
-          autoComplete="current-password"
         />
       </label>
-      <button type="submit" className="form__submit-button">
-        Login
-      </button>
+      {/* Submit Button and Toggle Link */}
+      <div className="form__actions">
+        <button type="submit" className="form__submit-button">
+          Log In
+        </button>
+        <span className="form__toggle-link">
+          or{" "}
+          <button
+            type="button"
+            className="form__toggle-button"
+            onClick={onToggleRegister} // Use the onToggleRegister prop to open the Sign Up modal
+          >
+            Sign Up
+          </button>
+        </span>
+      </div>
     </ModalWithForm>
   );
 }

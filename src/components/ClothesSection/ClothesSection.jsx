@@ -8,6 +8,7 @@ function ClothesSection({
   clothingItems = [],
   onCardClick,
   onAddItemClick,
+  currentWeatherType,
   onAddGarmentClick,
 }) {
   const currentUser = useContext(CurrentUserContext);
@@ -17,6 +18,13 @@ function ClothesSection({
   );
 
   console.log("Clothing items:", clothingItems);
+
+  // Further filter items based on the current weather type
+  const filteredClothingItems = userClothingItems.filter(
+    (item) => item.weather.toLowerCase() === currentWeatherType?.toLowerCase()
+  );
+
+  console.log("Filtered clothing items:", filteredClothingItems);
 
   return (
     <div className="clothes-section">
@@ -29,12 +37,14 @@ function ClothesSection({
         </div>
       )}
       <ul className="clothes-section__list">
-        {userClothingItems.length > 0 ? (
-          userClothingItems.map((item) => (
+        {filteredClothingItems.length > 0 ? (
+          filteredClothingItems.map((item) => (
             <ItemCard key={item._id} item={item} onCardClick={onCardClick} />
           ))
         ) : (
-          <p className="clothes-section__empty"></p>
+          <p className="clothes-section__empty">
+            No items to display for the current weather.
+          </p>
         )}
       </ul>
     </div>

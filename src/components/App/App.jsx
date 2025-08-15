@@ -6,7 +6,7 @@ import "./App.css";
 import { coordinates, APIkey } from "../../utils/constants";
 import Header from "../Header/Header";
 import Main from "../Main/Main";
-import Profile from "../Profile/Profile";
+import Profile from "../Profile/Profile.jsx";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import ItemModal from "../ItemModal/ItemModal";
 import Footer from "../Footer/footer";
@@ -14,7 +14,6 @@ import { filterWeatherData, getWeather } from "../../utils/weatherApi";
 import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnitContext";
 import ClothesSection from "../ClothesSection/ClothesSection";
 import { getItems, addItem, deleteItem } from "../../utils/api";
-import Sidebar from "../Sidebar/Sidebar";
 import AddItemModal from "../AddItemModal/AddItemModal";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import CurrentUserContext from "../../contexts/CurrentUserContext"; // Import the context
@@ -28,6 +27,7 @@ import { updateUserProfile } from "../../utils/api"; // Import the updateUserPro
 import { checkToken } from "../../utils/api";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { defaultClothingItems } from "../../utils/constants.js";
+import ProfileModal from "../ProfileModal/ProfileModal.jsx"; // Import the new component
 
 const MODALS = {
   ADD_GARMENT: "add-garment",
@@ -59,8 +59,9 @@ function App() {
   const [isProfileOpen, setIsProfileOpen] = useState(false); // State to control visibility
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("jwt"));
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+
   const [currentUser, setCurrentUser] = useState({
     name: "Default User",
     avatar: "", // Default avatar
@@ -74,17 +75,18 @@ function App() {
   console.log("Current Weather Type:", currentWeatherType);
   console.log("Updated Clothing Items:", updatedClothingItems);
 
-  const filteredClothingItems =
-    updatedClothingItems.length > 0
-      ? updatedClothingItems.filter(
-          (item) =>
-            item.weather.toLowerCase() === currentWeatherType.toLowerCase()
-        )
-      : [];
-
-  console.log("Filtered clothing items:", filteredClothingItems);
-
   const [cards, setCards] = useState([]);
+  const [clothingItems, setClothingItems] = useState([]);
+
+  useEffect(() => {
+    console.log("Updated clothing items:", updatedClothingItems);
+  }, [updatedClothingItems]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchClothingItems(); // Fetch clothing items when logged in
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
     console.log("Checking weather...");
@@ -130,6 +132,25 @@ function App() {
     }
   }, []);
 
+  const fetchClothingItems = async () => {
+    try {
+      const items = await getClothingItems(); // Replace with your API call
+      setUpdatedClothingItems(items);
+    } catch (error) {
+      console.error("Failed to fetch clothing items:", error);
+    }
+  };
+
+  const filteredClothingItems =
+    updatedClothingItems.length > 0
+      ? updatedClothingItems.filter(
+          (item) =>
+            item.weather.toLowerCase() === currentWeatherType.toLowerCase()
+        )
+      : [];
+
+  console.log("Filtered clothing items:", filteredClothingItems);
+
   const handleRegister = async ({ name, avatar, email, password }) => {
     try {
       // Call the signup API
@@ -137,6 +158,8 @@ function App() {
 
       // Log the user in after successful registration
       await handleLogin({ email, password });
+
+      console.log("Registering user:", formData);
 
       // Close the register modal
       setShowRegisterModal(false);
@@ -150,6 +173,7 @@ function App() {
     try {
       // Call the signin API
       const res = await signin(email, password);
+      console.log("Signin response:", res);
 
       // Validate the token
       if (!res.token) {
@@ -449,6 +473,7 @@ function App() {
   };
 
   const handleAddItemClick = () => {
+    console.log("Add New button clicked");
     setActiveModal(MODALS.ADD_GARMENT); // Set the modal to open
   };
 
@@ -467,7 +492,6 @@ function App() {
                 onSidebarToggle={handleSidebarToggle} // Pass the toggle function to Header
                 setShowRegisterModal={setShowRegisterModal} // Pass the function to show the register modal
                 handleLoginClick={() => setShowLoginModal(true)} // Pass the function to show the login modal
-                setShowLoginModal={setShowLoginModal}
                 weatherData={weatherData}
                 username={username}
                 isLoggedIn={isLoggedIn}
@@ -480,17 +504,14 @@ function App() {
                 handleLogout={handleLogout}
                 onChangeProfileData={handleChangeProfileData}
                 onLogout={handleLogout}
+                onAddItemClick={handleAddItemClick}
               />
-{/* 
-              {!isLoggedIn && <WeatherCard temperature={weatherData.temp} />} */}
 
-              {isSidebarOpen && (
-                <Sidebar
-                  isOpen={isSidebarOpen}
+              {isProfileOpen && (
+                <Profile
+                  isOpen={isProfileOpen}
                   onClose={() => setIsSidebarOpen(false)}
-                  currentUser={currentUser}
                   username={username}
-                  onProfileClick={handleProfileClick}
                   onSignOut={handleSignOut}
                   onAddGarmentClick={handleAddGarmentClick}
                   clothingItems={updatedClothingItems}
@@ -499,60 +520,16 @@ function App() {
                   onChangeProfileData={handleChangeProfileData} // Pass the function to Sidebar
                   isLoggedIn={isLoggedIn} // Pass isLoggedIn to Sidebar
                   onLogout={handleLogout} // Pass the logout function
+                  onAddItemClick={() => console.log("Add item clicked")}
                 />
               )}
-              <ModalWithForm
-                isOpen={isProfileModalOpen}
-                title="Change Profile Data"
-                onSubmit={handleProfileSubmit}
-                onClose={() => setIsProfileModalOpen(false)}
-                className="change-profile-modal"
-              >
-                <label className="modal__label">
-                  Name*
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name || ""}
-                    onChange={handleInputChange}
-                    className="modal__input"
-                    required
-                  />
-                </label>
-                <label className="modal__label">
-                  Avatar*
-                  <input
-                    type="url"
-                    name="avatar"
-                    value={formData.avatar || ""}
-                    onChange={handleInputChange}
-                    className="modal__input"
-                    required
-                  />
-                </label>
-                <button type="submit" className="modal__submit-button">
-                  Save Changes
-                </button>
-              </ModalWithForm>
-              {isProfileOpen && (
-                <Sidebar
-                  isOpen={isProfileOpen}
-                  onClose={() => setIsProfileOpen(false)}
-                  currentUser={currentUser}
-                  username={username}
-                  onProfileClick={handleProfileClick}
-                  onSignOut={handleSignOut}
-                  onChangeProfileData={handleChangeProfileData} // Pass the function
-                  onAddGarmentClick={handleAddGarmentClick}
-                  clothingItems={updatedClothingItems}
-                  onCardClick={handleCardClick}
-                  onCardLike={handleCardLike}
-                  handleDeleteCard={handleDeleteCard}
-                  handleAddItemSubmit={handleAddItemSubmit}
+              {isProfileModalOpen && (
+                <ProfileModal
+                  isOpen={isProfileModalOpen}
+                  onSubmit={handleProfileSubmit}
+                  onClose={() => setIsProfileModalOpen(false)}
+                  formData={formData}
                   handleInputChange={handleInputChange}
-                  formData={formData} // Pass form data state
-                  handleSubmit={handleSubmit} // Pass the submit handler
-                  onLogout={handleLogout} // Pass the logout function
                 />
               )}
               <Routes>
@@ -569,182 +546,72 @@ function App() {
                               onAddGarment={handleAddGarment}
                               isOpen={activeModal === MODALS.ADD_GARMENT}
                               onSubmit={handleAddGarment}
-                              onClose={() => setActiveModal(null)}
+                              onClose={closeActiveModal} // A function to close the modal
+                              onAddItemSubmit={handleAddItemSubmit} // The function to handle form submission
                             />
                           )}
                         </>
                       )}
                       {showRegisterModal && (
-                        <ModalWithForm
+                        <RegisterModal
                           isOpen={showRegisterModal}
-                          title="Sign Up"
-                          onSubmit={(e) => {
-                            e.preventDefault();
-                            handleRegister(formData); // Call handleRegister with the form data
+                          onRegister={handleRegister} // Call your register logic
+                          onClose={() => setShowRegisterModal(false)} // Close the register modal
+                          onToggleLogin={() => {
+                            setShowRegisterModal(false); // Close the register modal
+                            setShowLoginModal(true); // Open the login modal
                           }}
-                          onClose={() => {
-                            setShowRegisterModal(false);
-                          }}
-                        >
-                          <label className="form__label">
-                            Email*
-                            <input
-                              type="email"
-                              name="email"
-                              placeholder="Email"
-                              value={formData.email || ""}
-                              onChange={handleInputChange}
-                              required
-                            />
-                          </label>
-                          <label className="form__label">
-                            Password*
-                            <input
-                              type="password"
-                              name="password"
-                              placeholder="Password"
-                              value={formData.password || ""}
-                              onChange={handleInputChange}
-                              required
-                            />
-                          </label>
-                          <label className="form__label">
-                            Name*
-                            <input
-                              type="text"
-                              name="name"
-                              placeholder="Name"
-                              value={formData.name || ""}
-                              onChange={handleInputChange}
-                              required
-                            />
-                          </label>
-                          <label className="form__label">
-                            Avatar URL*
-                            <input
-                              type="text"
-                              name="avatar"
-                              placeholder="Avatar URL"
-                              value={formData.avatar || ""}
-                              onChange={handleInputChange}
-                            />
-                          </label>
-                          {/* Submit Button and Toggle Link */}
-                          <div className="form__actions">
-                            <button
-                              type="submit"
-                              className="form__submit-button"
-                            >
-                              Sign Up
-                            </button>
-                            <span className="form__toggle-link">
-                              or{" "}
-                              <button
-                                type="button"
-                                className="form__toggle-button"
-                                onClick={() => {
-                                  setShowRegisterModal(false); // Close the Sign Up modal
-                                  setShowLoginModal(true); // Open the Log In modal
-                                }}
-                              >
-                                Log In
-                              </button>
-                            </span>
-                          </div>
-                        </ModalWithForm>
+                        />
                       )}
-
                       {showLoginModal && (
-                        <ModalWithForm
+                        <LoginModal
                           isOpen={showLoginModal}
-                          title="Login"
-                          onSubmit={(e) => {
-                            e.preventDefault();
-                            handleLogin(formData); // Call handleLogin with the form data
-                          }}
-                          onClose={() => {
-                            setShowLoginModal(false);
-                          }}
-                        >
-                          <label className="form__label">
-                            Email
-                            <input
-                              type="email"
-                              name="email"
-                              placeholder="Email"
-                              value={formData.email || ""}
-                              onChange={handleInputChange}
-                              required
-                            />
-                          </label>
-                          <label className="form__label">
-                            Password
-                            <input
-                              type="password"
-                              name="password"
-                              placeholder="Password"
-                              value={formData.password || ""}
-                              onChange={handleInputChange}
-                              required
-                            />
-                          </label>
-                          {/* Submit Button and Toggle Link */}
-                          <div className="form__actions">
-                            <button
-                              type="submit"
-                              className="form__submit-button"
-                            >
-                              Log In
-                            </button>
-                            <span className="form__toggle-link">
-                              or{" "}
-                              <button
-                                type="button"
-                                className="form__toggle-button"
-                                onClick={() => {
-                                  setShowLoginModal(false); // Close the Log In modal
-                                  setShowRegisterModal(true); // Open the Sign Up modal
-                                }}
-                              >
-                                Sign Up
-                              </button>
-                            </span>
-                          </div>
-                        </ModalWithForm>
+                          onLogin={handleLogin} // Pass the handleLogin function as the onLogin prop
+                          onClose={() => setShowLoginModal(false)}
+                        />
                       )}
-
                       <>
-                        <Main
-                          isLoggedIn={isLoggedIn} // Pass the isLoggedIn state as a prop
-
-                          weatherData={weatherData}
-                          clothingItems={updatedClothingItems}
-                          handleCardClick={handleCardClick}
-                          cards={cards}
-                          onCardLike={handleCardLike}
-                        />
-                        <div className="cards-container">
-                          {filteredClothingItems.length > 0 ? (
-                            filteredClothingItems.map((item) => (
-                              <ItemCard
-                                key={item._id}
-                                item={item}
-                                onCardClick={handleCardClick}
-                                onCardLike={handleLikeClick}
-                                currentWeatherType={currentWeatherType}
-                                currentUser={currentUser}
-                              />
-                            ))
-                          ) : (
-                            <p>No items to display for the current weather.</p>
-                          )}
-                        </div>
-                        <ClothesSection
-                          showHeader={true}
-                          clothingItems={updatedClothingItems}
-                          onCardClick={handleCardClick}
-                          onAddItemClick={handleAddItemClick} // Pass the handler here
-                        />
+                        {isLoggedIn ? (
+                          <>
+                            {/* Render Main and ClothesSection for logged-in users */}
+                            <Main
+                              isLoggedIn={isLoggedIn} // Pass the isLoggedIn state as a prop
+                              weatherData={weatherData}
+                              clothingItems={updatedClothingItems}
+                              handleCardClick={handleCardClick}
+                              cards={cards}
+                              onCardLike={handleCardLike}
+                            />
+                            <ClothesSection
+                              showHeader={true}
+                              clothingItems={updatedClothingItems}
+                              onCardClick={handleCardClick}
+                              onAddItemClick={handleAddItemClick} // Pass the handler here
+                              currentWeatherType={currentWeatherType} // Pass the current weather type
+                            />
+                          </>
+                        ) : (
+                          <>
+                            {/* Render cards-container for logged-out users */}
+                            <div className="cards-container">
+                              {filteredClothingItems.length > 0 ? (
+                                filteredClothingItems.map((item) => (
+                                  <ItemCard
+                                    key={item._id}
+                                    item={item}
+                                    onCardClick={handleCardClick}
+                                    onCardLike={handleLikeClick}
+                                    currentWeatherType={currentWeatherType}
+                                  />
+                                ))
+                              ) : (
+                                <p>
+                                  No items to display for the current weather.
+                                </p>
+                              )}
+                            </div>
+                          </>
+                        )}
                       </>
                     </>
                   }
@@ -755,17 +622,16 @@ function App() {
                     isLoggedIn ? (
                       <ProtectedRoute isLoggedIn={isLoggedIn}>
                         <>
-                          <Sidebar
-                            currentUser={currentUser}
-                            onChangeProfileData={handleProfileChange}
-                          />
+                          <Profile onChangeProfileData={handleProfileChange} />
                           <ClothesSection
                             showHeader={false} // Hide the header in the sidebar if needed
                             clothingItems={updatedClothingItems}
                             onCardClick={handleCardClick}
-                            onAddItemClick={() =>
-                              setActiveModal(MODALS.ADD_GARMENT)
-                            }
+                            onAddItemClick={() => {
+                              console.log("Add New button clicked");
+
+                              setActiveModal(MODALS.ADD_GARMENT);
+                            }}
                           />
                           <Profile
                             clothingItems={updatedClothingItems}
@@ -774,19 +640,15 @@ function App() {
                             }
                             onSignOut={handleSignOut}
                           />
+                          {activeModal === MODALS.ADD_GARMENT && (
+                            <AddGarmentModal
+                              onClose={() => setActiveModal(null)} // Close the modal
+                            />
+                          )}
                         </>
                       </ProtectedRoute>
                     ) : (
-                      <p>
-                        Please log in to view your profile.{" "}
-                        <button
-                          onClick={() => {
-                            setShowLoginModal(true); // Open the login modal
-                          }}
-                        >
-                          Log In
-                        </button>
-                      </p>
+                      <p>You must be logged in to view this page.</p>
                     )
                   }
                 />

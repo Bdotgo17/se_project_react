@@ -40,16 +40,7 @@ export function addItem(name, imageUrl, weather) {
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     },
     body: JSON.stringify(payload),
-  })
-    .then((res) => {
-      if (!res.ok) {
-        return res.json().then((err) => Promise.reject(err));
-      }
-      return res.json();
-    })
-    .then((data) => {
-      return data;
-    });
+  }).then(checkResponse);
 }
 
 export function deleteItem(id) {
@@ -62,13 +53,7 @@ export function deleteItem(id) {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then((res) => {
-      if (res.status === 404) {
-        console.error("Item not found on the server.");
-        throw new Error("Item not found.");
-      }
-      return checkResponse(res);
-    })
+    .then(checkResponse)
     .catch((err) => {
       console.error("Error in deleteItem:", err); // Debug log
       throw err; // Re-throw the error for further handling
@@ -86,12 +71,7 @@ export const addCardLike = (cardId) => {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-  }).then((res) => {
-    if (!res.ok) {
-      return Promise.reject(`Error: ${res.status}`);
-    }
-    return res.json(); // Ensure the updated card is returned
-  });
+  }).then(checkResponse); // Reuse the checkResponse function
 };
 
 export const removeCardLike = (cardId) => {
@@ -105,12 +85,7 @@ export const removeCardLike = (cardId) => {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-  }).then((res) => {
-    if (!res.ok) {
-      return Promise.reject(`Error: ${res.status}`);
-    }
-    return res.json(); // Ensure the updated card is returned
-  });
+  }).then(checkResponse); // Reuse the checkResponse function
 };
 
 export const updateUserProfile = (profileData) => {
@@ -121,12 +96,7 @@ export const updateUserProfile = (profileData) => {
       Authorization: `Bearer ${localStorage.getItem("jwt")}`,
     },
     body: JSON.stringify(profileData),
-  }).then((res) => {
-    if (!res.ok) {
-      return Promise.reject(`Error: ${res.status}`);
-    }
-    return res.json();
-  });
+  }).then(checkResponse); // Reuse the checkResponse function
 };
 
 export function checkToken(token) {
@@ -137,19 +107,7 @@ export function checkToken(token) {
       authorization: `Bearer ${token}`,
     },
   })
-    .then((res) => {
-      if (!res.ok) {
-        if (res.status === 401) {
-          localStorage.removeItem("jwt"); // Clear expired token
-          window.location.href = "/login"; // Redirect to login page
-        }
-        return Promise.reject(`Error: ${res.status}`);
-      }
-      return res.json();
-    })
-    .then((data) => {
-      return data;
-    })
+    .then(checkResponse)
     .catch((err) => {
       console.error("Error in checkToken:", err);
       throw err;
