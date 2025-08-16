@@ -17,8 +17,6 @@ function ClothesSection({
     (item) => item.owner === currentUser?._id
   );
 
-  console.log("Clothing items:", clothingItems);
-
   // Further filter items based on the current weather type
   const filteredClothingItems = userClothingItems.filter(
     (item) => item.weather.toLowerCase() === currentWeatherType?.toLowerCase()
@@ -31,7 +29,13 @@ function ClothesSection({
       {showHeader && ( // Conditionally render the header
         <div className="clothes-section__header">
           <h2 className="clothes-section__title">Your Items</h2>
-          <button className="add-new-button" onClick={onAddItemClick}>
+          <button
+            className="add-new-button"
+            onClick={() => {
+              console.log("Add New button clicked in ClothesSection");
+              onAddItemClick();
+            }}
+          >
             + Add New
           </button>
         </div>

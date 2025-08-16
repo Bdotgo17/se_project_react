@@ -113,3 +113,18 @@ export function checkToken(token) {
       throw err;
     });
 }
+
+export const getClothingItems = async () => {
+  const response = await fetch(`${BASE_URL}/clothing-items`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch clothing items");
+  }
+
+  return response.json();
+};

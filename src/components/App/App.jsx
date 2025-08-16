@@ -28,6 +28,7 @@ import { checkToken } from "../../utils/api";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { defaultClothingItems } from "../../utils/constants.js";
 import ProfileModal from "../ProfileModal/ProfileModal.jsx"; // Import the new component
+import { getClothingItems } from "./../../utils/api.js"; // Import the getClothingItems function
 
 const MODALS = {
   ADD_GARMENT: "add-garment",
@@ -83,12 +84,6 @@ function App() {
   }, [updatedClothingItems]);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      fetchClothingItems(); // Fetch clothing items when logged in
-    }
-  }, [isLoggedIn]);
-
-  useEffect(() => {
     console.log("Checking weather...");
     getWeather(coordinates, APIkey)
       .then((data) => {
@@ -140,6 +135,12 @@ function App() {
       console.error("Failed to fetch clothing items:", error);
     }
   };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchClothingItems(); // Fetch clothing items when logged in
+    }
+  }, [isLoggedIn]);
 
   const filteredClothingItems =
     updatedClothingItems.length > 0
