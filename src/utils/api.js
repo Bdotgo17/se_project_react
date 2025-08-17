@@ -10,18 +10,16 @@ export function checkResponse(res) {
   return res.json();
 }
 
-export function getItems() {
-  return fetch(`${BASE_URL}/items`) // Use BASE_URL and append /items
-    .then((res) => {
-      return checkResponse(res);
-    })
-    .then((data) => {
-      return data;
-    })
-    .catch((err) => {
-      console.error("Error in getItems:", err); // Debug log
-      throw err; // Re-throw the error for further handling
-    });
+export async function getItems() {
+  try {
+    const res = await fetch(`${BASE_URL}/items`) // Use BASE_URL and append /items
+      ;
+    const data = checkResponse(res);
+    return data;
+  } catch (err) {
+    console.error("Error in getItems:", err); // Debug log
+    throw err; // Re-throw the error for further handling
+  }
 }
 
 export function addItem(name, imageUrl, weather) {
