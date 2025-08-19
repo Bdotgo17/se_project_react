@@ -37,16 +37,18 @@ function Profile({
         onSignOut={onSignOut}
         onChangeProfileData={onChangeProfileData}
       />
-      {/* Render the ClothesSection with filtered clothing items */}
-      {sidebarClothingItems.length > 0 && (
-        <ClothesSection
-          showHeader={true}
-          clothingItems={sidebarClothingItems}
-          onCardClick={onCardClick}
-          onAddGarmentClick={onAddGarmentClick}
-        />
-      )}
-    </div>
+        {/* Render the ClothesSection with filtered clothing items */}
+        {sidebarClothingItems.length > 0 && (
+          <div className="profile__content">
+            <ClothesSection
+              showHeader={true}
+              clothingItems={sidebarClothingItems}
+              onCardClick={onCardClick}
+              onAddGarmentClick={onAddGarmentClick}
+            />
+          </div>
+        )}
+      </div>
   );
 }
 

@@ -5,6 +5,7 @@
 .page__content {
   width: 100%; /* Ensure it takes up the full width */
   max-width: none; /* Remove any maximum width restriction */
+  height: 100%; /* Ensure it fills the height of the parent */
   margin: 0 auto; /* Center the content horizontally */
   padding: 16px; /* Optional: Add padding */
   box-sizing: border-box;

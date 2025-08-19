@@ -5,6 +5,7 @@ import avatar from "../../assets/avatar.svg";
 import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
 import logo from "../../assets/logo.svg";
 import "./Header.css";
+import { MODALS } from "../App/App";
 
 function Header({
   onSidebarToggle,
@@ -63,7 +64,7 @@ function Header({
 
       {isLoggedIn && (
         <button
-          onClick={() => setActiveModal("ADD_GARMENT")}
+          onClick={() => setActiveModal(MODALS.ADD_GARMENT)}
           type="button"
           className="header__add-clothes-btn"
         >
@@ -102,7 +103,7 @@ function Header({
               className="header__signup-button"
             >
               Sign Up
-            </button>                        
+            </button>
             <button onClick={handleLoginClick} className="header__login-button">
               Log In
             </button>

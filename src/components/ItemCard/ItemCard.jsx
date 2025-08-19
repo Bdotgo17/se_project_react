@@ -8,19 +8,21 @@ function ItemCard({
   item,
   onCardClick,
   currentUser,
-  onCardLike,
+  onCardLike = () => {},
   currentWeatherType,
 }) {
   console.log("ItemCard props:", { item, currentWeatherType, currentUser });
 
-  const isLiked = item.likes?.includes(currentUser?._id) ?? false;
+  const isLiked = item.likes?.includes(currentUser?._id);
 
   const handleCardClick = () => {
     onCardClick(item);
   };
 
   const handleLike = () => {
-    onCardLike(item); // Use onCardLike for the like functionality
+    if (typeof onCardLike === "function") {
+      onCardLike(item);
+    }
   };
 
   // Create a variable for the like button's class
@@ -44,11 +46,14 @@ function ItemCard({
           <h2 className="card__name">{item.name}</h2>
         </div>
         {currentUser && ( // Hide the like button for unauthorized users
-          <button className={itemLikeButtonClassName} onClick={handleLike}>
+          <button
+            className={itemLikeButtonClassName}
+            onClick={() => onCardLike(item)}
+          >
             <img
+              className="item-card__like-icon"
               src={isLiked ? heartIconActive : heartIcon}
               alt="Like"
-              className="item-card__like-icon"
             />
           </button>
         )}

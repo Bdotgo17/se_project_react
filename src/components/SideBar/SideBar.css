@@ -32,8 +32,8 @@
 
 .sidebar__button {
   padding: 10px;
-  background-color: #007bff;
-  color: white;
+  background: none;
+  color: black;
   border: none;
   border-radius: 5px;
   cursor: pointer;

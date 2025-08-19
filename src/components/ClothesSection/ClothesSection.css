@@ -6,12 +6,16 @@
 }
 
 .clothes-section__header {
-  display: none;
+  /* display: none; */
+  display: flex;
+  align-items: center; /* Vertically center items */
+  gap: 16px;
+  padding-bottom: 8px;
 }
 
 /* Hide the header in the main section */
 .main .clothes-section__header {
-  display: none;
+  /* display: none; */
 }
 
 .sidebar-layout .clothes-section__header {
@@ -45,10 +49,14 @@
   grid-template-columns: repeat(3, 1fr); /* Create 3 equal-width columns */
   gap: 16px; /* Add spacing between cards */
   list-style: none; /* Remove default list styling */
-  padding: 0;
-  margin: 0;
+  padding-left: 16px;
+  padding-right: 8px;
+  /* Add space on the left */
+  margin: 8px;
   width: 100%; /* Ensure the list takes up the full width of its container */
   box-sizing: border-box;
+  overflow-x: auto; /* Allow horizontal scrolling if needed */
+  padding-bottom: 8px; /* space for scrollbar */
 }
 
 .item-card {
@@ -69,4 +77,16 @@
   border-radius: 4px;
   object-fit: cover; /* Ensure the image scales properly without distortion */
   display: block;
+}
+
+.add-new-button {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.6); /* Keep your text color */
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
 }

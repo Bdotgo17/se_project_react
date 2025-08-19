@@ -30,7 +30,7 @@ import { defaultClothingItems } from "../../utils/constants.js";
 import ProfileModal from "../ProfileModal/ProfileModal.jsx"; // Import the new component
 import { getClothingItems } from "./../../utils/api.js"; // Import the getClothingItems function
 
-const MODALS = {
+export const MODALS = {
   ADD_GARMENT: "add-garment",
   PREVIEW: "preview",
 };
@@ -291,9 +291,11 @@ function App() {
   };
 
   const handleCardLike = (card) => {
+    console.log("handleCardLike called for:", card);
+
     const isLiked = card.likes.some((id) => id === currentUser._id);
 
-    // Optimistically update the state for updatedClothingItems
+    // Optimistically update UI
     setUpdatedClothingItems((prevItems) =>
       prevItems.map((item) =>
         item._id === card._id
@@ -306,28 +308,27 @@ function App() {
           : item
       )
     );
+
     if (isLiked) {
-      // Call removeCardLike if the card is already liked
       removeCardLike(card._id)
         .then((updatedCard) => {
-          setCards((state) => {
-            const updatedState = state.map((c) =>
-              c._id === card._id ? updatedCard : c
-            );
-            return updatedState;
-          });
+          setCards((state) =>
+            state.map((c) => (c._id === card._id ? updatedCard : c))
+          );
+          setUpdatedClothingItems((items) =>
+            items.map((item) => (item._id === card._id ? updatedCard : item))
+          );
         })
         .catch((err) => console.error("Error removing like:", err));
     } else {
-      // Call addCardLike if the card is not liked
       addCardLike(card._id)
         .then((updatedCard) => {
-          setCards((state) => {
-            const updatedState = state.map((c) =>
-              c._id === card._id ? updatedCard : c
-            );
-            return updatedState;
-          });
+          setCards((state) =>
+            state.map((c) => (c._id === card._id ? updatedCard : c))
+          );
+          setUpdatedClothingItems((items) =>
+            items.map((item) => (item._id === card._id ? updatedCard : item))
+          );
         })
         .catch((err) => console.error("Error adding like:", err));
     }
@@ -355,13 +356,14 @@ function App() {
   };
 
   const handleAddGarment = (name, imageUrl, weather) => {
-    addItem(name, imageUrl, weather)
+    return addItem(name, imageUrl, weather)
       .then((newItem) => {
         setUpdatedClothingItems((prevItems) => [...prevItems, newItem]); // Update state
         closeActiveModal(null); // Close the modal after submission
       })
       .catch((err) => {
         console.error("Error adding garment:", err);
+        throw err;
       });
   };
 
@@ -507,6 +509,12 @@ function App() {
                 onLogout={handleLogout}
                 onAddItemClick={handleAddItemClick}
               />
+              {!isProfileOpen && (
+                <WeatherCard
+                  weatherData={weatherData}
+                  currentTemperatureUnit={currentTemperatureUnit}
+                />
+              )}
 
               {isProfileOpen && (
                 <Profile
@@ -544,11 +552,9 @@ function App() {
                             <AddGarmentForm
                               formData={formData}
                               setFormData={setFormData}
-                              onAddGarment={handleAddGarment}
                               isOpen={activeModal === MODALS.ADD_GARMENT}
                               onSubmit={handleAddGarment}
-                              onClose={closeActiveModal} // A function to close the modal
-                              onAddItemSubmit={handleAddItemSubmit} // The function to handle form submission
+                              onClose={() => setActiveModal(null)}
                             />
                           )}
                         </>
@@ -587,8 +593,11 @@ function App() {
                               showHeader={true}
                               clothingItems={updatedClothingItems}
                               onCardClick={handleCardClick}
+                              onCardLike={handleCardLike} // <-- Add this prop!
                               onAddItemClick={handleAddItemClick} // Pass the handler here
-                              currentWeatherType={currentWeatherType} // Pass the current weather type
+                              currentUser={currentUser}
+                              currentWeatherType={weatherData.type} // Pass the current weather type
+                              onAddGarmentClick={handleAddGarmentClick}
                             />
                           </>
                         ) : (
@@ -601,7 +610,8 @@ function App() {
                                     key={item._id}
                                     item={item}
                                     onCardClick={handleCardClick}
-                                    onCardLike={handleLikeClick}
+                                    onCardLike={handleCardLike}
+                                    onAddItemClick={handleAddItemClick}
                                     currentWeatherType={currentWeatherType}
                                   />
                                 ))
@@ -623,29 +633,26 @@ function App() {
                     isLoggedIn ? (
                       <ProtectedRoute isLoggedIn={isLoggedIn}>
                         <>
-                          <Profile onChangeProfileData={handleProfileChange} />
-                          <ClothesSection
-                            showHeader={false} // Hide the header in the sidebar if needed
-                            clothingItems={updatedClothingItems}
-                            onCardClick={handleCardClick}
-                            onAddItemClick={() => {
-                              console.log("Add New button clicked");
-
-                              setActiveModal(MODALS.ADD_GARMENT);
-                            }}
-                          />
                           <Profile
+                            onChangeProfileData={handleProfileChange}
                             clothingItems={updatedClothingItems}
                             onAddItemClick={() =>
                               setActiveModal(MODALS.ADD_GARMENT)
                             }
                             onSignOut={handleSignOut}
                           />
-                          {activeModal === MODALS.ADD_GARMENT && (
-                            <AddGarmentModal
-                              onClose={() => setActiveModal(null)} // Close the modal
-                            />
-                          )}
+                          <ClothesSection
+                            showHeader={true}
+                            clothingItems={updatedClothingItems}
+                            onCardClick={handleCardClick}
+                            onCardLike={handleCardLike} // <-- Must be present!
+                            currentUser={currentUser}
+                            onAddItemClick={() =>
+                              setActiveModal(MODALS.ADD_GARMENT)
+                            }
+                            onAddGarmentClick={handleAddGarmentClick}
+                            currentWeatherType={weatherData.type}
+                          />
                         </>
                       </ProtectedRoute>
                     ) : (
@@ -654,7 +661,6 @@ function App() {
                   }
                 />
               </Routes>
-
               {activeModal === MODALS.PREVIEW && (
                 <ItemModal
                   activeModal={activeModal}
@@ -663,9 +669,17 @@ function App() {
                   handleDeleteCard={handleDeleteCard} // Pass the delete handler
                 />
               )}
+              {activeModal === MODALS.ADD_GARMENT && (
+                <AddGarmentForm
+                  formData={formData}
+                  setFormData={setFormData}
+                  isOpen={activeModal === MODALS.ADD_GARMENT}
+                  onSubmit={handleAddGarment}
+                  onClose={() => setActiveModal(null)}
+                />
+              )}
               <Footer />
             </div>
-            <div className="page__sidebar"></div>
           </div>
         </div>
       </CurrentTemperatureUnitContext.Provider>

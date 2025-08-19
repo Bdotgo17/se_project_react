@@ -12,11 +12,13 @@ function Main({
   updatedClothingItems,
   clothingItems = [],
   isLoggedIn, // Pass the isLoggedIn state as a prop
+  currentUser,
+  currentWeatherType,
 }) {
   const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext); // Access the current unit
 
-  const filteredItems = Array.isArray(updatedClothingItems)
-    ? updatedClothingItems.filter(
+  const filteredItems = Array.isArray(clothingItems)
+    ? clothingItems.filter(
         (item) =>
           item.weather &&
           weatherData.type &&
@@ -24,9 +26,16 @@ function Main({
       )
     : [];
 
+  console.log("Filtered Items:", filteredItems); // Debugging log
+  console.log("Weather Data:", weatherData); // Debugging log
+  console.log("Current Temperature Unit:", currentTemperatureUnit); // Debugging log
+  console.log("Clothing Items:", clothingItems); // Debugging log
+  console.log("Is Logged In:", isLoggedIn); // Debugging log
+  console.log("Updated Clothing Items:", updatedClothingItems); // Debugging log
+  console.log("Current Weather Type:", weatherData.type); // Debugging log
+
   return (
     <main>
-      <WeatherCard temperature={weatherData.temp} />
       <section className="cards">
         <p className="cards__text">
           Today is{" "}
@@ -35,27 +44,16 @@ function Main({
             : weatherData.temp.C}{" "}
           &deg; {currentTemperatureUnit} / You may want to wear:
         </p>
-
-        <ul className="cards__list">
-          {filteredItems.length > 0
-            ? filteredItems.map((item) => (
-                <ItemCard
-                  key={item._id}
-                  item={item}
-                  onCardClick={handleCardClick}
-                  onCardLike={onCardLike} // Pass the onCardLike function to ItemCard
-                  currentWeatherType={weatherData.type} // Pass the current weather type
-                />
-              ))
-            : isLoggedIn && <p className="cards__empty-message"></p>}
-        </ul>
       </section>
       {/* Add ClothesSection without the header */}
       <ClothesSection
-        showHeader={false} // Hide the header
-        clothingItems={clothingItems} // Pass the clothing items for this section
-        onCardClick={handleCardClick} // Handle card clicks
-        onAddItemClick={() => {}} // Standardized prop name
+        showHeader={false}
+        clothingItems={filteredItems}
+        onCardClick={handleCardClick}
+        onAddItemClick={() => {}}
+        onCardLike={onCardLike}
+        currentWeatherType={currentWeatherType}
+        currentUser={currentUser} // Standardized prop name
       />
     </main>
   );

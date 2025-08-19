@@ -23,7 +23,7 @@ function AddGarmentForm({
     e.preventDefault();
 
     // Ensure onSubmit returns a Promise
-    onSubmit(formData.name, formData.imageUrl, formData.weather)
+    onSubmit(name, imageUrl, weather)
       .then(() => {
         onClose(); // Close the modal only after a successful response
       })

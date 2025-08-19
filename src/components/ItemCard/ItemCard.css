@@ -99,3 +99,8 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
 }
 
+.clothes-section__list {
+  max-height: 60vh; /* Adjust as needed */
+  overflow-y: auto;
+  padding-right: 8px; /* Optional: space for scrollbar */
+}
