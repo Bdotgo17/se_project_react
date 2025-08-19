@@ -59,9 +59,7 @@ function ClothesSection({
             />
           ))
         ) : (
-          <p className="clothes-section__empty">
-            No items to display for the current weather.
-          </p>
+          <p className="clothes-section__empty"></p>
         )}
       </ul>
     </div>

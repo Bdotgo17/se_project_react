@@ -40,5 +40,6 @@
 }
 
 .sidebar__button:hover {
-  background-color: #0056b3;
+  color: #333; /* Slightly darker on hover, optional */
+  background: none;
 }
