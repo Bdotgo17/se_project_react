@@ -14,9 +14,8 @@ function Main({
   isLoggedIn, // Pass the isLoggedIn state as a prop
   currentUser,
   currentWeatherType,
+  currentTemperatureUnit,
 }) {
-  const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext); // Access the current unit
-
   const filteredItems = Array.isArray(clothingItems)
     ? clothingItems.filter(
         (item) =>
@@ -36,6 +35,10 @@ function Main({
 
   return (
     <main>
+      <WeatherCard
+        weatherData={weatherData}
+        currentTemperatureUnit={currentTemperatureUnit}
+      />
       <section className="cards">
         <p className="cards__text">
           Today is{" "}
