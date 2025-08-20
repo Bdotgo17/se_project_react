@@ -7,16 +7,12 @@ body {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Prevent scrolling when the modal is open */
-  position: relative; /* Ensure proper positioning context */
   font-family: "Cabinet Grotesk", sans-serif;
 }
 
 .page {
-  position: relative; /* Makes this element the positioning context for the overlay */
   width: 100%; /* Ensure it spans the full width */
   height: 100%; /* Ensure it spans the full height */
-  overflow: hidden; /* Ensure no clipping occurs */
 }
 
 .avatar {

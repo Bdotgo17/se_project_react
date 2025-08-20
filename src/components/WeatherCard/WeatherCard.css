@@ -4,37 +4,29 @@
   align-items: center;
   height: 80px;
   width: 100%;
+  margin: 0 auto; /* Center the card horizontally */
   border-radius: 12px;
   overflow: hidden;
   background: #f5f5f5; /* Optional: for visibility */
-  padding-left: 16px;
+  padding: 0 24px; /* Add extra space on left/right */
+  box-sizing: border-box; /* Ensure padding is included in width */
 }
-
-/* .weather-card__temp {
-  font-size: 36px;
-  line-height: 40px;
-  margin: 0;
-  position: absolute;
-  top: 20px;
-  left: 16px;
-} */
 
 .weather-card__temp {
   font-size: 36px;
   line-height: 40px;
   margin: 0;
-  position: static; /* Remove absolute positioning */
+  position: absolute;
+  top: 20px;
+  left: 35px;
 }
 
-/* .weather-card__image {
+.weather-card__image {
   object-fit: cover;
   object-position: right top;
   width: 100%;
-} */
+}
 
-.weather-card__image {
-  width: 48px;
-  height: 48px;
-  object-fit: cover;
-  margin-left: 16px;
+.cards__text {
+  padding-left: 24px; /* or use margin-left: 24px; */
 }

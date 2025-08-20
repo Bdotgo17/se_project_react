@@ -15,6 +15,8 @@ function Main({
   currentUser,
   currentWeatherType,
 }) {
+  console.log("Main loaded", weatherData, currentUser, clothingItems);
+
   const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext);
 
   const filteredItems = clothingItems.filter(

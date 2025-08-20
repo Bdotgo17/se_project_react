@@ -11,6 +11,7 @@ function ClothesSection({
   onAddItemClick,
   currentWeatherType,
   onAddGarmentClick,
+  isLoggedIn,
 }) {
   const currentUser = useContext(CurrentUserContext);
 
@@ -52,7 +53,7 @@ function ClothesSection({
           />
         ))}
       </ul>
-      {filteredClothingItems.length === 0 && (
+      {isLoggedIn && filteredClothingItems.length === 0 && (
         <p className="clothes-section__empty">
           No items to display for the current user.
         </p>

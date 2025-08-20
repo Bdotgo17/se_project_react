@@ -480,6 +480,18 @@ function App() {
     setActiveModal(MODALS.ADD_GARMENT); // Set the modal to open
   };
 
+  function openLoginModal() {
+    setActiveModal("login");
+  }
+
+  function openRegisterModal() {
+    setActiveModal("register");
+  }
+
+  function closeModal() {
+    setActiveModal(null);
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <CurrentTemperatureUnitContext.Provider
@@ -488,6 +500,12 @@ function App() {
         <div className={`App ${isProfileOpen ? "sidebar-open" : ""}`}>
           <div className="page">
             <div className="page__content">
+              {activeModal === "preview" && (
+                <div
+                  className="item-modal__overlay"
+                  onClick={closeActiveModal}
+                ></div>
+              )}
               <Header
                 handleAddClick={() => {
                   setActiveModal(MODALS.ADD_GARMENT);
@@ -571,46 +589,44 @@ function App() {
                           isOpen={showLoginModal}
                           onLogin={handleLogin} // Pass the handleLogin function as the onLogin prop
                           onClose={() => setShowLoginModal(false)}
+                          onToggleRegister={() => {
+                            setShowLoginModal(false); // Close the login modal
+                            setShowRegisterModal(true); // Open the register modal
+                          }}
                         />
                       )}
+
                       <>
-                        {isLoggedIn ? (
-                          <>
-                            {/* Render Main and ClothesSection for logged-in users */}
-                            <Main
-                              isLoggedIn={isLoggedIn} // Pass the isLoggedIn state as a prop
-                              weatherData={weatherData}
-                              clothingItems={updatedClothingItems}
-                              handleCardClick={handleCardClick}
-                              cards={cards}
-                              onCardLike={handleCardLike}
-                              currentUser={currentUser}
-                              currentWeatherType={weatherData.type}
-                            />
-                          </>
-                        ) : (
-                          <>
-                            {/* Render cards-container for logged-out users */}
-                            <div className="cards-container">
-                              {filteredClothingItems.length > 0 ? (
-                                filteredClothingItems.map((item) => (
-                                  <ItemCard
-                                    key={item._id}
-                                    item={item}
-                                    onCardClick={handleCardClick}
-                                    onCardLike={handleCardLike}
-                                    onAddItemClick={handleAddItemClick}
-                                    currentWeatherType={currentWeatherType}
-                                  />
-                                ))
-                              ) : (
-                                <p>
-                                  No items to display for the current weather.
-                                </p>
-                              )}
-                            </div>
-                          </>
-                        )}
+                        {/* Render Main and ClothesSection for logged-in users */}
+                        <Main
+                          isLoggedIn={isLoggedIn} // Pass the isLoggedIn state as a prop
+                          weatherData={weatherData}
+                          clothingItems={updatedClothingItems}
+                          handleCardClick={handleCardClick}
+                          cards={cards}
+                          onCardLike={handleCardLike}
+                          currentUser={currentUser}
+                          currentWeatherType={weatherData.type}
+                        />
+                      </>
+                      <>
+                        {/* Render cards-container for logged-out users */}
+                        <div className="cards-container">
+                          {filteredClothingItems.length > 0 ? (
+                            filteredClothingItems.map((item) => (
+                              <ItemCard
+                                key={item._id}
+                                item={item}
+                                onCardClick={handleCardClick}
+                                onCardLike={handleCardLike}
+                                onAddItemClick={handleAddItemClick}
+                                currentWeatherType={currentWeatherType}
+                              />
+                            ))
+                          ) : (
+                            <p>No items to display for the current weather.</p>
+                          )}
+                        </div>
                       </>
                     </>
                   }

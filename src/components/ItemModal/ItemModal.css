@@ -51,18 +51,18 @@
 }
 
 .item-modal__overlay {
-  position: fixed; /* Ensure it covers the viewport */
+  position: absolute; /* Ensure it covers the viewport */
   top: 0; /* Start at the top */
   left: 0; /* Start at the left */
   width: 100%; /* Cover the full width */
   height: 100%; /* Cover the full height */
   background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
   z-index: 999; /* Ensure it appears below the modal */
-  border-radius: 10px; /* Match the modal's curved edges */
+  border-radius: 10px;
 }
 
 .item-modal__content {
-  position: absolute; /* Position relative to div.page__content */
+  position: fixed; /* Position relative to div.page__content */
   top: 50%;
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Adjust for perfect centering */
@@ -96,7 +96,8 @@
   display: flex; /* Align items horizontally */
   justify-content: space-between; /* Push items to opposite ends */
   align-items: center; /* Vertically center the items */
-  margin-bottom: 10px; /* Add spacing below the header */
+  margin-bottom: 10px;
+  margin-right: 8px; /* Add spacing below the header */
 }
 
 .item-modal__caption {
@@ -144,4 +145,3 @@
   font-size: 20px; /* Adjust font size */
   margin: 20px 32px 0 0;
 }
-

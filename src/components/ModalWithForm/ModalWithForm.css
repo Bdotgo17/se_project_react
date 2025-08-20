@@ -58,12 +58,12 @@
 
 .form-modal__overlay {
   position: fixed; /* Ensures the overlay is fixed to the viewport */
-  top: 0;
-  left: 0;
-  width: 100%; /* Full width of the screen */
-  height: 100%; /* Full height of the screen */
+  inset: 0; /* Cover the entire viewport */
+  width: 100vw; /* Full width of the screen */
+  height: 100vh; /* Full height of the screen */
   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
   z-index: 999; /* Ensure it appears behind the modal content */
+  outline: 2px solid blue;
 }
 
 .form-modal__content {
@@ -130,7 +130,6 @@
   max-width: 600px; /* Optional: Limit the modal's width */
   height: 80%; /* Adjust modal height */
   max-height: 700px; /* Optional: Limit the modal's height */
-
 }
 
 .form-modal__form {
@@ -143,7 +142,6 @@
   overflow-y: visible; /* Enable vertical scrolling if content overflows */
   justify-content: space-between; /* Push the Add button to the bottom */
 }
-
 
 .modal__input {
   display: block;
@@ -379,4 +377,3 @@ button.modal__submit-button:active {
   display: flex;
   flex-direction: column; /* Stack content vertically */
 }
-
