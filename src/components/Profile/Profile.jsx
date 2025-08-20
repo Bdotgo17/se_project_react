@@ -13,6 +13,8 @@ function Profile({
   onSubmit,
   onAddGarmentClick = () => {}, // Default empty function if not provided
   onCardClick = () => {}, // Default empty function if not provided
+  onCardLike = () => {}, // <-- Add this default
+  currentWeatherType = "", // Default value for currentWeatherType
   clothingItems = [], // Default empty array if not provided
 }) {
   if (!isOpen) return null;
@@ -24,31 +26,30 @@ function Profile({
     return null; // Render nothing if currentUser is null
   }
 
-  // Filter clothing items owned by the current user
-  const sidebarClothingItems = clothingItems.filter(
-    (item) => item.owner === currentUser?._id
+  const userItems = clothingItems.filter(
+    (item) => String(item.owner) === String(currentUser?._id)
   );
 
   return (
     <div className="profile">
-      {/* Use the SideBar component for the sidebar layout */}
       <SideBar
         currentUser={currentUser}
         onSignOut={onSignOut}
         onChangeProfileData={onChangeProfileData}
       />
-        {/* Render the ClothesSection with filtered clothing items */}
-        {sidebarClothingItems.length > 0 && (
-          <div className="profile__content">
-            <ClothesSection
-              showHeader={true}
-              clothingItems={sidebarClothingItems}
-              onCardClick={onCardClick}
-              onAddGarmentClick={onAddGarmentClick}
-            />
-          </div>
-        )}
+      <div className="profile__content">
+        <ClothesSection
+          showHeader={true}
+          clothingItems={userItems}
+          onCardClick={onCardClick}
+          onCardLike={onCardLike}
+          currentUser={currentUser}
+          onAddItemClick={onAddItemClick} // <-- Use the prop, do NOT call setActiveModal directly!
+          onAddGarmentClick={onAddGarmentClick}
+          currentWeatherType={currentWeatherType}
+        />
       </div>
+    </div>
   );
 }
 

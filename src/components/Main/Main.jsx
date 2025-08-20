@@ -14,16 +14,16 @@ function Main({
   isLoggedIn, // Pass the isLoggedIn state as a prop
   currentUser,
   currentWeatherType,
-  currentTemperatureUnit,
 }) {
-  const filteredItems = Array.isArray(clothingItems)
-    ? clothingItems.filter(
-        (item) =>
-          item.weather &&
-          weatherData.type &&
-          item.weather.toLowerCase() === weatherData.type.toLowerCase()
-      )
-    : [];
+  const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext);
+
+  const filteredItems = clothingItems.filter(
+    (item) =>
+      String(item.owner) === String(currentUser?._id) &&
+      item.weather &&
+      weatherData.type &&
+      item.weather.toLowerCase() === weatherData.type.toLowerCase()
+  );
 
   console.log("Filtered Items:", filteredItems); // Debugging log
   console.log("Weather Data:", weatherData); // Debugging log
@@ -44,8 +44,8 @@ function Main({
           Today is{" "}
           {currentTemperatureUnit === "F"
             ? weatherData.temp.F
-            : weatherData.temp.C}{" "}
-          &deg; {currentTemperatureUnit} / You may want to wear:
+            : weatherData.temp?.C}
+          ° {currentTemperatureUnit} / You may want to wear:
         </p>
       </section>
       {/* Add ClothesSection without the header */}
@@ -53,7 +53,6 @@ function Main({
         showHeader={false}
         clothingItems={filteredItems}
         onCardClick={handleCardClick}
-        onAddItemClick={() => {}}
         onCardLike={onCardLike}
         currentWeatherType={currentWeatherType}
         currentUser={currentUser} // Standardized prop name

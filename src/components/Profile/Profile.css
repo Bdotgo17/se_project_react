@@ -1,10 +1,15 @@
 .profile {
   display: flex;
-  align-items: flex-start;
+  flex-direction: row;
+  height: 100vh;
 }
 
 .profile__content {
   flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  position: relative;
+  z-index: 1; 
 }
 
 .profile__sign-out-button {

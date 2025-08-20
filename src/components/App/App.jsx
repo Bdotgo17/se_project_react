@@ -509,12 +509,6 @@ function App() {
                 onLogout={handleLogout}
                 onAddItemClick={handleAddItemClick}
               />
-              {!isProfileOpen && (
-                <WeatherCard
-                  weatherData={weatherData}
-                  currentTemperatureUnit={currentTemperatureUnit}
-                />
-              )}
 
               {isProfileOpen && (
                 <Profile
@@ -529,7 +523,9 @@ function App() {
                   onChangeProfileData={handleChangeProfileData} // Pass the function to Sidebar
                   isLoggedIn={isLoggedIn} // Pass isLoggedIn to Sidebar
                   onLogout={handleLogout} // Pass the logout function
-                  onAddItemClick={() => console.log("Add item clicked")}
+                  onAddItemClick={() => setActiveModal(MODALS.ADD_GARMENT)} // <-- Pass the function here!
+                  currentWeatherType={weatherData.type}
+                  currentUser={currentUser}
                 />
               )}
               {isProfileModalOpen && (
@@ -588,16 +584,8 @@ function App() {
                               handleCardClick={handleCardClick}
                               cards={cards}
                               onCardLike={handleCardLike}
-                            />
-                            <ClothesSection
-                              showHeader={true}
-                              clothingItems={updatedClothingItems}
-                              onCardClick={handleCardClick}
-                              onCardLike={handleCardLike} // <-- Add this prop!
-                              onAddItemClick={handleAddItemClick} // Pass the handler here
                               currentUser={currentUser}
-                              currentWeatherType={weatherData.type} // Pass the current weather type
-                              onAddGarmentClick={handleAddGarmentClick}
+                              currentWeatherType={weatherData.type}
                             />
                           </>
                         ) : (
@@ -640,18 +628,6 @@ function App() {
                               setActiveModal(MODALS.ADD_GARMENT)
                             }
                             onSignOut={handleSignOut}
-                          />
-                          <ClothesSection
-                            showHeader={true}
-                            clothingItems={updatedClothingItems}
-                            onCardClick={handleCardClick}
-                            onCardLike={handleCardLike} // <-- Must be present!
-                            currentUser={currentUser}
-                            onAddItemClick={() =>
-                              setActiveModal(MODALS.ADD_GARMENT)
-                            }
-                            onAddGarmentClick={handleAddGarmentClick}
-                            currentWeatherType={weatherData.type}
                           />
                         </>
                       </ProtectedRoute>

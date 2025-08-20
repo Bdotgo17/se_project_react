@@ -3,12 +3,12 @@
 }
 
 .page__content {
-  width: 100%; /* Ensure it takes up the full width */
-  max-width: none; /* Remove any maximum width restriction */
-  height: 100%; /* Ensure it fills the height of the parent */
-  margin: 0 auto; /* Center the content horizontally */
-  padding: 16px; /* Optional: Add padding */
-  box-sizing: border-box;
+  min-height: 100vh; /* Ensure the content takes at least full viewport height */
+  height: auto; /* Allow height to adjust based on content */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+  overflow-y: auto; /* Enable vertical scrolling if content overflows */
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Stack children vertically */
 }
 
 body {

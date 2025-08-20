@@ -104,3 +104,12 @@
   overflow-y: auto;
   padding-right: 8px; /* Optional: space for scrollbar */
 }
+
+.cards-container {
+  min-height: 100vh;
+  height: auto;
+  overflow-y: auto;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 16px;
+}

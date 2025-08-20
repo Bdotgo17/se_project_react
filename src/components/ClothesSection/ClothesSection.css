@@ -6,16 +6,10 @@
 }
 
 .clothes-section__header {
-  /* display: none; */
-  display: flex;
+  display: flex !important;
   align-items: center; /* Vertically center items */
   gap: 16px;
   padding-bottom: 8px;
-}
-
-/* Hide the header in the main section */
-.main .clothes-section__header {
-  /* display: none; */
 }
 
 .sidebar-layout .clothes-section__header {
@@ -89,4 +83,10 @@
   font-size: 20px;
   font-weight: 700;
   cursor: pointer;
+}
+
+.clothes-section__empty {
+  color: #888;
+  font-size: 16px;
+  margin-top: 16px;
 }

@@ -35,33 +35,28 @@ function ClothesSection({
       {showHeader && ( // Conditionally render the header
         <div className="clothes-section__header">
           <h2 className="clothes-section__title">Your Items</h2>
-          <button
-            className="add-new-button"
-            onClick={() => {
-              console.log("Add New button clicked in ClothesSection");
-              onAddItemClick();
-            }}
-          >
+          <button className="add-new-button" onClick={onAddItemClick}>
             + Add New
           </button>
         </div>
       )}
       <ul className="clothes-section__list">
-        {filteredClothingItems.length > 0 ? (
-          filteredClothingItems.map((item) => (
-            <ItemCard
-              key={item._id}
-              item={item}
-              onCardClick={onCardClick}
-              onCardLike={onCardLike} // <-- Make sure this is a function!
-              currentWeatherType={currentWeatherType}
-              currentUser={currentUser}
-            />
-          ))
-        ) : (
-          <p className="clothes-section__empty"></p>
-        )}
+        {filteredClothingItems.map((item) => (
+          <ItemCard
+            key={item._id}
+            item={item}
+            onCardClick={onCardClick}
+            onCardLike={onCardLike} // <-- Make sure this is a function!
+            currentWeatherType={currentWeatherType}
+            currentUser={currentUser}
+          />
+        ))}
       </ul>
+      {filteredClothingItems.length === 0 && (
+        <p className="clothes-section__empty">
+          No items to display for the current user.
+        </p>
+      )}
     </div>
   );
 }
