@@ -17,7 +17,6 @@ function Profile({
   currentWeatherType = "", // Default value for currentWeatherType
   clothingItems = [], // Default empty array if not provided
 }) {
-  if (!isOpen) return null;
 
   const currentUser = useContext(CurrentUserContext); // Consume CurrentUserContext
 

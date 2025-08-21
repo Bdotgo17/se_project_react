@@ -30,15 +30,6 @@ function ItemCard({
     isLiked ? "item-card__like-button_active" : ""
   }`;
 
-  // Only render the card if the item's weather matches the current weather type
-  if (
-    !item.weather ||
-    !currentWeatherType ||
-    item.weather.toLowerCase() !== currentWeatherType.toLowerCase()
-  ) {
-    return null; // Do not render the card if it doesn't match the weather
-  }
-
   return (
     <li className="card">
       <div className="card__header-container">
@@ -64,10 +55,6 @@ function ItemCard({
         className="card__image"
         src={item.imageUrl}
         alt={item.name}
-        onError={(e) => {
-          e.target.src = "https://via.placeholder.com/150"; // Use a fallback image URL
-          e.target.onerror = null; // Prevent infinite loop if fallback also fails
-        }}
       />
       <div className="card__info"></div>
     </li>

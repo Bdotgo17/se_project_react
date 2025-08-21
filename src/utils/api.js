@@ -87,7 +87,7 @@ export const removeCardLike = (cardId) => {
 };
 
 export const updateUserProfile = (profileData) => {
-  return fetch("/users/me", {
+  return fetch(`${BASE_URL}/users/me`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",

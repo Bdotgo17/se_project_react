@@ -15,22 +15,6 @@ function ClothesSection({
 }) {
   const currentUser = useContext(CurrentUserContext);
 
-  // Add these debug logs here:
-  console.log("Current user ID:", currentUser?._id);
-  console.log("All clothing items:", clothingItems);
-  console.log("Current weather type:", currentWeatherType);
-
-  const userClothingItems = clothingItems.filter(
-    (item) => String(item.owner) === String(currentUser?._id)
-  );
-
-  // Further filter items based on the current weather type
-  const filteredClothingItems = userClothingItems.filter(
-    (item) => item.weather.toLowerCase() === currentWeatherType?.toLowerCase()
-  );
-
-  console.log("Filtered clothing items:", filteredClothingItems);
-
   return (
     <div className="clothes-section">
       {showHeader && ( // Conditionally render the header
@@ -42,7 +26,7 @@ function ClothesSection({
         </div>
       )}
       <ul className="clothes-section__list">
-        {filteredClothingItems.map((item) => (
+        {clothingItems.map((item) => (
           <ItemCard
             key={item._id}
             item={item}

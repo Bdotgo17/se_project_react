@@ -57,31 +57,28 @@ function App() {
     imageUrl: "", // For AddItemModal
     weather: "",
   });
+
   const [isProfileOpen, setIsProfileOpen] = useState(false); // State to control visibility
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("jwt"));
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
 
-  const [currentUser, setCurrentUser] = useState({
-    name: "Default User",
-    avatar: "", // Default avatar
-  });
+  const [currentUser, setCurrentUser] = useState(null);
+
   const navigate = useNavigate(); // Initialize useNavigate
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const currentWeatherType = weatherData?.type || "default"; // Replace "default" with a fallback value
 
-  console.log("Current Weather Type:", currentWeatherType);
-  console.log("Updated Clothing Items:", updatedClothingItems);
+  const filteredClothingItems = updatedClothingItems.filter(
+    (item) =>
+      item.weather === currentWeatherType || currentWeatherType === "default"
+  );
 
   const [cards, setCards] = useState([]);
   const [clothingItems, setClothingItems] = useState([]);
-
-  useEffect(() => {
-    console.log("Updated clothing items:", updatedClothingItems);
-  }, [updatedClothingItems]);
 
   useEffect(() => {
     console.log("Checking weather...");
@@ -135,20 +132,6 @@ function App() {
       console.error("Failed to fetch clothing items:", error);
     }
   };
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      fetchClothingItems(); // Fetch clothing items when logged in
-    }
-  }, [isLoggedIn]);
-
-  const filteredClothingItems =
-    updatedClothingItems.length > 0
-      ? updatedClothingItems.filter(
-          (item) =>
-            item.weather.toLowerCase() === currentWeatherType.toLowerCase()
-        )
-      : [];
 
   console.log("Filtered clothing items:", filteredClothingItems);
 
@@ -338,7 +321,6 @@ function App() {
     localStorage.removeItem("jwt"); // Remove the token from local storage
     setIsLoggedIn(false); // Set the isLoggedIn state to false
     setCurrentUser(null); // Clear the current user data
-    setUpdatedClothingItems([]); // Clear clothing items
     navigate("/"); // Redirect to the home page
   };
 
@@ -358,7 +340,7 @@ function App() {
   const handleAddGarment = (name, imageUrl, weather) => {
     return addItem(name, imageUrl, weather)
       .then((newItem) => {
-        setUpdatedClothingItems((prevItems) => [...prevItems, newItem]); // Update state
+        setUpdatedClothingItems((prevItems) => [newItem, ...prevItems]); // Update state
         closeActiveModal(null); // Close the modal after submission
       })
       .catch((err) => {
@@ -372,9 +354,13 @@ function App() {
     setIsLoggedIn(false); // Update the logged-in state
     setCurrentUser(null); // Clear the current user data
     setUpdatedClothingItems([]); // Clear clothing items
-
+    setWeatherData({ type: "", temp: { F: 0, C: 0 }, city: "" }); // Reset weather data
     navigate("/"); // Redirect to the home page
     setIsSidebarOpen(false); // Close the sidebar
+    getWeather(coordinates, APIkey).then((data) =>
+      setWeatherData(filterWeatherData(data))
+    );
+    getItems().then((items) => setUpdatedClothingItems(items));
   };
 
   const handleAddGarmentClick = () => {
@@ -527,7 +513,6 @@ function App() {
                 onLogout={handleLogout}
                 onAddItemClick={handleAddItemClick}
               />
-
               {isProfileOpen && (
                 <Profile
                   isOpen={isProfileOpen}
@@ -544,15 +529,6 @@ function App() {
                   onAddItemClick={() => setActiveModal(MODALS.ADD_GARMENT)} // <-- Pass the function here!
                   currentWeatherType={weatherData.type}
                   currentUser={currentUser}
-                />
-              )}
-              {isProfileModalOpen && (
-                <ProfileModal
-                  isOpen={isProfileModalOpen}
-                  onSubmit={handleProfileSubmit}
-                  onClose={() => setIsProfileModalOpen(false)}
-                  formData={formData}
-                  handleInputChange={handleInputChange}
                 />
               )}
               <Routes>
@@ -595,13 +571,11 @@ function App() {
                           }}
                         />
                       )}
-
                       <>
-                        {/* Render Main and ClothesSection for logged-in users */}
                         <Main
                           isLoggedIn={isLoggedIn} // Pass the isLoggedIn state as a prop
                           weatherData={weatherData}
-                          clothingItems={updatedClothingItems}
+                          clothingItems={filteredClothingItems}
                           handleCardClick={handleCardClick}
                           cards={cards}
                           onCardLike={handleCardLike}
@@ -609,25 +583,7 @@ function App() {
                           currentWeatherType={weatherData.type}
                         />
                       </>
-                      <>
-                        {/* Render cards-container for logged-out users */}
-                        <div className="cards-container">
-                          {filteredClothingItems.length > 0 ? (
-                            filteredClothingItems.map((item) => (
-                              <ItemCard
-                                key={item._id}
-                                item={item}
-                                onCardClick={handleCardClick}
-                                onCardLike={handleCardLike}
-                                onAddItemClick={handleAddItemClick}
-                                currentWeatherType={currentWeatherType}
-                              />
-                            ))
-                          ) : (
-                            <p>No items to display for the current weather.</p>
-                          )}
-                        </div>
-                      </>
+                      <></>
                     </>
                   }
                 />
@@ -638,12 +594,29 @@ function App() {
                       <ProtectedRoute isLoggedIn={isLoggedIn}>
                         <>
                           <Profile
-                            onChangeProfileData={handleProfileChange}
+                            isOpen={isProfileOpen}
+                            onClose={() => setIsSidebarOpen(false)}
+                            username={username}
+                            onSignOut={handleSignOut}
+                            onAddGarmentClick={handleAddGarmentClick}
                             clothingItems={updatedClothingItems}
+                            onCardClick={handleCardClick}
+                            onCardLike={handleCardLike}
+                            onChangeProfileData={handleChangeProfileData}
+                            isLoggedIn={isLoggedIn}
+                            onLogout={handleLogout}
                             onAddItemClick={() =>
                               setActiveModal(MODALS.ADD_GARMENT)
                             }
-                            onSignOut={handleSignOut}
+                            currentWeatherType={weatherData.type}
+                            currentUser={currentUser}
+                          />
+                          <ProfileModal
+                            isOpen={isProfileModalOpen}
+                            onSubmit={handleProfileSubmit}
+                            onClose={() => setIsProfileModalOpen(false)}
+                            formData={formData}
+                            handleInputChange={handleInputChange}
                           />
                         </>
                       </ProtectedRoute>

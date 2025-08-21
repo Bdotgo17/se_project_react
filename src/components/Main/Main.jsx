@@ -21,19 +21,10 @@ function Main({
 
   const filteredItems = clothingItems.filter(
     (item) =>
-      String(item.owner) === String(currentUser?._id) &&
       item.weather &&
       weatherData.type &&
       item.weather.toLowerCase() === weatherData.type.toLowerCase()
   );
-
-  console.log("Filtered Items:", filteredItems); // Debugging log
-  console.log("Weather Data:", weatherData); // Debugging log
-  console.log("Current Temperature Unit:", currentTemperatureUnit); // Debugging log
-  console.log("Clothing Items:", clothingItems); // Debugging log
-  console.log("Is Logged In:", isLoggedIn); // Debugging log
-  console.log("Updated Clothing Items:", updatedClothingItems); // Debugging log
-  console.log("Current Weather Type:", weatherData.type); // Debugging log
 
   return (
     <main>
