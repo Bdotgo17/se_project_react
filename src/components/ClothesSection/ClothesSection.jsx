@@ -12,6 +12,7 @@ function ClothesSection({
   currentWeatherType,
   onAddGarmentClick,
   isLoggedIn,
+  isProfileView,
 }) {
   const currentUser = useContext(CurrentUserContext);
 
@@ -25,7 +26,14 @@ function ClothesSection({
           </button>
         </div>
       )}
-      <ul className="clothes-section__list">
+      <ul
+        className={
+          isProfileView
+            ? "clothes-section__list clothes-section__list--profile"
+            : "clothes-section__list"
+        }
+      >
+        {" "}
         {clothingItems.map((item) => (
           <ItemCard
             key={item._id}

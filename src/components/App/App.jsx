@@ -29,6 +29,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { defaultClothingItems } from "../../utils/constants.js";
 import ProfileModal from "../ProfileModal/ProfileModal.jsx"; // Import the new component
 import { getClothingItems } from "./../../utils/api.js"; // Import the getClothingItems function
+import "../../index.css"; // Import global styles
 
 export const MODALS = {
   ADD_GARMENT: "add-garment",
@@ -632,6 +633,7 @@ function App() {
                   card={selectedCard} // Pass the selected card details
                   onClose={closeActiveModal} // Close the modal
                   handleDeleteCard={handleDeleteCard} // Pass the delete handler
+                  isLoggedIn={isLoggedIn} // <-- Add this line
                 />
               )}
               {activeModal === MODALS.ADD_GARMENT && (
@@ -643,8 +645,8 @@ function App() {
                   onClose={() => setActiveModal(null)}
                 />
               )}
-              <Footer />
             </div>
+            <Footer />
           </div>
         </div>
       </CurrentTemperatureUnitContext.Provider>

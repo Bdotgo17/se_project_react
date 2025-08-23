@@ -46,6 +46,7 @@ function Profile({
           onAddItemClick={onAddItemClick} // <-- Use the prop, do NOT call setActiveModal directly!
           onAddGarmentClick={onAddGarmentClick}
           currentWeatherType={currentWeatherType}
+          isProfileView={true} // <-- Add this line
         />
       </div>
     </div>

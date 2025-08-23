@@ -28,11 +28,13 @@
 .cards__text {
   font-family: "Cabinet Grotesk", sans-serif; /* Apply the desired font */
   font-weight: 700; /* Adjust font weight */
-  font-size: 18px; /* Adjust font size */
-  line-height: 22px; /* Adjust line height */
+  font-size: 20px; /* Adjust font size */
+  line-height: 25px; /* Adjust line height */
   letter-spacing: 0%; /* Adjust letter spacing */
   color: #333; /* Ensure text color contrasts with the background */
-  margin-bottom: 16px; /* Add spacing below the text */
+  margin-top: 40px; /* 40px below the weather card image */
+  padding: 0 0 34px 40px; /* Keep your left padding if needed */
+  margin-bottom: 0 !important;
 }
 
 .item-card__like-button {

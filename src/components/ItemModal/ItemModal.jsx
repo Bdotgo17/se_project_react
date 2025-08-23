@@ -8,7 +8,7 @@ function ItemModal({
   onClose,
   card,
   handleDeleteCard,
-  
+  isLoggedIn,
 }) {
   if (activeModal !== "preview") return null;
   const currentUser = useContext(CurrentUserContext);
@@ -26,9 +26,11 @@ function ItemModal({
     >
       <div className="item-modal__overlay" onClick={onClose}></div>
       <div className="item-modal__content">
-        <button onClick={onClose} type="button" className="item-modal__close">
-          &times;
-        </button>
+        <button
+          onClick={onClose}
+          type="button"
+          className="item-modal__close"
+        ></button>
         <img
           className="item-modal__image"
           src={card.imageUrl}
@@ -38,7 +40,7 @@ function ItemModal({
           <div className="item-modal__header">
             <h2 className="item-modal__caption">{card.name}</h2>
 
-            {isOwn && (
+            {isOwn && isLoggedIn && (
               <button
                 className={itemDeleteButtonClassName}
                 onClick={() => handleDeleteCard(card)}

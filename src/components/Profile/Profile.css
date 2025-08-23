@@ -7,9 +7,11 @@
 .profile__content {
   flex: 1;
   padding: 24px;
+  padding-bottom: 0px;
+  padding-left: 0;
   overflow-y: auto;
   position: relative;
-  z-index: 1; 
+  z-index: 1;
 }
 
 .profile__sign-out-button {
@@ -35,6 +37,7 @@
   background-color: #f4f4f4; /* Background color */
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
   padding: 20px; /* Add padding inside the sidebar */
+  padding-right: 85px;
   z-index: 1; /* Ensure it appears above other elements */
   overflow-y: auto; /* Add scrolling if content overflows */
 }
@@ -72,7 +75,6 @@
 }
 
 .sidebar__button {
-  padding: 10px; /* Add padding inside the buttons */
   color: black; /* Button text color */
   border: none; /* Remove default border */
   border-radius: 5px; /* Add rounded corners */

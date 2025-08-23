@@ -2,7 +2,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  width: 1360px; /* Set footer width */
+  margin-left: 40px; /* 40px from the left */
+  margin-bottom: 24px;
+  height: 20px;
 }
 
 .footer__name {

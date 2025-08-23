@@ -50,65 +50,72 @@ function Header({
 
   return (
     <header className="header">
-      <Link to="/" className="header__logo-link">
-        <img className="header__logo" src={logo} alt="Company logo" />
-      </Link>
-      <p className="header__date-and-location">
-        {currentTemperatureUnit === "F"
-          ? weatherData.temp?.F
-          : weatherData.temp?.C}
-        ° {currentDate}, {weatherData.city}
-      </p>
+      <div className="header__left">
+        <Link to="/" className="header__logo-link">
+          <img className="header__logo" src={logo} alt="Company logo" />
+        </Link>
+        <p className="header__date-and-location">
+          {currentTemperatureUnit === "F"
+            ? weatherData.temp?.F
+            : weatherData.temp?.C}
+          ° {currentDate}, {weatherData.city}
+        </p>
+      </div>
+      <div className="header__right">
+        <ToggleSwitch onToggleSwitchChange={onToggleSwitchChange} />
 
-      <ToggleSwitch onToggleSwitchChange={onToggleSwitchChange} />
-
-      {isLoggedIn && (
-        <button
-          onClick={() => setActiveModal(MODALS.ADD_GARMENT)}
-          type="button"
-          className="header__add-clothes-btn"
-        >
-          + Add clothes
-        </button>
-      )}
-
-      <div className="header__user-container">
-        {isLoggedIn && currentUser ? (
-          <div className="header__user-info">
-            <Link
-              to="/profile"
-              className="header__profile-link"
-              onClick={handleSidebarToggle} // Trigger the sidebar opening
-            >
-              <p className="header__username">{currentUser?.name || "User"}</p>
-              {/* Username first */}
-              {currentUser.avatar ? (
-                <img
-                  src={currentUser.avatar}
-                  alt={`${currentUser.name}'s avatar`}
-                  className="header__avatar"
-                />
-              ) : (
-                <div className="header__avatar-placeholder">
-                  {currentUser?.name?.charAt(0).toUpperCase() || "U"}
-                </div>
-              )}
-            </Link>
-          </div>
-        ) : (
-          <>
-            {/* Sign Up and Log In Buttons */}
-            <button
-              onClick={() => setShowRegisterModal(true)}
-              className="header__signup-button"
-            >
-              Sign Up
-            </button>
-            <button onClick={handleLoginClick} className="header__login-button">
-              Log In
-            </button>
-          </>
+        {isLoggedIn && (
+          <button
+            onClick={() => setActiveModal(MODALS.ADD_GARMENT)}
+            type="button"
+            className="header__add-clothes-btn"
+          >
+            + Add clothes
+          </button>
         )}
+
+        <div className="header__user-container">
+          {isLoggedIn && currentUser ? (
+            <div className="header__user-info">
+              <Link
+                to="/profile"
+                className="header__profile-link"
+              >
+                <p className="header__username">
+                  {currentUser?.name || "User"}
+                </p>
+                {/* Username first */}
+                {currentUser.avatar ? (
+                  <img
+                    src={currentUser.avatar}
+                    alt={`${currentUser.name}'s avatar`}
+                    className="header__avatar"
+                  />
+                ) : (
+                  <div className="header__avatar-placeholder">
+                    {currentUser?.name?.charAt(0).toUpperCase() || "U"}
+                  </div>
+                )}
+              </Link>
+            </div>
+          ) : (
+            <>
+              {/* Sign Up and Log In Buttons */}
+              <button
+                onClick={() => setShowRegisterModal(true)}
+                className="header__signup-button"
+              >
+                Sign Up
+              </button>
+              <button
+                onClick={handleLoginClick}
+                className="header__login-button"
+              >
+                Log In
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );

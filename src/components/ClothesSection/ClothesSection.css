@@ -1,7 +1,6 @@
 .clothes-section {
   width: 100%; /* Ensure the section takes up the full width of its parent */
   margin: 0 auto; /* Center the section horizontally */
-  padding: 16px; /* Add padding for spacing */
   box-sizing: border-box;
 }
 
@@ -9,7 +8,11 @@
   display: flex !important;
   align-items: center; /* Vertically center items */
   gap: 16px;
-  padding-bottom: 8px;
+  padding-bottom: 20px;
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  font-style: bold;
 }
 
 .sidebar-layout .clothes-section__header {
@@ -29,6 +32,7 @@
   font-family: "Cabinet Grotesk", sans-serif;
   font-size: 20px;
   font-weight: 700;
+  color: #00000099;
 }
 
 .clothes-section__title {
@@ -36,21 +40,28 @@
   font-size: 20px;
   font-weight: 700;
   margin: 0;
+  color: #000000;
 }
 
 .clothes-section__list {
-  display: grid; /* Use grid layout for the cards */
-  grid-template-columns: repeat(3, 1fr); /* Create 3 equal-width columns */
-  gap: 16px; /* Add spacing between cards */
-  list-style: none; /* Remove default list styling */
-  padding-left: 16px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  width: 1360px; /* Set list width */
+  height: auto; /* Set list height */
+  list-style: none;
+  padding-left: 1px;
   padding-right: 8px;
-  /* Add space on the left */
-  margin: 8px;
-  width: 100%; /* Ensure the list takes up the full width of its container */
+  margin-left: 40px;
+  margin-top: 0px;
   box-sizing: border-box;
-  overflow-x: auto; /* Allow horizontal scrolling if needed */
-  padding-bottom: 8px; /* space for scrollbar */
+  overflow: visible; /* No scrollbars */
+}
+
+.clothes-section__list--profile {
+  grid-template-columns: repeat(3, 1fr); /* Three cards wide */
+  width: 1015px;
+  margin-left: 0; /* Adjust as needed for profile layout */
 }
 
 .item-card {

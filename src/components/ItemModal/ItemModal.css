@@ -82,14 +82,18 @@
 
 .item-modal__close {
   position: absolute; /* Position the button relative to the modal content */
+  background-color: transparent; /* Make background transparent */
   top: 24px; /* Adjust the vertical position */
   right: 24px; /* Move the button to the right */
-  background: none;
+  background: url("/src/assets/closeXfix.svg") no-repeat center center; /* Use Figma export */
   border: none;
-  color: white;
-  font-size: 20px; /* Make the "X" larger */
-  cursor: pointer; /* Change cursor to pointer on hover */
-  z-index: 1002; /* Ensure it appears above the modal content */
+  width: 58px; /* Make the button larger */
+  height: 58px; /* Make the button larger */
+  cursor: pointer;
+  z-index: 1002;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Ensure it appears above the modal content */
 }
 
 .item-modal__header {
@@ -121,10 +125,14 @@
 }
 
 .item-modal__image {
-  display: block; /* Ensure the image is displayed */
-  max-width: 100%; /* Scale the image to fit its container */
-  height: auto; /* Maintain aspect ratio */
-  margin: 0 auto; /* Center the image horizontally */
+  display: block;
+  max-width: 100%;
+  max-height: 100%; /* Adjust as needed for your modal size */
+  width: 498px;
+  height: 498px;
+  margin: 0 auto;
+  object-fit: contain; /* or 'cover' if you want to crop */
+  border-radius: 12px;
 }
 
 .item-modal__weather {
@@ -134,9 +142,9 @@
   font-size: 20px;
 }
 
-.item-modal__delete-button {
+.modal__delete-button {
   background: none;
-  color: #ff4d4f; /* Set text color to red */
+  color: #ff4d00; /* Set text color to red */
   border: none; /* Remove border */
   border-radius: 5px; /* Rounded corners */
   padding: 5px 10px; /* Add padding */

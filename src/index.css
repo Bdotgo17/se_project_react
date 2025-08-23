@@ -10,11 +10,6 @@ body {
   font-family: "Cabinet Grotesk", sans-serif;
 }
 
-.page {
-  width: 100%; /* Ensure it spans the full width */
-  height: 100%; /* Ensure it spans the full height */
-}
-
 .avatar {
   width: 40px;
   height: 40px;
@@ -24,4 +19,27 @@ body {
 .sidebar {
   background-color: #f5f6f7;
   padding: 20px;
+}
+
+.App, .page, .page__content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page__content {
+  flex: 1 0 auto; /* Grow to fill available space, but leave room for footer */
+  /* Remove height: 100% or min-height: 100vh if present */
+  overflow: visible;
+}
+
+/* Main should grow to fill available space */
+main {
+  flex: 1 0 auto;
+}
+
+/* Footer stays at the bottom */
+.footer {
+  flex-shrink: 0;
+  width: 100%;
 }

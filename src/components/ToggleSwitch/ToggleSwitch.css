@@ -6,7 +6,7 @@
   cursor: pointer;
   overflow: hidden;
   position: relative;
-  margin-left: 20px; /* Add 20px spacing from the button */
+  margin-left: 40px; /* Add 20px spacing from the button */
 }
 
 .toggle-switch__checkbox {

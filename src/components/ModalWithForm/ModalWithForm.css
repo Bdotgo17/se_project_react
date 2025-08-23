@@ -22,7 +22,7 @@
 }
 
 .form-modal__title {
-  margin: 0;
+  margin-top: 28px;
   margin-bottom: 24px;
   font-family: "Cabinet Grotesk", sans-serif;
   font-weight: 700;
@@ -30,6 +30,8 @@
   line-height: 20px;
   letter-spacing: 0%;
   color: rgba(0, 0, 0, 1);
+  font-weight: bold;
+  margin-left: 28px;
 }
 
 .modal__label {
@@ -40,7 +42,10 @@
   letter-spacing: 0%;
   color: rgba(0, 0, 0, 1);
   margin-bottom: 24px;
-}
+  margin-left: 28px;
+  font-weight: bold;
+  width: 440px;
+  }
 
 .modal__radio-input {
   margin-right: 8px; /* Add spacing between the radio button and text */
@@ -66,41 +71,13 @@
   outline: 2px solid blue;
 }
 
-.form-modal__content {
-  flex-grow: 1; /* Allow the content to grow and fill the form */
-  height: 100%; /* Ensure the content takes up the full height of the form */
-  overflow-y: auto; /* Enable scrolling if the content overflows */
-
-  visibility: visible;
-  display: flex; /* Use flexbox to center the modal content */
-  position: fixed; /* Position relative to the viewport */
-  left: 50%; /* Center horizontally */
-  top: 50%; /* Center vertically */
-  transform: translate(-50%, -50%); /* Adjust for perfect centering */
-  z-index: 1001; /* Ensure it appears above the overlay */
-  background-color: white;
-  border-radius: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-  max-height: 90vh; /* Ensure the modal content does not exceed 90% of the viewport height */
-  width: 496px;
-  padding: 20px;
-  font-family: "Cabinet Grotesk", sans-serif;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 20px;
-  box-sizing: border-box; /*  Include padding and border in width/height */
-  display: flex;
-  flex-direction: column; /* Stack content vertically */
-}
-
 .form-modal__close {
   position: absolute; /* Position the button relative to the modal content */
   top: 20px; /* Adjust the vertical position */
-  right: 20px; /* Move the button to the right */
+  right: 28px; /* Move the button to the right */
   width: 20px; /* Set the width of the button */
   height: 20px; /* Set the height of the button */
-  background: url("/src/assets/union.svg") no-repeat center center;
-  /* background: url("../") no-repeat center center; Use the X image */
+  background: url("/src/assets/closeXfix.svg") no-repeat center center; /* Use Figma export */
   background-size: contain; /* Ensure the image fits within the button */
   border: none; /* Remove the default border */
   cursor: pointer; /* Change cursor to pointer on hover */
@@ -132,23 +109,13 @@
   max-height: 700px; /* Optional: Limit the modal's height */
 }
 
-.form-modal__form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px; /* Add spacing between form elements */
-  flex-grow: 1; /* Allow the form to grow and fill the modal */
-  padding: 20px;
-  height: 100%; /* Make the form take up the full height of the modal */
-  overflow-y: visible; /* Enable vertical scrolling if content overflows */
-  justify-content: space-between; /* Push the Add button to the bottom */
-}
-
 .modal__input {
   display: block;
   border: none; /* Remove the default border */
   outline: none; /* Remove the focus outline */
   background-color: transparent;
   margin-top: 7px;
+  padding-left: 0 !important;
   width: 440px; /* Set the width of the input */
   border-bottom: 1px solid rgba(0, 0, 0, 1); /* Add a line along the bottom */
 }
@@ -197,19 +164,23 @@
   font-size: 16px; /* Adjust the font size */
   line-height: 20px; /* Adjust the line height */
   cursor: pointer; /* Change the cursor to a pointer on hover */
-  margin-top: 32px; /* Add spacing above the button */
+   /* Add spacing above the button */
   display: flex; /* Use flexbox for centering */
   justify-content: center; /* Center text horizontally */
   align-items: center;
+  margin-bottom: 36px;
+  margin-left: 28px;
 }
 
 .form__label {
   border: none; /* Remove any default border */
-  padding: 0; /* Remove padding */
-  margin: 0; /* Remove margin */
   display: flex; /* Use flexbox for layout */
   flex-direction: column; /* Stack child elements vertically */
   align-items: flex-start; /* Align child elements to the left */
+  margin-left: 28px;
+  margin-bottom: 24px;
+  margin-right: 28px;
+  overflow: hidden;
 }
 
 .form__radio-label {
@@ -239,7 +210,8 @@
 .form__actions {
   display: flex;
   align-items: center;
-  margin-top: 20px;
+  margin-bottom: 32px;
+  margin-left: 28px;
 }
 
 .form__submit-button {
@@ -280,8 +252,7 @@
   width: 496px;
   height: auto;
   background-color: white;
-  padding: 20px;
-  border-radius: 8px;
+  border-radius: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -326,8 +297,13 @@ button.modal__submit-button {
   font-size: 16px;
   text-align: center; /* Center text inside the button */
   transition: background-color 0.3s ease; /* Smooth transition */
-  margin-top: 20px; /* Add spacing from the form fields */
   align-self: flex-start; /* Align the button to the left */
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 32px;
+  margin-left: 28px;
 }
 
 button.modal__submit-button:hover {
@@ -356,9 +332,7 @@ button.modal__submit-button:active {
 .form-modal__form {
   display: flex;
   flex-direction: column;
-  gap: 16px; /* Add spacing between form elements */
   flex-grow: 1; /* Allow the form to grow and fill the modal */
-  padding: 20px;
   box-sizing: border-box; /* Include padding in width/height calculations */
   height: 100%; /* Make the form take up the full height of the modal */
   overflow-y: visible; /* Disable vertical scrolling */
@@ -366,14 +340,25 @@ button.modal__submit-button:active {
 }
 
 .form-modal__content {
-  flex-grow: 1; /* Allow the content to grow and fill the form */
-  height: auto; /* Let the content grow naturally */
-  max-height: 100%; /* Ensure the content does not exceed the form's height */
-  overflow-y: auto; /* Enable scrolling if the content overflows */
-  box-sizing: border-box; /* Include padding in width/height calculations */
-  background-color: white; /* Ensure the white box is visible */
-  border-radius: 20px; /* Add rounded corners */
-  padding: 20px;
+  position: fixed; /* Center modal in viewport */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 496px;
+  height: auto;
+  max-width: 90vw;
+  max-height: 90vh;
+  box-sizing: border-box;
+  font-family: "Cabinet Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
   display: flex;
-  flex-direction: column; /* Stack content vertically */
+  flex-direction: column;
+  visibility: visible;
+  overflow: visible;
 }
