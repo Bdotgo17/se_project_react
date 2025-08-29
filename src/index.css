@@ -21,16 +21,30 @@ body {
   padding: 20px;
 }
 
-.App, .page, .page__content {
+.App, .page {
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  align-items: center; /* Center children horizontally */
+}
+
+.header,
+.page__content {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
 .page__content {
   flex: 1 0 auto; /* Grow to fill available space, but leave room for footer */
-  /* Remove height: 100% or min-height: 100vh if present */
   overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically if you want */
+  min-height: 100vh; /* Full viewport height */
+  width: 100%;
 }
 
 /* Main should grow to fill available space */
@@ -43,3 +57,4 @@ main {
   flex-shrink: 0;
   width: 100%;
 }
+

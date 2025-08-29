@@ -12,18 +12,22 @@ function LoginModal({
   if (!isOpen) return null; // Don't render the modal if it's not open
 
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState(""); // Add error state
 
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    onLogin(formData);
-  }
-
-  if (!isOpen) return null;
+ async function handleSubmit(e) {
+   e.preventDefault();
+   const loginError = await onLogin(formData);
+   if (loginError) {
+     setError("Email or password incorrect");
+   } else {
+     setError("");
+   }
+ }
 
   return (
     <ModalWithForm
@@ -55,6 +59,8 @@ function LoginModal({
         />
       </label>
       {/* Submit Button and Toggle Link */}
+      {error && <div className="form__error">{error}</div>}
+
       <div className="form__actions">
         <button type="submit" className="form__submit-button">
           Log In

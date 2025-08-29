@@ -14,51 +14,16 @@
   max-height: 90vh;
 }
 
-.item-modal {
-  position: fixed; /* Ensures the modal is positioned relative to the viewport */
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Adjust for perfect centering */
-  z-index: 1001; /* Ensure it appears above the overlay */
-  background-color: white; /* Modal background */
-  border-radius: 10px; /* Optional: Add rounded corners */
-  padding: 20px; /* Add padding inside the modal */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-  max-width: 90%; /* Limit the modal's width */
-  width: 500px;
-  height: 500px; /* Make it responsive */
-  max-height: 90vh; /* Ensure the modal doesn't exceed the viewport height */
-}
-
-.modal-overlay {
-  position: fixed; /* Fix the overlay to the viewport */
+.item-modal__overlay {
+  position: fixed; /* Ensure it covers the viewport */
   top: 0;
   left: 0;
-  width: 100vw; /* Full width of the viewport */
-  height: 100vh; /* Full height of the viewport */
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-  z-index: 1000; /* Ensure it appears behind the modal content */
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
+  right: 0;
+  bottom: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-}
-
-.item-modal__overlay {
-  position: absolute; /* Ensure it covers the viewport */
-  top: 0; /* Start at the top */
-  left: 0; /* Start at the left */
-  width: 100%; /* Cover the full width */
-  height: 100%; /* Cover the full height */
   background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
-  z-index: 999; /* Ensure it appears below the modal */
-  border-radius: 10px;
+  z-index: 1000; /* Ensure it appears below the modal */
 }
 
 .item-modal__content {
@@ -85,7 +50,7 @@
   background-color: transparent; /* Make background transparent */
   top: 24px; /* Adjust the vertical position */
   right: 24px; /* Move the button to the right */
-  background: url("/src/assets/closeXfix.svg") no-repeat center center; /* Use Figma export */
+  background: url("/src/assets/xWhite.svg") no-repeat center center; /* Use Figma export */
   border: none;
   width: 58px; /* Make the button larger */
   height: 58px; /* Make the button larger */
@@ -132,7 +97,10 @@
   height: 498px;
   margin: 0 auto;
   object-fit: contain; /* or 'cover' if you want to crop */
-  border-radius: 12px;
+  border-radius: 12px 12px 0 0; /* top-left, top-right, bottom-right, bottom-left */
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background: #f6f6f6;
 }
 
 .item-modal__weather {

@@ -9,6 +9,7 @@ function ModalWithForm({
   onClose,
   onSubmit,
   className,
+  isSubmitDisabled,
 }) {
   if (!isOpen) return null;
 
@@ -30,7 +31,11 @@ function ModalWithForm({
         <form className="form-modal__form" onSubmit={onSubmit}>
           {children}
           {buttonText && (
-            <button type="submit" className="form-modal__submit">
+            <button
+              type="submit"
+              className="form-modal__submit"
+              disabled={isSubmitDisabled} // <-- Add this line
+            >
               {buttonText}
             </button>
           )}

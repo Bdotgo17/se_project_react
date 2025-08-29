@@ -55,7 +55,7 @@ function App() {
     avatar: "",
     email: "",
     password: "",
-    imageUrl: "", // For AddItemModal
+    imageUrl: "",
     weather: "",
   });
 
@@ -64,7 +64,6 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem("jwt"));
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-
   const [currentUser, setCurrentUser] = useState(null);
 
   const navigate = useNavigate(); // Initialize useNavigate
@@ -150,7 +149,6 @@ function App() {
       setShowRegisterModal(false);
     } catch (err) {
       console.error("Registration failed:", err);
-      alert("Registration failed. Please try again."); // Optional user feedback
     }
   };
 
@@ -158,7 +156,6 @@ function App() {
     try {
       // Call the signin API
       const res = await signin(email, password);
-      console.log("Signin response:", res);
 
       // Validate the token
       if (!res.token) {
@@ -178,9 +175,9 @@ function App() {
 
       // Close the login modal
       setShowLoginModal(false);
+      return null;
     } catch (error) {
-      console.error("Login failed:", error);
-      alert("Login failed. Please check your email and password."); // Optional user feedback
+      return "Email or password incorrect";
     }
   };
 
@@ -226,18 +223,15 @@ function App() {
       })
       .catch((err) => {
         console.error("Error adding item:", err);
-        alert("Failed to add item. Please try again."); // Display error to the user
       });
   };
 
   const handleDeleteCard = (cardToDelete) => {
-    if (!cardToDelete || !cardToDelete._id) {
-      console.error("Invalid card object:", cardToDelete);
-      return;
-    }
+    console.log("Deleting card:", cardToDelete);
 
     deleteItem(cardToDelete._id, token)
       .then(() => {
+        console.log("Delete successful");
         setUpdatedClothingItems((prev) => {
           const updatedItems = prev.filter(
             (item) => item._id !== cardToDelete._id
@@ -248,7 +242,6 @@ function App() {
       })
       .catch((err) => {
         console.error("Error deleting item:", err);
-        alert("Failed to delete the item. Please try again.");
       });
   };
 
@@ -530,6 +523,7 @@ function App() {
                   onAddItemClick={() => setActiveModal(MODALS.ADD_GARMENT)} // <-- Pass the function here!
                   currentWeatherType={weatherData.type}
                   currentUser={currentUser}
+                  onDelete={handleDeleteCard}
                 />
               )}
               <Routes>
@@ -582,6 +576,7 @@ function App() {
                           onCardLike={handleCardLike}
                           currentUser={currentUser}
                           currentWeatherType={weatherData.type}
+                          onDelete={handleDeleteCard} // <-- Add this line!
                         />
                       </>
                       <></>
@@ -611,6 +606,7 @@ function App() {
                             }
                             currentWeatherType={weatherData.type}
                             currentUser={currentUser}
+                            onDelete={handleDeleteCard} // <-- ADD THIS LINE!
                           />
                           <ProfileModal
                             isOpen={isProfileModalOpen}
@@ -632,8 +628,8 @@ function App() {
                   activeModal={activeModal}
                   card={selectedCard} // Pass the selected card details
                   onClose={closeActiveModal} // Close the modal
-                  handleDeleteCard={handleDeleteCard} // Pass the delete handler
                   isLoggedIn={isLoggedIn} // <-- Add this line
+                  onDelete={() => handleDeleteCard(selectedCard)} // <-- Pass the selected card!
                 />
               )}
               {activeModal === MODALS.ADD_GARMENT && (

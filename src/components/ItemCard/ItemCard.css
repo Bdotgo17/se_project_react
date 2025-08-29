@@ -33,7 +33,7 @@
   letter-spacing: 0%; /* Adjust letter spacing */
   color: #333; /* Ensure text color contrasts with the background */
   margin-top: 40px; /* 40px below the weather card image */
-  padding: 0 0 34px 40px; /* Keep your left padding if needed */
+  padding: 0 0 34px 0px; /* Keep your left padding if needed */
   margin-bottom: 0 !important;
 }
 

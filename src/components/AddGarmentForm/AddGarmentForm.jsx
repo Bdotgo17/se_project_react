@@ -13,6 +13,7 @@ function AddGarmentForm({
   const [name, setName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [weather, setWeather] = useState("");
+  const [error, setError] = useState(""); // Add error state
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,15 +22,22 @@ function AddGarmentForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+if (!name || !imageUrl || !weather) {
+  setError("Please fill out all fields.");
+  return;
+}
     // Ensure onSubmit returns a Promise
     onSubmit(name, imageUrl, weather)
       .then(() => {
+        setError(""); // Clear error on success
+
         onClose(); // Close the modal only after a successful response
       })
       .catch((error) => {
         console.error("Error submitting garment:", error);
         // Optionally, handle the error (e.g., show an error message)
+              setError("Something went wrong. Please try again.");
+
       });
   };
 
@@ -40,6 +48,7 @@ function AddGarmentForm({
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
+      isSubmitDisabled={!name || !imageUrl || !weather} // <-- Add this line
     >
       <label className="form__label">
         Name
@@ -104,6 +113,7 @@ function AddGarmentForm({
           </label>
         </div>
       </label>
+      {error && <div className="form__error">{error}</div>}
     </ModalWithForm>
   );
 }

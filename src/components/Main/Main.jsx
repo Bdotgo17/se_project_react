@@ -14,8 +14,9 @@ function Main({
   isLoggedIn, // Pass the isLoggedIn state as a prop
   currentUser,
   currentWeatherType,
+  onDelete,
 }) {
-  console.log("Main loaded", weatherData, currentUser, clothingItems);
+  console.log("Main onDelete prop:", onDelete);
 
   const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext);
 
@@ -49,6 +50,7 @@ function Main({
         onCardLike={onCardLike}
         currentWeatherType={currentWeatherType}
         currentUser={currentUser} // Standardized prop name
+        onDelete={onDelete}
       />
     </main>
   );

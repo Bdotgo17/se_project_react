@@ -30,7 +30,7 @@ form textarea {
 .form__radio-group {
   display: flex;
   flex-direction: column; /* Stack the radio buttons vertically */
-  gap: 15px; /* Space between each radio button */
+  gap: 8px; /* Space between each radio button */
   margin-top: 10px;
 }
 
@@ -38,3 +38,18 @@ form textarea {
   text-align: left !important;
   justify-content: flex-start !important;
 }
+
+.form__input {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* for LoginModal.jsx */
+.form__error {
+  color: #FF4D00;
+  font-size: 14px;
+  margin-bottom: 32px;
+  margin-left: 28px;
+  }

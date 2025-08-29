@@ -13,7 +13,10 @@ function ClothesSection({
   onAddGarmentClick,
   isLoggedIn,
   isProfileView,
+  onDelete,
 }) {
+  console.log("ClothesSection onDelete prop:", onDelete);
+
   const currentUser = useContext(CurrentUserContext);
 
   return (
@@ -42,6 +45,7 @@ function ClothesSection({
             onCardLike={onCardLike} // <-- Make sure this is a function!
             currentWeatherType={currentWeatherType}
             currentUser={currentUser}
+            onDelete={onDelete} // <-- Pass the prop here!
           />
         ))}
       </ul>

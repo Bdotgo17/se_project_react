@@ -16,8 +16,8 @@ function Profile({
   onCardLike = () => {}, // <-- Add this default
   currentWeatherType = "", // Default value for currentWeatherType
   clothingItems = [], // Default empty array if not provided
+  onDelete,
 }) {
-
   const currentUser = useContext(CurrentUserContext); // Consume CurrentUserContext
 
   // Check if currentUser is null or undefined
@@ -47,6 +47,7 @@ function Profile({
           onAddGarmentClick={onAddGarmentClick}
           currentWeatherType={currentWeatherType}
           isProfileView={true} // <-- Add this line
+          onDelete={onDelete}
         />
       </div>
     </div>

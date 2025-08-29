@@ -12,8 +12,7 @@ export function checkResponse(res) {
 
 export async function getItems() {
   try {
-    const res = await fetch(`${BASE_URL}/items`) // Use BASE_URL and append /items
-      ;
+    const res = await fetch(`${BASE_URL}/items`); // Use BASE_URL and append /items
     const data = checkResponse(res);
     return data;
   } catch (err) {
@@ -41,8 +40,13 @@ export function addItem(name, imageUrl, weather) {
   }).then(checkResponse);
 }
 
-export function deleteItem(id) {
-  const token = localStorage.getItem("jwt"); // Retrieve the token from local storage
+export function deleteItem(id, token) {
+  if (!token) {
+    console.error("No JWT token found");
+    return Promise.reject("No JWT token found");
+  }
+
+  console.log("Deleting card:", id, "with token:", token);
 
   return fetch(`${BASE_URL}/items/${id}`, {
     method: "DELETE",
