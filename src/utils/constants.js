@@ -1,10 +1,8 @@
 // filepath: /src/utils/constants.js
-// ...existing code...
 export const BASE_URL =
   process.env.NODE_ENV === "production"
     ? "https://api.wtwrtriple.crabdance.com"
     : "http://localhost:9100";
-// ...existing code...
 
 export const defaultClothingItems = [
   {
